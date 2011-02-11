@@ -1,3 +1,28 @@
+GIT
+  remote: git://github.com/bmabey/database_cleaner.git
+  revision: 0022b64826e5f74c51bbb430dfb381c089708e6a
+  specs:
+    database_cleaner (0.6.2)
+
+GIT
+  remote: git://github.com/codebeige/mongoid-rspec.git
+  revision: 255141691ed905ca6d48827768a1726d5936e22b
+  specs:
+    mongoid-rspec (1.3.2)
+      mongoid (~> 2.0.0)
+      rspec (~> 2)
+
+GIT
+  remote: git://github.com/mongoid/mongoid.git
+  revision: 1abe9edf65ba9c044c0ed253fd26fce2d2f8edf5
+  branch: safe_master
+  specs:
+    mongoid (2.0.0.beta.20)
+      activemodel (~> 3.0)
+      mongo (~> 1.1)
+      tzinfo (~> 0.3.22)
+      will_paginate (~> 3.0.pre)
+
 PATH
   remote: .
   specs:
@@ -47,6 +72,7 @@ GEM
       activesupport (= 3.0.3)
     activesupport (3.0.3)
     acts_as_indexed (0.6.6)
+    archive-tar-minitar (0.5.2)
     arel (2.0.7)
     autotest (4.4.6)
       ZenTest (>= 4.4.1)
@@ -56,6 +82,8 @@ GEM
       ZenTest
     babosa (0.2.2)
     bcrypt-ruby (2.1.4)
+    bson (1.2.0)
+    bson_ext (1.2.0)
     builder (2.1.2)
     capybara (0.4.1.1)
       celerity (>= 0.7.9)
@@ -69,6 +97,7 @@ GEM
     celerity (0.8.7)
     childprocess (0.1.6)
       ffi (~> 0.6.3)
+    columnize (0.3.2)
     configuration (1.2.0)
     cucumber (0.10.0)
       builder (>= 2.1.2)
@@ -79,7 +108,6 @@ GEM
     cucumber-rails (0.3.2)
       cucumber (>= 0.8.0)
     culerity (0.2.15)
-    database_cleaner (0.6.2)
     devise (1.1.5)
       bcrypt-ruby (~> 2.1.2)
       warden (~> 1.0.2)
@@ -104,12 +132,19 @@ GEM
     launchy (0.3.7)
       configuration (>= 0.0.5)
       rake (>= 0.8.1)
+    linecache19 (0.5.11)
+      ruby_core_source (>= 0.1.4)
     mail (2.2.15)
       activesupport (>= 2.3.6)
       i18n (>= 0.4.0)
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
     mime-types (1.16)
+    mongo (1.2.0)
+      bson (>= 1.2.0)
+    mongoid_slug (0.6.2)
+      mongoid (~> 2.0.0.rc.7)
+      stringex (~> 1.2.0)
     moretea-awesome_nested_set (1.4.3.1)
       activerecord (~> 3.0.0)
     nokogiri (1.4.4)
@@ -135,14 +170,9 @@ GEM
       rake (>= 0.8.7)
       thor (~> 0.14.4)
     rake (0.8.7)
-    rdoc (3.5.1)
+    rdoc (3.5.2)
     refinerycms-generators (0.9.9.2)
       refinerycms (>= 0.9.9)
-    refinerycms-i18n (0.9.9.7)
-      refinerycms (>= 0.9.8)
-      routing-filter (>= 0.2.3)
-    routing-filter (0.2.3)
-      actionpack
     rspec (2.3.0)
       rspec-core (~> 2.3.0)
       rspec-expectations (~> 2.3.0)
@@ -156,7 +186,17 @@ GEM
       activesupport (~> 3.0)
       railties (~> 3.0)
       rspec (~> 2.3.0)
+    ruby-debug-base19 (0.11.24)
+      columnize (>= 0.3.1)
+      linecache19 (>= 0.5.11)
+      ruby_core_source (>= 0.1.4)
+    ruby-debug19 (0.11.6)
+      columnize (>= 0.3.1)
+      linecache19 (>= 0.5.11)
+      ruby-debug-base19 (>= 0.11.19)
     ruby-prof (0.9.2)
+    ruby_core_source (0.1.4)
+      archive-tar-minitar (>= 0.5.2)
     rubyzip (0.9.4)
     selenium-webdriver (0.1.2)
       childprocess (~> 0.1.5)
@@ -165,6 +205,7 @@ GEM
       rubyzip
     spork (0.8.4)
     sqlite3 (1.3.3)
+    stringex (1.2.0)
     term-ansicolor (1.0.5)
     thor (0.14.6)
     treetop (1.4.9)
@@ -184,18 +225,22 @@ DEPENDENCIES
   autotest
   autotest-notification
   autotest-rails
+  bson_ext (>= 1.2.0)
   capybara
   cucumber-rails
-  database_cleaner
+  database_cleaner!
   factory_girl
   gherkin
   json_pure
   launchy
+  mongoid!
+  mongoid-rspec!
+  mongoid_slug
   rack-test (~> 0.5.6)
   refinerycms!
   refinerycms-generators (~> 0.9)
-  refinerycms-i18n (~> 0.9)
   rspec-rails (= 2.3)
+  ruby-debug19
   ruby-prof
   spork
   sqlite3

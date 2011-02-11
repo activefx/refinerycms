@@ -2,6 +2,14 @@ require 'spec_helper'
 
 describe Resource do
 
+  it { should be_mongoid_document }
+  it { should be_timestamped_document }
+  it { should have_field(:file_mime_type).of_type(String) }
+  it { should have_field(:file_name).of_type(String) }
+  it { should have_field(:file_size).of_type(Integer) }
+  it { should have_field(:file_uid).of_type(String) }
+  it { should have_field(:file_ext).of_type(String) }
+
   def reset_resource(options = {})
     @valid_attributes = {
       :id => 1,
@@ -89,3 +97,4 @@ describe Resource do
   end
 
 end
+

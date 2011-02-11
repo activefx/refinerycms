@@ -1,10 +1,37 @@
-require 'globalize3'
+#require 'globalize3'
 
-class Page < ActiveRecord::Base
+class Page
+  include Mongoid::Document
+  include Mongoid::Timestamps
 
-  translates :title, :meta_keywords, :meta_description, :browser_title if self.respond_to?(:translates)
+  field :title,                 :type => String
+  field :parent_id,             :type => Integer
+  field :position,              :type => Integer
+  field :path,                  :type => String
+  field :meta_keywords,         :type => String
+  field :meta_description,      :type => String
+  field :show_in_menu,          :type => Boolean, :default => true
+  field :link_url,              :type => String
+  field :menu_match,            :type => String
+  field :deletable,             :type => Boolean, :default => true
+  field :custom_title,          :type => String
+  field :custom_title_type,     :type => String,  :default => 'none'
+  field :draft,                 :type => Boolean, :default => false
+  field :browser_title,         :type => String
+  field :skip_to_first_child,   :type => Boolean, :default => false
+  field :lft,                   :type => Integer
+  field :rgt,                   :type => Integer
+  field :depth,                 :type => Integer
+
+  index :depth
+  index :lft
+  index :parent_id # add to association definition
+  index :rgt
+
+  #translates :title, :meta_keywords, :meta_description, :browser_title if self.respond_to?(:translates)
   attr_accessor :locale # to hold temporarily
-  validates :title, :presence => true
+  #validates :title, :presence => true
+  validates_presence_of :title
 
   acts_as_nested_set
 
@@ -14,17 +41,29 @@ class Page < ActiveRecord::Base
                   :reserved_words => %w(index new session login logout users refinery admin images wymiframe),
                   :approximate_ascii => RefinerySetting.find_or_set(:approximate_ascii, false, :scoping => "pages")
 
-  has_many :parts,
-           :class_name => "PagePart",
-           :order => "position ASC",
-           :inverse_of => :page,
-           :dependent => :destroy
+#  has_many :parts,
+#           :class_name => "PagePart",
+#           :order => "position ASC",
+#           :inverse_of => :page,
+#           :dependent => :destroy
+
+  embeds_many :parts,
+              :class_name => "PagePart",
+              #:order
+              #inverse_of
+              #:dependent => :destroy
 
   accepts_nested_attributes_for :parts, :allow_destroy => true
 
   # Docs for acts_as_indexed http://github.com/dougal/acts_as_indexed
-  acts_as_indexed :fields => [:title, :meta_keywords, :meta_description,
-                              :custom_title, :browser_title, :all_page_part_content]
+  #acts_as_indexed :fields => [:title, :meta_keywords, :meta_description,
+  #                            :custom_title, :browser_title, :all_page_part_content]
+  index :title
+  index :meta_keywords
+  index :meta_description
+  index :custom_title
+  index :browser_title
+  index :all_page_part_content
 
   before_destroy :deletable?
   after_save :reposition_parts!
@@ -288,3 +327,33 @@ class Page < ActiveRecord::Base
     $stdout.puts warning.join("\n")
   end
 end
+
+#  create_table "pages", :force => true do |t|
+#    t.string   "title"
+#    t.integer  "parent_id"
+#    t.integer  "position"
+#    t.string   "path"
+#    t.datetime "created_at"
+#    t.datetime "updated_at"
+#    t.string   "meta_keywords"
+#    t.text     "meta_description"
+#    t.boolean  "show_in_menu",        :default => true
+#    t.string   "link_url"
+#    t.string   "menu_match"
+#    t.boolean  "deletable",           :default => true
+#    t.string   "custom_title"
+#    t.string   "custom_title_type",   :default => "none"
+#    t.boolean  "draft",               :default => false
+#    t.string   "browser_title"
+#    t.boolean  "skip_to_first_child", :default => false
+#    t.integer  "lft"
+#    t.integer  "rgt"
+#    t.integer  "depth"
+#  end
+
+#  add_index "pages", ["depth"], :name => "index_pages_on_depth"
+#  add_index "pages", ["id"], :name => "index_pages_on_id"
+#  add_index "pages", ["lft"], :name => "index_pages_on_lft"
+#  add_index "pages", ["parent_id"], :name => "index_pages_on_parent_id"
+#  add_index "pages", ["rgt"], :name => "index_pages_on_rgt"
+

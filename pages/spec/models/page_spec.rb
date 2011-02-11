@@ -2,6 +2,27 @@ require 'spec_helper'
 
 describe Page do
 
+  it { should be_mongoid_document }
+  it { should be_timestamped_document }
+  it { should have_field(:title).of_type(String) }
+  it { should have_field(:parent_id).of_type(Integer) }
+  it { should have_field(:position).of_type(Integer) }
+  it { should have_field(:path).of_type(String) }
+  it { should have_field(:meta_keywords).of_type(String) }
+  it { should have_field(:meta_description).of_type(String) }
+  it { should have_field(:show_in_menu).of_type(Boolean).with_default_value_of(true) }
+  it { should have_field(:link_url).of_type(String) }
+  it { should have_field(:menu_match).of_type(String) }
+  it { should have_field(:deletable).of_type(Boolean).with_default_value_of(true) }
+  it { should have_field(:custom_title).of_type(String) }
+  it { should have_field(:custom_title_type).of_type(String).with_default_value_of('none') }
+  it { should have_field(:draft).of_type(Boolean).with_default_value_of(false) }
+  it { should have_field(:browser_title).of_type(String) }
+  it { should have_field(:skip_to_first_child).of_type(Boolean).with_default_value_of(false) }
+  it { should have_field(:lgt).of_type(Integer) }
+  it { should have_field(:rgt).of_type(Integer) }
+  it { should have_field(:depth).of_type(Integer) }
+
   def reset_page(options = {})
     @valid_attributes = {
       :id => 1,
@@ -153,3 +174,4 @@ describe Page do
   end
 
 end
+

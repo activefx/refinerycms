@@ -9,6 +9,10 @@ else
   gem 'sqlite3'
 end
 
+gem 'mongoid', :git => 'git://github.com/mongoid/mongoid.git', :branch => 'safe_master' #'>= 2.0.0.rc.1'
+gem 'bson_ext', '>= 1.2.0'
+gem 'mongoid_slug', :require => 'mongoid/slug'
+
 # Use unicorn as the web server
 # gem 'unicorn'
 # gem 'mongrel'
@@ -19,7 +23,7 @@ end
 # To use debugger
 # gem 'ruby-debug'
 # or in 1.9.x:
-# gem 'ruby-debug19'
+gem 'ruby-debug19', :require => 'ruby-debug'
 
 # For Heroku/s3:
 # gem 'aws-s3', :require => 'aws/s3'
@@ -34,7 +38,7 @@ group :development, :test do
   gem 'rspec-rails',            '= 2.3'
   # Cucumber
   gem 'capybara'
-  gem 'database_cleaner'
+  gem 'database_cleaner', :git => 'git://github.com/bmabey/database_cleaner.git'
   gem 'cucumber-rails'
   gem 'launchy'
   gem 'gherkin'
@@ -48,6 +52,9 @@ group :development, :test do
   gem 'autotest'
   gem 'autotest-rails'
   gem 'autotest-notification'
+  # Mongoid
+    # original mongoid-rspec unfortunately overwrites save
+  gem 'mongoid-rspec', :git => 'git://github.com/codebeige/mongoid-rspec.git'
 end
 
 # END REFINERY CMS ============================================================
@@ -68,6 +75,7 @@ gem 'refinerycms-generators',   '~> 0.9'
 # gem 'refinerycms-blog',         '~> 1.1'
 
 # Add i18n support (optional, you can remove this if you really want to).
-gem 'refinerycms-i18n',         '~> 0.9'
+# gem 'refinerycms-i18n',         '~> 0.9'
 
 # END USER DEFINED
+

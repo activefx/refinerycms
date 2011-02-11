@@ -1,25 +1,75 @@
-class RefinerySetting < ActiveRecord::Base
+class RefinerySetting
+  include Mongoid::Document
+  include Mongoid::Timestamps
+
+  field :name, :type => String
+  field :value, :type => Hash
+  field :destroyable, :type => Boolean, :default => true
+  field :scoping, :type => String
+  field :restricted, :type => Boolean, :default => false
+  field :callback_proc_as_string, :type => String
+  field :form_value_type, :type => String
+
+  # Extractable Methods
+
+  def self.table_exists?
+    included_modules.include? Mongoid::Document
+  end
+
+  def self.column_names
+    fields
+  end
+
+  # Model Specific Methods
+
+  def self.find_or_initialize_by_name_and_scoping(options={})
+    #find_or_initialize_by_name_and_scoping(:name => name.to_s, :scoping => scoping)
+    find_or_initialize_by(:name => options[:name].to_s, :scoping => options[:scoping])
+  end
+
+  def self.find_by_name(name, options={:conditions=>{}})
+    #find_by_name(:creating_from_scratch.to_s, :conditions => {:scoping => 'rspec_testing'})
+    where(:name => name, :scoping => options[:conditions][:scoping]).first
+  end
 
   FORM_VALUE_TYPES = [
     ['Multi-line', 'text_area'],
     ['Checkbox', 'check_box']
   ]
 
-  validates :name, :presence => true
+  #validates :name, :presence => true
+  validates_presence_of :name
 
-  serialize :value # stores into YAML format
-  serialize :callback_proc_as_string
+  #serialize :value # stores into YAML format
+  #serialize :callback_proc_as_string
 
   # Docs for acts_as_indexed http://github.com/dougal/acts_as_indexed
-  acts_as_indexed :fields => [:name]
+  #acts_as_indexed :fields => [:name]
+  index :name
 
-  before_save do |setting|
-    setting.restricted = false if setting.restricted.nil?
-  end
+#  before_save do |setting|
+#    setting.restricted = false if setting.restricted.nil?
+#  end
 
-  after_save do |setting|
-    setting.class.rewrite_cache
+#  after_save do |setting|
+#    setting.class.rewrite_cache
+#  end
+
+  before_save :set_restricted_callback
+
+  after_save :rewrite_cache_callback
+
+  after_destroy :rewrite_cache_callback
+
+  def set_restricted_callback
+    self.restricted = false if self.restricted.nil?
   end
+  protected :set_restricted_callback
+
+  def rewrite_cache_callback
+    self.class.rewrite_cache
+  end
+  protected :rewrite_cache_callback
 
   class << self
     # Number of settings to show per page when using will_paginate
@@ -210,3 +260,18 @@ private
   end
 
 end
+
+#  create_table "refinery_settings", :force => true do |t|
+#    t.string   "name"
+#    t.text     "value"
+#    t.boolean  "destroyable",             :default => true
+#    t.datetime "created_at"
+#    t.datetime "updated_at"
+#    t.string   "scoping"
+#    t.boolean  "restricted",              :default => false
+#    t.string   "callback_proc_as_string"
+#    t.string   "form_value_type"
+#  end
+
+#  add_index "refinery_settings", ["name"], :name => "index_refinery_settings_on_name"
+

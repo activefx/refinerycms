@@ -2,9 +2,33 @@ require 'spec_helper'
 
 describe RefinerySetting do
 
+  it { should be_mongoid_document }
+  it { should be_timestamped_document }
+  it { should have_field(:name).of_type(String) }
+  it { should have_field(:value).of_type(Hash) }
+  it { should have_field(:destroyable).of_type(Boolean).with_default_value_of(true) }
+  it { should have_field(:scoping).of_type(String) }
+  it { should have_field(:restricted).of_type(Boolean).with_default_value_of(false) }
+  it { should have_field(:callback_proc_as_string).of_type(String) }
+  it { should have_field(:form_value_type).of_type(String) }
+
   before(:each) do
-    RefinerySetting.set(:creating_from_scratch, nil)
-    RefinerySetting.set(:rspec_testing_creating_from_scratch, nil)
+    # Not sure why these were being called each time,
+    # they would not have set / cleared scoped settings
+    # RefinerySetting.set(:creating_from_scratch, nil)
+    # RefinerySetting.set(:rspec_testing_creating_from_scratch, nil)
+    RefinerySetting.where(:name => "creating_from_scratch").each{ |s| s.destroy }
+  end
+
+  # delete is not clearing the cache / triggering mongoid callbacks
+  # so make sure to use destroy
+  context "caching" do
+    it "should remove a setting from the cache after deletion" do
+      RefinerySetting.set(:creating_from_scratch, {:value => "Look, a value", :scoping => 'rspec_testing'})
+      @setting = RefinerySetting.find_by_name(:creating_from_scratch.to_s, :conditions => {:scoping => 'rspec_testing'})
+      @setting.destroy
+      RefinerySetting.get(:creating_from_scratch, :scoping => 'rspec_testing').should == nil
+    end
   end
 
   context "set" do
@@ -79,6 +103,7 @@ describe RefinerySetting do
 
   context "find_or_set" do
     it "should create a non existant setting" do
+      #debugger
       @created = RefinerySetting.find_or_set(:creating_from_scratch, 'I am a setting being created', :scoping => 'rspec_testing')
 
       @created.should == "I am a setting being created"
@@ -94,8 +119,10 @@ describe RefinerySetting do
     end
 
     it "should work without scoping" do
+      RefinerySetting.set(:rspec_testing_creating_from_scratch, nil)
       RefinerySetting.find_or_set(:rspec_testing_creating_from_scratch, 'Yes it worked').should == 'Yes it worked'
     end
   end
 
 end
+
