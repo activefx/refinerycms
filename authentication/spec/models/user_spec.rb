@@ -2,7 +2,88 @@ require 'spec_helper'
 
 Dir[File.expand_path('../../../features/support/factories.rb', __FILE__)].each {|f| require f}
 
+describe Role do
+
+  it { should be_mongoid_document }
+  it { should be_timestamped_document }
+  it { should have_field(:title).of_type(String) }
+  it { should validate_uniqueness_of(:title) }
+  it { should reference_and_be_referenced_in_many(:users) }
+
+end
+
+describe UserPlugin do
+
+  it { should be_mongoid_document }
+  it { should be_timestamped_document }
+  it { should have_field(:name).of_type(String) }
+  it { should have_field(:position).of_type(Integer) }
+  it { should be_referenced_in(:user).as_inverse_of(:plugins) }
+
+end
+
 describe User do
+
+  it { should be_mongoid_document }
+  it { should be_timestamped_document }
+
+  # Model Fields
+  it { should have_field(:username).of_type(String).with_default_value_of("") }
+  # Devise Confirmable
+  it { should have_field(:confirmation_token).of_type(String) }
+  it { should have_field(:confirmed_at).of_type(Time) }
+  it { should have_field(:confirmation_sent_at).of_type(Time) }
+  # Devise Database Authenticable
+  it { should have_field(:email).of_type(String).with_default_value_of("") }
+  it { should have_field(:encrypted_password).of_type(String).with_default_value_of("") }
+  # Devise Encryptable
+  it { should have_field(:password_salt).of_type(String).with_default_value_of("") }
+  # Devise Lockable
+  it { should have_field(:failed_attempts).of_type(Integer).with_default_value_of(0) }
+  it { should have_field(:unlock_token).of_type(String) }
+  it { should have_field(:locked_at).of_type(Time) }
+  # Devise Recoverable
+  it { should have_field(:reset_password_token).of_type(String) }
+  # Devise Rememberable
+  it { should have_field(:remember_token).of_type(String) }
+  it { should have_field(:remember_created_at).of_type(Time) }
+  # Devise Token Authenticable
+  it { should have_field(:authentication_token).of_type(String) }
+  # Devise Trackable
+  it { should have_field(:sign_in_count).of_type(Integer).with_default_value_of(0) }
+  it { should have_field(:current_sign_in_at).of_type(Time) }
+  it { should have_field(:last_sign_in_at).of_type(Time) }
+  it { should have_field(:current_sign_in_ip).of_type(String) }
+  it { should have_field(:last_sign_in_ip).of_type(String) }
+  # Refinery Specific
+  it { should have_field(:persistence_token).of_type(String) }
+  it { should have_field(:perishable_token).of_type(String) }
+
+  it { should validate_presence_of(:username) }
+  it { should validate_uniqueness_of(:username) }
+  it { should reference_and_be_referenced_in_many(:roles) }
+  it { should reference_many(:plugins) }
+
+  context "devise modules" do
+    subject { User }
+    it { should_not be_confirmable }
+    it { should be_database_authenticatable }
+    it { should_not be_encryptable } #because we're using bcrypt
+    it { should_not be_lockable }
+    it { should_not be_omniauthable }
+    it { should be_recoverable }
+    it { should be_registerable }
+    it { should be_rememberable }
+    it { should_not be_timeoutable }
+    it { should_not be_token_authenticatable }
+    it { should be_trackable }
+    it { should be_validatable }
+  end
+
+  before(:all) do
+    User.delete_all
+  end
+
   context "Roles" do
     context "add_role" do
       it "raises Exception when Role object is passed" do
@@ -83,6 +164,8 @@ describe User do
 
   describe "#can_delete?" do
     before(:each) do
+      User.delete_all
+      Role.delete_all
       @user = Factory(:refinery_user)
       @user_not_persisted = Factory.build(:refinery_user)
       @super_user = Factory(:refinery_user)
@@ -99,6 +182,7 @@ describe User do
       end
 
       it "if user count with refinery role <= 1" do
+        #debugger
         Role[:refinery].users.delete(@user)
         @super_user.can_delete?(@user).should be_false
       end
@@ -157,3 +241,4 @@ describe User do
     end
   end
 end
+
