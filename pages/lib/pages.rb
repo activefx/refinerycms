@@ -1,6 +1,6 @@
 require 'refinery'
-require 'awesome_nested_set'
-require 'globalize3'
+require 'mongoid_nested_set'
+#require 'globalize3'
 
 module Refinery
   module Pages
@@ -34,3 +34,4 @@ module Refinery
     end
   end
 end
+

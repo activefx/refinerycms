@@ -3,9 +3,10 @@
 class Page
   include Mongoid::Document
   include Mongoid::Timestamps
+  include Mongoid::Slug
 
   field :title,                 :type => String
-  field :parent_id,             :type => Integer
+#  field :parent_id,             :type => Integer
   field :position,              :type => Integer
   field :path,                  :type => String
   field :meta_keywords,         :type => String
@@ -19,14 +20,14 @@ class Page
   field :draft,                 :type => Boolean, :default => false
   field :browser_title,         :type => String
   field :skip_to_first_child,   :type => Boolean, :default => false
-  field :lft,                   :type => Integer
-  field :rgt,                   :type => Integer
-  field :depth,                 :type => Integer
+#  field :lft,                   :type => Integer
+#  field :rgt,                   :type => Integer
+#  field :depth,                 :type => Integer
 
-  index :depth
-  index :lft
-  index :parent_id # add to association definition
-  index :rgt
+  #index :depth
+  #index :lft
+  #index :parent_id # add to association definition
+  #index :rgt
 
   #translates :title, :meta_keywords, :meta_description, :browser_title if self.respond_to?(:translates)
   attr_accessor :locale # to hold temporarily
@@ -36,10 +37,11 @@ class Page
   acts_as_nested_set
 
   # Docs for friendly_id http://github.com/norman/friendly_id
-  has_friendly_id :title, :use_slug => true,
-                  :default_locale => (defined?(::Refinery::I18n.default_frontend_locale) ? ::Refinery::I18n.default_frontend_locale : :en),
-                  :reserved_words => %w(index new session login logout users refinery admin images wymiframe),
-                  :approximate_ascii => RefinerySetting.find_or_set(:approximate_ascii, false, :scoping => "pages")
+#  has_friendly_id :title, :use_slug => true,
+#                  :default_locale => (defined?(::Refinery::I18n.default_frontend_locale) ? ::Refinery::I18n.default_frontend_locale : :en),
+#                  :reserved_words => %w(index new session login logout users refinery admin images wymiframe),
+#                  :approximate_ascii => RefinerySetting.find_or_set(:approximate_ascii, false, :scoping => "pages")
+  slug :title, :index => true
 
 #  has_many :parts,
 #           :class_name => "PagePart",
@@ -48,7 +50,7 @@ class Page
 #           :dependent => :destroy
 
   embeds_many :parts,
-              :class_name => "PagePart",
+              :class_name => "PagePart"
               #:order
               #inverse_of
               #:dependent => :destroy

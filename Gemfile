@@ -12,6 +12,7 @@ end
 gem 'mongoid', :git => 'git://github.com/mongoid/mongoid.git', :branch => 'safe_master' #'>= 2.0.0.rc.1'
 gem 'bson_ext', '>= 1.2.0'
 gem 'mongoid_slug', :require => 'mongoid/slug'
+gem 'mongoid_nested_set'
 
 # Use unicorn as the web server
 # gem 'unicorn'
