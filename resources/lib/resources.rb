@@ -8,6 +8,15 @@ module Refinery
     class Engine < Rails::Engine
       initializer 'resources-with-dragonfly' do |app|
 
+#        Mongoid::Document.module_eval do
+#          def self.included(base)
+#            base.extend(Dragonfly::ActiveModelExtensions::ClassMethods)
+#            base.send(:include, Dragonfly::ActiveModelExtensions::InstanceMethods)
+##            base.register_dragonfly_app(:image_accessor, Dragonfly[:images])
+#            base.register_dragonfly_app(:resource_accessor, Dragonfly[:resources])
+#          end
+#        end
+
         db = YAML.load_file(Rails.root.join('config/mongoid.yml'))[Rails.env]['database']
 
         app_resources = Dragonfly[:resources]
@@ -22,7 +31,7 @@ module Refinery
         app_resources.configure_with(:heroku, ENV['S3_BUCKET']) if Refinery.s3_backend
 
         #app_resources.define_macro(ActiveRecord::Base, :resource_accessor)
-        app_resources.define_macro_on_include(Mongoid::Document, :resource_accessor)
+        #app_resources.define_macro_on_include(Mongoid::Document, :resource_accessor)
         app_resources.analyser.register(Dragonfly::Analysis::FileCommandAnalyser)
         app_resources.content_disposition = :attachment
 

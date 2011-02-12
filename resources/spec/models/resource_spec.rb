@@ -9,8 +9,8 @@ describe Resource do
   it { should have_field(:file_size).of_type(Integer) }
   it { should have_field(:file_uid).of_type(String) }
   it { should have_field(:file_ext).of_type(String) }
-#  it { should validate_presence_of(:file) }
-#  it { should validate_length_of(:file) }
+  it { should validate_presence_of(:file) }
+  it { should validate_length_of(:file) }
 
   def reset_resource(options = {})
     @valid_attributes = {

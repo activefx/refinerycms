@@ -8,6 +8,15 @@ module Refinery
     class Engine < Rails::Engine
       initializer 'images-with-dragonfly' do |app|
 
+#        Mongoid::Document.module_eval do
+#          def self.included(base)
+#            base.extend(Dragonfly::ActiveModelExtensions::ClassMethods)
+#            base.send(:include, Dragonfly::ActiveModelExtensions::InstanceMethods)
+#            base.register_dragonfly_app(:image_accessor, Dragonfly[:images])
+##            base.register_dragonfly_app(:resource_accessor, Dragonfly[:resources])
+#          end
+#        end
+
         db = YAML.load_file(Rails.root.join('config/mongoid.yml'))[Rails.env]['database']
 
         app_images = Dragonfly[:images]
@@ -21,7 +30,8 @@ module Refinery
         end
         app_images.configure_with(:heroku, ENV['S3_BUCKET']) if Refinery.s3_backend
 
-        app_images.define_macro_on_include(Mongoid::Document, :image_accessor)
+        #app_images.define_macro(ActiveRecord::Base, :image_accessor)
+        #app_images.define_macro_on_include(Mongoid::Document, :image_accessor)
         app_images.analyser.register(Dragonfly::Analysis::ImageMagickAnalyser)
         app_images.analyser.register(Dragonfly::Analysis::FileCommandAnalyser)
 

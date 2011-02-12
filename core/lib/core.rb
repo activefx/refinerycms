@@ -1,7 +1,8 @@
 require 'rails/all'
 
 require 'acts_as_indexed'
-require 'awesome_nested_set'
+require 'mongoid'
+require 'mongoid_nested_set'
 require 'dragonfly'
 require 'devise'
 require 'friendly_id'
@@ -137,7 +138,19 @@ module Refinery
         end
       end
 
+      initializer 'use multiple dragonfly apps with Mongoid' do |app|
+        Mongoid::Document.module_eval do
+          def self.included(base)
+            base.extend(Dragonfly::ActiveModelExtensions::ClassMethods)
+            base.send(:include, Dragonfly::ActiveModelExtensions::InstanceMethods)
+            base.register_dragonfly_app(:image_accessor, Dragonfly[:images])
+            base.register_dragonfly_app(:resource_accessor, Dragonfly[:resources])
+          end
+        end
+      end
+
     end
   end
 
 end
+

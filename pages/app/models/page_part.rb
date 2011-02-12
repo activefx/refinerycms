@@ -12,6 +12,8 @@ class PagePart
   #belongs_to :page
   embedded_in :page, :inverse_of => :parts
 
+  default_scope asc(:position)
+
   #validates :title, :presence => true
   validates_presence_of :title
 

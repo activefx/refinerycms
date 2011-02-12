@@ -12,19 +12,29 @@ class Image < ActiveRecord::Base
   field :image_uid, :type => String
   field :image_ext, :type => String
 
+  # Extractable Methods
+
+  def self.table_exists?
+    included_modules.include? Mongoid::Document
+  end
+
+  def self.column_names
+    fields
+  end
+
   # What is the max image size a user can upload
   MAX_SIZE_IN_MB = 5
 
   image_accessor :image
 
-#  validates :image, :presence  => {},
-#                    :length    => { :maximum => MAX_SIZE_IN_MB.megabytes }
+  validates :image, :presence  => {},
+                    :length    => { :maximum => MAX_SIZE_IN_MB.megabytes }
 
-#  validates_property :mime_type, :of => :image, :in => %w(image/jpeg image/png image/gif image/tiff),
-#                     :message => :incorrect_format
+  validates_property :mime_type, :of => :image, :in => %w(image/jpeg image/png image/gif image/tiff),
+                      :message => :incorrect_format
 
-  # Docs for acts_as_indexed http://github.com/dougal/acts_as_indexed
-  #acts_as_indexed :fields => [:title]
+#    # Docs for acts_as_indexed http://github.com/dougal/acts_as_indexed
+#    #acts_as_indexed :fields => [:title]
   index :title
 
   # when a dialog pops up with images, how many images per page should there be
@@ -64,8 +74,8 @@ class Image < ActiveRecord::Base
 
   # Get a thumbnail job object given a geometry.
   def thumbnail(geometry = nil)
-    if geometry.is_a?(Symbol) and self.class.user_image_sizes.keys.include?(geometry)
-      geometry = self.class.user_image_sizes[geometry]
+    if geometry.present? and self.class.user_image_sizes.keys.include?(geometry.to_s)
+      geometry = self.class.user_image_sizes[geometry.to_s]
     end
 
     if geometry.present? && !geometry.is_a?(Symbol)

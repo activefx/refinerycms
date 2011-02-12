@@ -36,7 +36,7 @@ gem 'refinerycms',              :path => '.'
 
 group :development, :test do
   # RSpec
-  gem 'rspec-rails',            '= 2.3'
+  gem 'rspec-rails',            '>= 2.5.0'
   # Cucumber
   gem 'capybara'
   gem 'database_cleaner', :git => 'git://github.com/bmabey/database_cleaner.git'
