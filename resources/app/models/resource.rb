@@ -23,11 +23,8 @@ class Resource
 
   resource_accessor :file
 
-  #validates :file, :presence => {},
-  #                 :length   => { :maximum => MAX_SIZE_IN_MB.megabytes }
-
-  validates_presence_of :file
-  validates_length_of :file, :maximum => MAX_SIZE_IN_MB.megabytes
+  validates :file, :presence => {},
+                   :length   => { :maximum => MAX_SIZE_IN_MB.megabytes }
 
   # Docs for acts_as_indexed http://github.com/dougal/acts_as_indexed
   # acts_as_indexed :fields => [:file_name, :title, :type_of_content]

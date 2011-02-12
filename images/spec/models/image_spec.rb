@@ -2,6 +2,18 @@ require 'spec_helper'
 
 describe Image do
 
+  it { should be_mongoid_document }
+  it { should be_timestamped_document }
+  it { should have_field(:image_mime_type).of_type(String) }
+  it { should have_field(:image_name).of_type(String) }
+  it { should have_field(:image_size).of_type(Integer) }
+  it { should have_field(:image_width).of_type(Integer) }
+  it { should have_field(:image_height).of_type(Integer) }
+  it { should have_field(:image_uid).of_type(String) }
+  it { should have_field(:image_ext).of_type(String) }
+  it { should validate_presence_of(:image) }
+  it { should validate_length_of(:image) }
+
   def reset_image(options = {})
     @valid_attributes = {
       :id => 1,
@@ -85,3 +97,4 @@ describe Image do
   end
 
 end
+

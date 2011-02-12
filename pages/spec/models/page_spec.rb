@@ -1,5 +1,17 @@
 require 'spec_helper'
 
+describe PagePart do
+
+  it { should be_mongoid_document }
+  it { should be_timestamped_document }
+  it { should have_field(:title).of_type(String) }
+  it { should have_field(:body).of_type(String) }
+  it { should have_field(:position).of_type(Integer) }
+  it { should validate_presence_of(:title) }
+  it { should be_embedded_in(:page).as_inverse_of(:parts) }
+
+end
+
 describe Page do
 
   it { should be_mongoid_document }
@@ -22,6 +34,8 @@ describe Page do
   it { should have_field(:lgt).of_type(Integer) }
   it { should have_field(:rgt).of_type(Integer) }
   it { should have_field(:depth).of_type(Integer) }
+  it { should validate_presence_of(:title) }
+  it { should embed_many(:parts) }
 
   def reset_page(options = {})
     @valid_attributes = {
