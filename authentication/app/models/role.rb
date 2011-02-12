@@ -5,7 +5,7 @@ class Role
   field :title, :type => String
 
   #has_and_belongs_to_many :users
-  references_and_referenced_in_many :users
+  references_and_referenced_in_many :users #, :stored_as => :array, :inverse_of => :roles
 
   before_validation :camelize_title
   validates :title, :uniqueness => true
@@ -18,6 +18,14 @@ class Role
 
   def self.column_names
     fields
+  end
+
+  def self.find_or_create_by_title(title)
+    find_or_create_by(:title => title)
+  end
+
+  def self.find_by_title(title)
+    where(:title => title).first
   end
 
   def camelize_title(role_title = self.title)

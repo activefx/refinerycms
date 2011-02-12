@@ -35,7 +35,7 @@ class User
   field :persistence_token,     :type => String
   field :perishable_token,      :type => String
 
-  references_and_referenced_in_many :roles
+  references_and_referenced_in_many :roles #, :stored_as => :array, :inverse_of => :users
 
   # has_many :plugins, :class_name => "UserPlugin", :order => "position ASC", :dependent => :destroy
   references_many :plugins, :class_name => "UserPlugin", :dependent => :destroy, :index => true

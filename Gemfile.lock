@@ -229,6 +229,7 @@ DEPENDENCIES
   capybara
   cucumber-rails
   database_cleaner!
+  devise (~> 1.1.5)
   factory_girl
   gherkin
   json_pure

@@ -18,6 +18,10 @@ class UserPlugin
     :unique => true
   )
 
+  def self.find_by_user_id(user_id)
+    where(:user_id => user_id).first
+  end
+
 end
 
 #  field :user_id, :type => Integer

@@ -8,7 +8,7 @@ describe Role do
   it { should be_timestamped_document }
   it { should have_field(:title).of_type(String) }
   it { should validate_uniqueness_of(:title) }
-  it { should reference_many(:users) }
+  it { should reference_and_be_referenced_in_many(:users) }
 
 end
 
@@ -61,21 +61,28 @@ describe User do
 
   it { should validate_presence_of(:username) }
   it { should validate_uniqueness_of(:username) }
-  it { should reference_many(:roles) }
+  it { should reference_and_be_referenced_in_many(:roles) }
   it { should reference_many(:plugins) }
 
-  it { should_not be_confirmable }
-  it { should be_database_authenticatable }
-  it { should_not be_encryptable } #because we're using bcrypt
-  it { should_not be_lockable }
-  it { should_not be_omniauthable }
-  it { should be_recoverable }
-  it { should be_registerable }
-  it { should be_rememberable }
-  it { should_not be_timeoutable }
-  it { should_not be_token_authenticatable }
-  it { should be_trackable }
-  it { should be_validatable }
+  context "devise modules" do
+    subject { User }
+    it { should_not be_confirmable }
+    it { should be_database_authenticatable }
+    it { should_not be_encryptable } #because we're using bcrypt
+    it { should_not be_lockable }
+    it { should_not be_omniauthable }
+    it { should be_recoverable }
+    it { should be_registerable }
+    it { should be_rememberable }
+    it { should_not be_timeoutable }
+    it { should_not be_token_authenticatable }
+    it { should be_trackable }
+    it { should be_validatable }
+  end
+
+  before(:all) do
+    User.delete_all
+  end
 
   context "Roles" do
     context "add_role" do
@@ -157,6 +164,8 @@ describe User do
 
   describe "#can_delete?" do
     before(:each) do
+      User.delete_all
+      Role.delete_all
       @user = Factory(:refinery_user)
       @user_not_persisted = Factory.build(:refinery_user)
       @super_user = Factory(:refinery_user)
@@ -173,6 +182,7 @@ describe User do
       end
 
       it "if user count with refinery role <= 1" do
+        #debugger
         Role[:refinery].users.delete(@user)
         @super_user.can_delete?(@user).should be_false
       end
