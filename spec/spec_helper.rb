@@ -5,6 +5,7 @@ def setup_environment
   ENV["RAILS_ENV"] ||= 'test'
   require File.expand_path("../../config/environment", __FILE__)
   require 'rspec/rails'
+  require 'database_cleaner'
 
   # Requires supporting files with custom matchers and macros, etc,
   # in ./support/ and its subdirectories.
@@ -12,13 +13,16 @@ def setup_environment
 
   RSpec.configure do |config|
 
-#    require 'database_cleaner'
 #    config.before(:suite) do
 #      DatabaseCleaner.strategy = :truncation
 #      DatabaseCleaner.orm = "mongoid"
 #    end
 
 #    config.before(:each) do
+#      DatabaseCleaner.start
+#    end
+
+#    config.after(:each) do
 #      DatabaseCleaner.clean
 #    end
 

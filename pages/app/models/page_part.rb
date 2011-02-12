@@ -25,6 +25,16 @@ class PagePart
 
   before_save :normalise_text_fields
 
+  # Extractable Methods
+
+  def self.table_exists?
+    included_modules.include? Mongoid::Document
+  end
+
+  def self.column_names
+    fields
+  end
+
 protected
   def normalise_text_fields
     unless body.blank? or body =~ /^\</

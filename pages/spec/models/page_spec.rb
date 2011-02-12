@@ -5,7 +5,7 @@ describe Page do
   it { should be_mongoid_document }
   it { should be_timestamped_document }
   it { should have_field(:title).of_type(String) }
-  it { should have_field(:parent_id).of_type(Integer) }
+  it { should have_field(:parent_id).of_type(Object) }
   it { should have_field(:position).of_type(Integer) }
   it { should have_field(:path).of_type(String) }
   it { should have_field(:meta_keywords).of_type(String) }
@@ -51,6 +51,9 @@ describe Page do
     RefinerySetting.set(:use_marketable_urls, {:value => false, :scoping => 'pages'})
   end
 
+  def turn_on_marketable_urls
+    RefinerySetting.set(:use_marketable_urls, {:value => true, :scoping => 'pages'})
+  end
 
   before(:each) do
     reset_page
@@ -112,6 +115,7 @@ describe Page do
     end
 
     it "should return its path with marketable urls" do
+      turn_on_marketable_urls
       @page.url[:id].should be_nil
       @page.url[:path].should == ["rspec-is-great-for-testing-too"]
     end

@@ -34,7 +34,7 @@ class Page
   #validates :title, :presence => true
   validates_presence_of :title
 
-  acts_as_nested_set
+  acts_as_nested_set :left_field => 'lgt'
 
   # Docs for friendly_id http://github.com/norman/friendly_id
 #  has_friendly_id :title, :use_slug => true,
@@ -75,13 +75,15 @@ class Page
 
   # shows all pages with :show_in_menu set to true, but it also
   # rejects any page that has not been translated to the current locale.
-  scope :in_menu, lambda {
-    pages = Arel::Table.new(Page.table_name)
-    translations = Arel::Table.new(Page.translations_table_name)
+#  scope :in_menu, lambda {
+#    pages = Arel::Table.new(Page.table_name)
+#    translations = Arel::Table.new(Page.translations_table_name)
 
-    includes(:translations).where(:show_in_menu => true).where(
-      translations[:locale].eq(Globalize.locale)).where(pages[:id].eq(translations[:page_id]))
-  }
+#    includes(:translations).where(:show_in_menu => true).where(
+#      translations[:locale].eq(Globalize.locale)).where(pages[:id].eq(translations[:page_id]))
+#  }
+  scope :in_menu, where(:show_in_menu => true) # no translation support yet
+
 
   # when a dialog pops up to link to a page, how many pages per page should there be
   PAGES_PER_DIALOG = 14
@@ -91,6 +93,16 @@ class Page
 
   # when collecting the pages path how is each of the pages seperated?
   PATH_SEPARATOR = " - "
+
+  # Extractable Methods
+
+  def self.table_exists?
+    included_modules.include? Mongoid::Document
+  end
+
+  def self.column_names
+    fields
+  end
 
   # Am I allowed to delete this page?
   # If a link_url is set we don't want to break the link so we don't allow them to delete
@@ -103,7 +115,7 @@ class Page
   # This ensures that they are in the correct 0,1,2,3,4... etc order.
   def reposition_parts!
     parts.each_with_index do |part, index|
-      part.update_attribute(:position, index)
+      part.update_attributes(:position => index)
     end
   end
 
@@ -216,8 +228,19 @@ class Page
     "#{cache_key}#nested_url"
   end
 
+  def active_record_cache_key
+    case
+    when new_record?
+      "#{self.class.model_name.cache_key}/new"
+    when timestamp = self[:updated_at]
+      "#{self.class.model_name.cache_key}/#{id}-#{timestamp.to_s(:number)}"
+    else
+      "#{self.class.model_name.cache_key}/#{id}"
+    end
+  end
+
   def cache_key
-    "#{Refinery.base_cache_key}/#{super}"
+    "#{Refinery.base_cache_key}/#{active_record_cache_key}"
   end
 
   def use_marketable_urls?
@@ -305,13 +328,13 @@ class Page
   # This applies mostly to plugin-generated pages.
   #
   # Returns the sluggified string
-  def normalize_friendly_id(slug_string)
-    sluggified = super
-    if use_marketable_urls? && self.class.friendly_id_config.reserved_words.include?(sluggified)
-      sluggified << "-page"
-    end
-    sluggified
-  end
+#  def normalize_friendly_id(slug_string)
+#    sluggified = super
+#    if use_marketable_urls? && self.class.friendly_id_config.reserved_words.include?(sluggified)
+#      sluggified << "-page"
+#    end
+#    sluggified
+#  end
 
   private
 

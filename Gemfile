@@ -9,8 +9,8 @@ else
   gem 'sqlite3'
 end
 
-gem 'mongoid', :git => 'git://github.com/mongoid/mongoid.git', :branch => 'safe_master' #'>= 2.0.0.rc.1'
-gem 'bson_ext', '>= 1.2.0'
+gem 'mongoid', :git => 'git://github.com/mongoid/mongoid.git'
+gem 'bson_ext', '>= 1.2.1'
 gem 'mongoid_slug', :require => 'mongoid/slug'
 gem 'mongoid_nested_set'
 
@@ -55,7 +55,8 @@ group :development, :test do
   gem 'autotest-notification'
   # Mongoid
     # original mongoid-rspec unfortunately overwrites save
-  gem 'mongoid-rspec', :git => 'git://github.com/codebeige/mongoid-rspec.git'
+  #gem 'mongoid-rspec', :git => 'git://github.com/codebeige/mongoid-rspec.git'
+  gem 'mongoid-rspec', :git => 'git://github.com/durran/mongoid-rspec.git'
 end
 
 # END REFINERY CMS ============================================================
