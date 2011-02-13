@@ -5,7 +5,8 @@ Feature: Lost Password
     I want to reset my password
 
     Background:
-      Given A Refinery user exists
+      Given I have no users
+      And A Refinery user exists
 
     @users-password-forgot
     Scenario: Forgot Password page (no email entered)
@@ -47,3 +48,4 @@ Feature: Lost Password
       And I press "Reset password"
       Then I should be on the admin root
       And I should see "Password reset successfully for"
+

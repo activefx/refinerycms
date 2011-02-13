@@ -87,6 +87,14 @@ class User
       login = conditions.delete(:login)
       self.any_of({ :username => login }, { :email => login }).first
     end
+
+    def find_by_email(email)
+      where(:email => email).first
+    end
+
+    def find_by_reset_password_token(reset_password_token)
+      where(:reset_password_token => reset_password_token).first
+    end
   end
 
   # Extractable Methods
