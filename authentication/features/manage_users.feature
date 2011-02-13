@@ -59,3 +59,4 @@ Feature: Manage Users
     Then I should be on the list of users
     And I should see "cucumber was successfully updated."
     And I should see "cucumber (green@cucumber.com)"
+

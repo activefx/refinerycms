@@ -59,3 +59,12 @@ end
 Then /^I should be redirected back to "([^\"]*)"$/ do |page_name|
   visit path_to(page_name)
 end
+
+Then /^Display the page$/ do
+  puts "\n\n\n#{page.body.to_s}\n\n\n"
+end
+
+Then /^display "([^"]*)"$/ do |selector|
+  puts "\n\n\n#{find(selector).native.to_html}\n\n\n"
+end
+

@@ -15,15 +15,15 @@ defaults: &defaults
 
 development:
   <<: *defaults
-  database: refinery_app_development
+  database: refinery_app1_development
 
 test:
   <<: *defaults
-  database: refinery_app_test
+  database: refinery_app1_test
 
 cucumber:
   <<: *defaults
-  database: refinery_app_cucumber
+  database: refinery_app1_cucumber
 
 # set these environment variables on your prod server
 production:

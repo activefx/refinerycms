@@ -19,6 +19,7 @@ module Admin
 
     def create
       @user = User.new(params[:user])
+
       @selected_plugin_names = params[:user][:plugins] || []
       @selected_role_names = params[:user][:roles] || []
 
@@ -39,7 +40,7 @@ module Admin
     end
 
     def edit
-      @user = User.find params[:id]
+      @user = User.find_by_slug params[:id]
       @selected_plugin_names = @user.plugins.collect{|p| p.name}
     end
 
@@ -78,6 +79,10 @@ module Admin
 
   protected
 
+    def find_user
+      @user = User.find_by_slug(params[:id])
+    end
+
     def load_available_plugins_and_roles
       @available_plugins = ::Refinery::Plugins.registered.in_menu.collect{|a|
         {:name => a.name, :title => a.title}
@@ -88,3 +93,4 @@ module Admin
 
   end
 end
+

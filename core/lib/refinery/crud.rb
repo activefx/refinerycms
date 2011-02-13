@@ -56,7 +56,8 @@ module Refinery
             # if the position field exists, set this object as last object, given the conditions of this class.
             if #{class_name}.column_names.include?("position")
               params[:#{singular_name}].merge!({
-                :position => ((#{class_name}.maximum(:position, :conditions => #{options[:conditions].inspect})||-1) + 1)
+                #:position => ((#{class_name}.max(:position, :conditions => #{options[:conditions].inspect})||-1) + 1)
+                :position => ((#{class_name}.find(:all, :conditions => #{options[:conditions].inspect}).max(:position)||-1) + 1)
               })
             end
 
@@ -141,17 +142,26 @@ module Refinery
 
           # Finds one single result based on the id params.
           def find_#{singular_name}
-            @#{singular_name} = #{class_name}.find(params[:id],
-                                                   :include => #{options[:include].map(&:to_sym).inspect})
+            debugger
+#            @#{singular_name} = #{class_name}.find(params[:id],
+#                                                   :include => #{options[:include].map(&:to_sym).inspect})
+             @#{singular_name} = #{class_name}.find(params[:id])
           end
 
           # Find the collection of @#{plural_name} based on the conditions specified into crudify
           # It will be ordered based on the conditions specified into crudify
           # And eager loading is applied as specified into crudify.
+
           def find_all_#{plural_name}(conditions = #{options[:conditions].inspect})
-            @#{plural_name} = #{class_name}.where(conditions).includes(
-                                #{options[:include].map(&:to_sym).inspect}
-                              ).order("#{options[:order]}")
+#            @#{plural_name} = #{class_name}.where(conditions).includes(
+#                                #{options[:include].map(&:to_sym).inspect}
+#                              ).order("#{options[:order]}")
+            conditions = conditions.empty? ? nil : conditions
+            order = "#{options[:order]}"
+            @#{plural_name} = #{class_name}.where(conditions)
+            unless order.empty?
+              @#{plural_name} = @#{plural_name}.order_by([order.scan(/\w+/).map{|i| i.downcase.to_sym}])
+            end
           end
 
           # Paginate a set of @#{plural_name} that may/may not already exist.
@@ -293,3 +303,4 @@ module Refinery
 
   end
 end
+

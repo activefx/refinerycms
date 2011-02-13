@@ -34,3 +34,4 @@ end
 Then /^I should have ([0-9]+) users?$/ do |count|
   User.count.should == count.to_i
 end
+
