@@ -4,7 +4,6 @@ class Role
 
   field :title, :type => String
 
-  #has_and_belongs_to_many :users
   references_and_referenced_in_many :users #, :stored_as => :array, :inverse_of => :roles
 
   before_validation :camelize_title

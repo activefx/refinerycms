@@ -32,6 +32,15 @@ class RefinerySetting
     where(:name => name, :scoping => options[:conditions][:scoping]).first
   end
 
+  def self.find_or_create_by_name(name, options={})
+    registration = where(:name => name).first
+    if registration.nil?
+      return create(options.merge({:name => name}))
+    else
+      return registration
+    end
+  end
+
   FORM_VALUE_TYPES = [
     ['Multi-line', 'text_area'],
     ['Checkbox', 'check_box']

@@ -182,7 +182,6 @@ describe User do
       end
 
       it "if user count with refinery role <= 1" do
-        #debugger
         Role[:refinery].users.delete(@user)
         @super_user.can_delete?(@user).should be_false
       end
