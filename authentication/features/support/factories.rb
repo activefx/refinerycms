@@ -11,8 +11,10 @@ Factory.define :refinery_user, :parent => :user do |u|
   u.roles { [ Role[:refinery] ] }
 
   u.after_create do |user|
+    #u.send(:update_roles) #Temporary workaround
     Refinery::Plugins.registered.each_with_index do |plugin, index|
       user.plugins.create(:name => plugin.name, :position => index)
     end
   end
 end
+
