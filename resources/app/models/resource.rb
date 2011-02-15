@@ -1,6 +1,7 @@
 class Resource
   include Mongoid::Document
   include Mongoid::Timestamps
+  include Mongoid::Search
 
   field :file_mime_type, :type => String
   field :file_name, :type => String
@@ -29,9 +30,8 @@ class Resource
   # Docs for acts_as_indexed http://github.com/dougal/acts_as_indexed
   # acts_as_indexed :fields => [:file_name, :title, :type_of_content]
 
-  index :file_name
-  index :title
-  index :type_of_content
+  # Docs for Mongoid Search http://github.com/mauriciozaffari/mongoid_search
+  search_in :file_name, :title, :type_of_content
 
   # when a dialog pops up with resources, how many resources per page should there be
   PAGES_PER_DIALOG = 12
@@ -53,6 +53,11 @@ class Resource
   end
 
   class << self
+
+    def find_by_file_name(file_name)
+      where(:file_name => file_name).first
+    end
+
     # How many resources per page should be displayed?
     def per_page(dialog = false)
       dialog ? PAGES_PER_DIALOG : PAGES_PER_ADMIN_INDEX

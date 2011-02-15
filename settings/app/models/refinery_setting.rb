@@ -1,6 +1,7 @@
 class RefinerySetting
   include Mongoid::Document
   include Mongoid::Timestamps
+  include Mongoid::Search
 
   field :name, :type => String
   field :value, :type => Hash
@@ -9,6 +10,8 @@ class RefinerySetting
   field :restricted, :type => Boolean, :default => false
   field :callback_proc_as_string, :type => String
   field :form_value_type, :type => String
+
+  index :name
 
   # Extractable Methods
 
@@ -54,7 +57,9 @@ class RefinerySetting
 
   # Docs for acts_as_indexed http://github.com/dougal/acts_as_indexed
   #acts_as_indexed :fields => [:name]
-  index :name
+
+  # Docs for Mongoid Search http://github.com/mauriciozaffari/mongoid_search
+  search_in :name
 
 #  before_save do |setting|
 #    setting.restricted = false if setting.restricted.nil?

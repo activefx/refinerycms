@@ -1,4 +1,11 @@
 GIT
+  remote: git://github.com/activefx/mongoid_search_relevant.git
+  revision: d9fed60e5698cf6f3d3e75f9f41a53412a9c43ba
+  specs:
+    mongoid_search (0.1.2)
+      mongoid (~> 2.0.0.beta)
+
+GIT
   remote: git://github.com/bmabey/database_cleaner.git
   revision: fc5c71dda3ebc7c84c0c352aa3cc2bbc82511e12
   specs:
@@ -237,6 +244,7 @@ DEPENDENCIES
   mongoid!
   mongoid-rspec!
   mongoid_nested_set
+  mongoid_search!
   mongoid_slug
   rack-test (~> 0.5.6)
   refinerycms!

@@ -4,6 +4,7 @@ class Page
   include Mongoid::Document
   include Mongoid::Timestamps
   include Mongoid::Slug
+  include Mongoid::Search
 
   field :title,                 :type => String
 #  field :parent_id,             :type => Integer
@@ -24,10 +25,10 @@ class Page
 #  field :rgt,                   :type => Integer
 #  field :depth,                 :type => Integer
 
-  #index :depth
-  #index :lft
-  #index :parent_id # add to association definition
-  #index :rgt
+  index :depth
+  index :lft
+  index :parent_id
+  index :rgt
 
   #translates :title, :meta_keywords, :meta_description, :browser_title if self.respond_to?(:translates)
   attr_accessor :locale # to hold temporarily
@@ -60,12 +61,10 @@ class Page
   # Docs for acts_as_indexed http://github.com/dougal/acts_as_indexed
   #acts_as_indexed :fields => [:title, :meta_keywords, :meta_description,
   #                            :custom_title, :browser_title, :all_page_part_content]
-  index :title
-  index :meta_keywords
-  index :meta_description
-  index :custom_title
-  index :browser_title
-  index :all_page_part_content
+
+  # Docs for Mongoid Search http://github.com/mauriciozaffari/mongoid_search
+  search_in :title, :meta_keywords, :meta_description,
+            :custom_title, :browser_title, :all_page_part_content
 
   before_destroy :deletable?
   after_save :reposition_parts!

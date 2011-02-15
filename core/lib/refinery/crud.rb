@@ -142,7 +142,6 @@ module Refinery
 
           # Finds one single result based on the id params.
           def find_#{singular_name}
-            debugger
 #            @#{singular_name} = #{class_name}.find(params[:id],
 #                                                   :include => #{options[:include].map(&:to_sym).inspect})
              @#{singular_name} = #{class_name}.find(params[:id])
@@ -153,10 +152,11 @@ module Refinery
           # And eager loading is applied as specified into crudify.
 
           def find_all_#{plural_name}(conditions = #{options[:conditions].inspect})
-#            @#{plural_name} = #{class_name}.where(conditions).includes(
-#                                #{options[:include].map(&:to_sym).inspect}
-#                              ).order("#{options[:order]}")
+##            @#{plural_name} = #{class_name}.where(conditions).includes(
+##                                #{options[:include].map(&:to_sym).inspect}
+##                              ).order("#{options[:order]}")
             conditions = conditions.empty? ? nil : conditions
+
             order = "#{options[:order]}"
             @#{plural_name} = #{class_name}.where(conditions)
             unless order.empty?
@@ -182,10 +182,15 @@ module Refinery
           # Returns a weighted set of results based on the query specified by the user.
           def search_all_#{plural_name}
             # First find normal results.
-            find_all_#{plural_name}(#{options[:search_conditions].inspect})
-
+            # find_all_#{plural_name}(#{options[:search_conditions].inspect})
+            conditions = #{options[:search_conditions].inspect}
+            conditions = conditions.empty? ? nil : conditions
+            order = "#{options[:order]}"
             # Now get weighted results by running the query against the results already found.
-            @#{plural_name} = @#{plural_name}.with_query(params[:search])
+            @#{plural_name} = #{class_name}.search(params[:search]).where(conditions)
+            unless order.empty?
+              @#{plural_name} = @#{plural_name}.order_by([order.scan(/\w+/).map{|i| i.downcase.to_sym}])
+            end
           end
 
           # Ensure all methods are protected so that they should only be called

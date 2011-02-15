@@ -34,10 +34,10 @@ module Admin
 
   protected
     def find_all_refinery_settings
-      @refinery_settings = RefinerySetting.order('name ASC')
+      @refinery_settings = RefinerySetting.asc(:name)
 
       unless current_user.has_role?(:superuser)
-        @refinery_settings = @refinery_settings.where("restricted <> ? ", true)
+        @refinery_settings = @refinery_settings.excludes(:restricted => true)
       end
 
       @refinery_settings
@@ -45,10 +45,16 @@ module Admin
 
     def search_all_refinery_settings
       # search for settings that begin with keyword
-      term = "^" + params[:search].to_s.downcase.gsub(' ', '_')
+      #term = "^" + params[:search].to_s.downcase.gsub(' ', '_')
+      term = params[:search].to_s
 
-      # First find normal results, then weight them with the query.
-       @refinery_settings = find_all_refinery_settings.with_query(term)
+      @refinery_settings = RefinerySetting.search(term).asc(:name)
+
+      unless current_user.has_role?(:superuser)
+        @refinery_settings = @refinery_settings.excludes(:restricted => true)
+      end
+
+      @refinery_settings
     end
 
   private
@@ -75,3 +81,4 @@ module Admin
 
   end
 end
+

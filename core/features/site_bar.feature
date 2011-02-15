@@ -5,7 +5,8 @@ Feature: Site Bar
   And I want logged in customers to not see a site bar
 
   Background:
-    Given I have a page titled "Home" with a custom url "/"
+    Given I have no users
+    And I have a page titled "Home" with a custom url "/"
     And I am not logged in
 
   Scenario: Not logged in
@@ -22,3 +23,4 @@ Feature: Site Bar
     And I am a logged in customer
     When I go to the home page
     Then I should not see "Switch to your website editor"
+

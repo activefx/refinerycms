@@ -1,8 +1,9 @@
 # encoding: utf-8
 
-class Image < ActiveRecord::Base
+class Image
   include Mongoid::Document
   include Mongoid::Timestamps
+  include Mongoid::Search
 
   field :image_mime_type, :type => String
   field :image_name, :type => String
@@ -35,7 +36,8 @@ class Image < ActiveRecord::Base
 
 #    # Docs for acts_as_indexed http://github.com/dougal/acts_as_indexed
 #    #acts_as_indexed :fields => [:title]
-  index :title
+  # Docs for Mongoid Search http://github.com/mauriciozaffari/mongoid_search
+  search_in :title
 
   # when a dialog pops up with images, how many images per page should there be
   PAGES_PER_DIALOG = 18

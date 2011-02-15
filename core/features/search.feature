@@ -5,7 +5,8 @@ Feature: Search
   I want to use search
 
   Background:
-    Given I am a logged in refinery user
+    Given I have no users
+    And I am a logged in refinery user
 
   @search-existing
   Scenario Outline: Search Existing Item
