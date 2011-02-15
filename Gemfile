@@ -12,7 +12,7 @@ end
 gem 'mongoid', :git => 'git://github.com/mongoid/mongoid.git'
 gem 'bson_ext', '>= 1.2.1'
 gem 'mongoid_slug', :require => 'mongoid/slug'
-gem 'mongoid_nested_set'
+gem 'mongoid_nested_set', :git => 'git://github.com/activefx/mongoid_nested_set.git'
 gem 'mongoid_search', :git => 'git://github.com/activefx/mongoid_search_relevant.git'
 gem 'devise', '~> 1.1.5'
 

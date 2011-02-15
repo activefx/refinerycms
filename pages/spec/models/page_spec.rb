@@ -31,7 +31,7 @@ describe Page do
   it { should have_field(:draft).of_type(Boolean).with_default_value_of(false) }
   it { should have_field(:browser_title).of_type(String) }
   it { should have_field(:skip_to_first_child).of_type(Boolean).with_default_value_of(false) }
-  it { should have_field(:lgt).of_type(Integer) }
+  it { should have_field(:lft).of_type(Integer) }
   it { should have_field(:rgt).of_type(Integer) }
   it { should have_field(:depth).of_type(Integer) }
   it { should validate_presence_of(:title) }
@@ -192,4 +192,5 @@ describe Page do
   end
 
 end
+# {"title"=>"Pickles are Cucumbers Soaked in Evil", "parts_attributes"=>{"0"=>{"title"=>"Body", "body"=>"", "position"=>"0"}, "1"=>{"title"=>"Side Body", "body"=>"", "position"=>"1"}}, "draft"=>"0", "parent_id"=>"", "custom_title_type"=>"none", "custom_title"=>"", "skip_to_first_child"=>"0", "link_url"=>"", "show_in_menu"=>"1", "browser_title"=>"", "meta_keywords"=>"", "meta_description"=>"", "position"=>0}
 

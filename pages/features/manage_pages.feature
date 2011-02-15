@@ -5,7 +5,8 @@ Feature: Manage Pages
   I want to create and manage pages
 
   Background:
-    Given I am a logged in refinery user
+    Given I have no users
+    And I am a logged in refinery user
     And I have no pages
 
   Scenario: Pages List
@@ -36,7 +37,7 @@ Feature: Manage Pages
     And I fill in "Title" with "About"
     And I press "Save"
     Then I should have 3 pages
-    And I should have a page at /about--2
+    And I should have a page at /about-1
 
   Scenario: Delete Page
     Given I only have a page titled "test"
@@ -45,3 +46,4 @@ Feature: Manage Pages
     Then I should see "'test' was successfully removed."
     And I should have 0 pages
     And I should have 0 page_parts
+

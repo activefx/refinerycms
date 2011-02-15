@@ -35,7 +35,7 @@ class Page
   #validates :title, :presence => true
   validates_presence_of :title
 
-  acts_as_nested_set :left_field => 'lgt'
+  acts_as_nested_set
 
   # Docs for friendly_id http://github.com/norman/friendly_id
 #  has_friendly_id :title, :use_slug => true,
@@ -52,9 +52,9 @@ class Page
 
   embeds_many :parts,
               :class_name => "PagePart"
-              #:order
-              #inverse_of
-              #:dependent => :destroy
+#                  :dependent => :delete,
+#                  :inverse_of => :page,
+#                  :index => true
 
   accepts_nested_attributes_for :parts, :allow_destroy => true
 

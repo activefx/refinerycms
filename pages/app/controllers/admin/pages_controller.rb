@@ -18,6 +18,10 @@ module Admin
 
   protected
 
+    def find_page
+      @page = Page.find_by_slug(params[:id])
+    end
+
     def globalize!
       Thread.current[:globalize_locale] = (params[:switch_locale] || (@page.present? && @page.slug.present? && @page.slug.locale) || ::Refinery::I18n.default_frontend_locale)
     end
@@ -35,3 +39,4 @@ module Admin
 
   end
 end
+

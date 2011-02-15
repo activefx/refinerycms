@@ -1,4 +1,11 @@
 GIT
+  remote: git://github.com/activefx/mongoid_nested_set.git
+  revision: f8bc134d5791e11d63e03e40cd75a0c32a32d411
+  specs:
+    mongoid_nested_set (0.1.2)
+      mongoid (>= 2.0.0.beta.20)
+
+GIT
   remote: git://github.com/activefx/mongoid_search_relevant.git
   revision: d9fed60e5698cf6f3d3e75f9f41a53412a9c43ba
   specs:
@@ -148,8 +155,6 @@ GEM
     mime-types (1.16)
     mongo (1.2.1)
       bson (>= 1.2.1)
-    mongoid_nested_set (0.1.2)
-      mongoid (>= 2.0.0.beta.20)
     mongoid_slug (0.6.2)
       mongoid (~> 2.0.0.rc.7)
       stringex (~> 1.2.0)
@@ -243,7 +248,7 @@ DEPENDENCIES
   launchy
   mongoid!
   mongoid-rspec!
-  mongoid_nested_set
+  mongoid_nested_set!
   mongoid_search!
   mongoid_slug
   rack-test (~> 0.5.6)
