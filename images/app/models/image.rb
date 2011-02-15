@@ -52,6 +52,11 @@ class Image
   delegate :size, :mime_type, :url, :width, :height, :to => :image
 
   class << self
+
+    def find_by_image_name(image_name)
+      where(:image_name => image_name).first
+    end
+
     # How many images per page should be displayed?
     def per_page(dialog = false, has_size_options = false)
       if dialog
