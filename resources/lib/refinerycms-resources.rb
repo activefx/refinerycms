@@ -1,17 +1,24 @@
-require 'rack/cache'
 require 'dragonfly'
-require 'mongoid'
-require 'refinery'
+require 'rack/cache'
+require 'refinerycms-core'
+#require 'mongoid'
 
 module Refinery
   module Resources
-    class Engine < Rails::Engine
+
+    class << self
+      attr_accessor :root
+      def root
+        @root ||= Pathname.new(File.expand_path('../../', __FILE__))
+      end
+    end
+
+    class Engine < ::Rails::Engine
       initializer 'resources-with-dragonfly' do |app|
 
         db = YAML.load_file(Rails.root.join('config/mongoid.yml'))[Rails.env]['database']
 
         app_resources = Dragonfly[:resources]
-        #app_resources.datastore = Dragonfly::DataStorage::MongoGridFsStore.new @settings["host"], @settings["database"]
         app_resources.configure_with(:rails) do |c|
           c.datastore = Dragonfly::DataStorage::MongoDataStore.new :database => db
           #c.datastore.root_path = Rails.root.join('public', 'system', 'resources').to_s
@@ -21,8 +28,6 @@ module Refinery
         end
         app_resources.configure_with(:heroku, ENV['S3_BUCKET']) if Refinery.s3_backend
 
-        #app_resources.define_macro(ActiveRecord::Base, :resource_accessor)
-        #app_resources.define_macro_on_include(Mongoid::Document, :resource_accessor)
         app_resources.analyser.register(Dragonfly::Analysis::FileCommandAnalyser)
         app_resources.content_disposition = :attachment
 
@@ -51,7 +56,7 @@ module Refinery
       end
 
       config.after_initialize do
-        Refinery::Plugin.register do |plugin|
+        ::Refinery::Plugin.register do |plugin|
           plugin.name = "refinery_files"
           plugin.url = {:controller => '/admin/resources', :action => 'index'}
           plugin.menu_match = /(refinery|admin)\/(refinery_)?(files|resources)$/
@@ -64,4 +69,6 @@ module Refinery
     end
   end
 end
+
+::Refinery.engines << 'resources'
 

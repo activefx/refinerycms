@@ -39,9 +39,10 @@ class Page
 
   # Docs for friendly_id http://github.com/norman/friendly_id
 #  has_friendly_id :title, :use_slug => true,
-#                  :default_locale => (defined?(::Refinery::I18n.default_frontend_locale) ? ::Refinery::I18n.default_frontend_locale : :en),
+#                  :default_locale => (::Refinery::I18n.default_frontend_locale rescue :en),
 #                  :reserved_words => %w(index new session login logout users refinery admin images wymiframe),
 #                  :approximate_ascii => RefinerySetting.find_or_set(:approximate_ascii, false, :scoping => "pages")
+
   slug :title, :index => true
 
 #  has_many :parts,
@@ -52,9 +53,6 @@ class Page
 
   embeds_many :parts,
               :class_name => "PagePart"
-#                  :dependent => :delete,
-#                  :inverse_of => :page,
-#                  :index => true
 
   accepts_nested_attributes_for :parts, :allow_destroy => true
 
@@ -148,14 +146,6 @@ class Page
   # Used for the browser title to get the full path to this page
   # It automatically prints out this page title and all of it's parent page titles joined by a PATH_SEPARATOR
   def path(options = {})
-    # Handle deprecated boolean
-    if [true, false].include?(options)
-      warning = "Page::path does not want a boolean (you gave #{options.inspect}) anymore. "
-      warning << "Please change this to {:reversed => #{options.inspect}}. "
-      warn(warning << "\nCalled from #{caller.first.inspect}")
-      options = {:reversed => options}
-    end
-
     # Override default options with any supplied.
     options = {:reversed => true}.merge(options)
 
@@ -178,7 +168,7 @@ class Page
   def url
     if link_url.present?
       link_url_localised?
-    elsif use_marketable_urls?
+    elsif self.class.use_marketable_urls?
       url_marketable
     elsif to_param.present?
       url_normal
@@ -196,11 +186,11 @@ class Page
 
   def url_marketable
     # :id => nil is important to prevent any other params[:id] from interfering with this route.
-    {:controller => "/pages", :action => "show", :path => nested_url, :id => nil}
+    {:controller => '/pages', :action => 'show', :path => nested_url, :id => nil}
   end
 
   def url_normal
-    {:controller => "/pages", :action => "show", :id => to_param}
+    {:controller => '/pages', :action => 'show', :path => nil, :id => to_param}
   end
 
   # Returns an array with all ancestors to_param, allow with its own
@@ -220,11 +210,11 @@ class Page
   # Returns the string version of nested_url, i.e., the path that should be generated
   # by the router
   def nested_path
-    @nested_path ||= "/#{nested_url.join('/')}"
+    Rails.cache.fetch(path_cache_key) { ['', nested_url].join('/') }
   end
 
-  def url_cache_key
-    "#{cache_key}#nested_url"
+  def path_cache_key
+    [cache_key, 'nested_path'].join('#')
   end
 
   def active_record_cache_key
@@ -238,12 +228,12 @@ class Page
     end
   end
 
-  def cache_key
-    "#{Refinery.base_cache_key}/#{active_record_cache_key}"
+  def url_cache_key
+    [cache_key, 'nested_url'].join('#')
   end
 
-  def use_marketable_urls?
-    RefinerySetting.find_or_set(:use_marketable_urls, true, :scoping => 'pages')
+  def cache_key
+    [Refinery.base_cache_key, active_record_cache_key].join('/')
   end
 
   # Returns true if this page is "published"
@@ -278,10 +268,8 @@ class Page
       dialog ? PAGES_PER_DIALOG : PAGES_PER_ADMIN_INDEX
     end
 
-    # Returns all the top level pages, usually to render the top level navigation.
-    def top_level
-      warn("Please use .live.in_menu instead of .top_level")
-      roots.where(:show_in_menu => true, :draft => false)
+    def use_marketable_urls?
+      RefinerySetting.find_or_set(:use_marketable_urls, true, :scoping => 'pages')
     end
   end
 
@@ -310,11 +298,11 @@ class Page
 
   # In the admin area we use a slightly different title to inform the which pages are draft or hidden pages
   def title_with_meta
-    title = self.title.to_s
-    title << " <em>(#{::I18n.t('hidden', :scope => 'admin.pages.page')})</em>" unless show_in_menu?
-    title << " <em>(#{::I18n.t('draft', :scope => 'admin.pages.page')})</em>" if draft?
+    title = [self.title.to_s]
+    title << "<em>(#{::I18n.t('hidden', :scope => 'admin.pages.page')})</em>" unless show_in_menu?
+    title << "<em>(#{::I18n.t('draft', :scope => 'admin.pages.page')})</em>" if draft?
 
-    title.strip
+    title.join(' ')
   end
 
   # Used to index all the content on this page so it can be easily searched.
@@ -338,17 +326,11 @@ class Page
   private
 
   def invalidate_child_cached_url
-    return true unless use_marketable_urls?
+    return true unless self.class.use_marketable_urls?
     children.each do |child|
       Rails.cache.delete(child.url_cache_key)
+      Rails.cache.delete(child.path_cache_key)
     end
-  end
-
-  def warn(msg)
-    warning = ["\n*** DEPRECATION WARNING ***"]
-    warning << "#{msg}"
-    warning << ""
-    $stdout.puts warning.join("\n")
   end
 end
 

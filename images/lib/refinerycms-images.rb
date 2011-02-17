@@ -1,11 +1,19 @@
-require 'rack/cache'
 require 'dragonfly'
-require 'mongoid'
-require 'refinery'
+#require 'mongoid'
+require 'rack/cache'
+require 'refinerycms-core'
 
 module Refinery
   module Images
-    class Engine < Rails::Engine
+
+    class << self
+      attr_accessor :root
+      def root
+        @root ||= Pathname.new(File.expand_path('../../', __FILE__))
+      end
+    end
+
+    class Engine < ::Rails::Engine
       initializer 'images-with-dragonfly' do |app|
 
         db = YAML.load_file(Rails.root.join('config/mongoid.yml'))[Rails.env]['database']
@@ -21,8 +29,6 @@ module Refinery
         end
         app_images.configure_with(:heroku, ENV['S3_BUCKET']) if Refinery.s3_backend
 
-        #app_images.define_macro(ActiveRecord::Base, :image_accessor)
-        #app_images.define_macro_on_include(Mongoid::Document, :image_accessor)
         app_images.analyser.register(Dragonfly::Analysis::ImageMagickAnalyser)
         app_images.analyser.register(Dragonfly::Analysis::FileCommandAnalyser)
 
@@ -51,7 +57,7 @@ module Refinery
       end
 
       config.after_initialize do
-        Refinery::Plugin.register do |plugin|
+        ::Refinery::Plugin.register do |plugin|
           plugin.name = "refinery_images"
           plugin.directory = "images"
           plugin.version = %q{0.9.9}
@@ -64,4 +70,6 @@ module Refinery
     end
   end
 end
+
+::Refinery.engines << 'dashboard'
 

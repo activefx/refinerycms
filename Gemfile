@@ -1,5 +1,7 @@
 source 'http://rubygems.org'
 
+gemspec
+
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails'
 
@@ -14,7 +16,7 @@ gem 'bson_ext', '>= 1.2.1'
 gem 'mongoid_slug', :require => 'mongoid/slug'
 gem 'mongoid_nested_set', :git => 'git://github.com/activefx/mongoid_nested_set.git'
 gem 'mongoid_search', :git => 'git://github.com/activefx/mongoid_search_relevant.git'
-gem 'devise', '~> 1.1.5'
+gem 'devise', '~> 1.1.6'
 
 # Use unicorn as the web server
 # gem 'unicorn'
@@ -32,32 +34,12 @@ gem 'ruby-debug19', :require => 'ruby-debug'
 # gem 'aws-s3', :require => 'aws/s3'
 
 # REFINERY CMS ================================================================
+# Anything you put in here will be overridden when the app gets updated.
 
-# Specify the Refinery CMS core:
-gem 'refinerycms',              :path => '.'
+# gem 'refinerycms', '~> 0.9.9.1'
 
 group :development, :test do
-  # RSpec
-  gem 'rspec-rails',            '>= 2.5.0'
-  # Cucumber
-  gem 'capybara'
-  gem 'database_cleaner', :git => 'git://github.com/bmabey/database_cleaner.git'
-  gem 'cucumber-rails'
-  gem 'launchy'
-  gem 'gherkin'
-  gem 'spork' unless Bundler::WINDOWS
-  gem 'rack-test',              '~> 0.5.6'
-  gem 'json_pure'
-  # Factory Girl
-  gem 'factory_girl'
-  gem "#{'j' if RUBY_PLATFORM == 'java'}ruby-prof" unless defined?(RUBY_ENGINE) and RUBY_ENGINE == 'rbx'
-  # Autotest
-  gem 'autotest'
-  gem 'autotest-rails'
-  gem 'autotest-notification'
-  # Mongoid
-    # original mongoid-rspec unfortunately overwrites save
-  #gem 'mongoid-rspec', :git => 'git://github.com/codebeige/mongoid-rspec.git'
+  gem 'refinerycms-testing',    '~> 0.9.9.1'
   gem 'mongoid-rspec', :git => 'git://github.com/durran/mongoid-rspec.git'
 end
 
@@ -70,16 +52,16 @@ end
 # USER DEFINED
 
 # Specify additional Refinery CMS Engines here (all optional):
-gem 'refinerycms-generators',   '~> 0.9'
-# gem 'refinerycms-inquiries',    '~> 0.9.9.9'
+# gem 'refinerycms-inquiries',    '~> 0.9'
 # gem 'refinerycms-news',         '~> 1.0'
 # gem 'refinerycms-portfolio',    '~> 0.9.9'
 # gem 'refinerycms-theming',      '~> 0.9.9'
 # gem 'refinerycms-search',       '~> 0.9.8'
 # gem 'refinerycms-blog',         '~> 1.1'
+# gem 'refinerycms-page-images,   '~> 1.0
 
 # Add i18n support (optional, you can remove this if you really want to).
-# gem 'refinerycms-i18n',         '~> 0.9'
+# gem 'refinerycms-i18n',         '~> 0.9.9.9'
 
 # END USER DEFINED
 
