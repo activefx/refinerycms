@@ -32,6 +32,11 @@ def setup_environment
   # prefer to use XPath just remove this line and adjust any selectors in your
   # steps to use the XPath syntax.
   Capybara.default_selector = :css
+
+  require 'database_cleaner'
+  require 'database_cleaner/cucumber'
+  DatabaseCleaner.strategy = :truncation
+  DatabaseCleaner.orm = "mongoid"
 end
 
 def each_run
@@ -61,10 +66,7 @@ def each_run
   Cucumber::Rails::World.use_transactional_fixtures = false
   # How to clean your database when transactions are turned off. See
   # http://github.com/bmabey/database_cleaner for more info.
-  require 'database_cleaner'
-  require 'database_cleaner/cucumber'
-  DatabaseCleaner.strategy = :truncation
-  DatabaseCleaner.orm = "mongoid"
+
   Before { DatabaseCleaner.clean }
 
 

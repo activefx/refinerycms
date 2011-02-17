@@ -3,11 +3,11 @@ source 'http://rubygems.org'
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails'
 
-if RUBY_PLATFORM == 'java'
-  gem 'activerecord-jdbcsqlite3-adapter', '>= 1.0.2', :platform => :jruby
-else
-  gem 'sqlite3'
-end
+#if RUBY_PLATFORM == 'java'
+#  gem 'activerecord-jdbcsqlite3-adapter', '>= 1.0.2', :platform => :jruby
+#else
+#  gem 'sqlite3'
+#end
 
 gem 'mongoid', :git => 'git://github.com/mongoid/mongoid.git'
 gem 'bson_ext', '>= 1.2.1'

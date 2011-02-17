@@ -7,7 +7,7 @@ module Admin
             :include => [:parts, :slugs, :children, :parent, :translations],
             :paging => false
 
-    rescue_from FriendlyId::ReservedError, :with => :show_errors_for_reserved_slug
+    # rescue_from FriendlyId::ReservedError, :with => :show_errors_for_reserved_slug
 
     def new
       @page = Page.new

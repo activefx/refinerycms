@@ -20,7 +20,7 @@ class PagesController < ApplicationController
 
     @page = Page.find_by_slug(params[:path] ? params[:path].to_s.split('/').last : params[:id])
 
-    if @page.try(:live?) or (refinery_user? and current_user.authorized_plugins.include?("refinery_pages"))
+    if @page.try(:live?) or (@page and refinery_user? and current_user.authorized_plugins.include?("refinery_pages"))
       # if the admin wants this to be a "placeholder" page which goes to its first child, go to that instead.
       if @page.skip_to_first_child and (first_live_child = @page.children.asc(:lft).where(:draft=>false).first).present?
         redirect_to first_live_child.url

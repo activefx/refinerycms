@@ -3,7 +3,7 @@ class Role
   include Mongoid::Timestamps
 
   field :title, :type => String
-  field :user_ids, :type => Array
+  field :user_ids, :type => Array, :default => []
 
   #references_and_referenced_in_many :users, :inverse_of => :roles #, :stored_as => :array, :inverse_of => :roles
 

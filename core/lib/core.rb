@@ -1,15 +1,19 @@
-require 'rails/all'
+# require "active_record/railtie"
+require "action_controller/railtie"
+require "action_mailer/railtie"
+require "active_resource/railtie"
+require "rails/test_unit/railtie"
 
 require 'acts_as_indexed'
 require 'mongoid'
 require 'mongoid_nested_set'
 require 'dragonfly'
 require 'devise'
-require 'friendly_id'
+#require 'friendly_id'
 require 'truncate_html'
 require 'will_paginate'
 require 'rails/generators'
-require 'rails/generators/migration'
+#require 'rails/generators/migration'
 
 module Refinery
 
