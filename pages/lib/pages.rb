@@ -31,6 +31,15 @@ module Refinery
         app.routes_reloader.paths << File.expand_path('../pages/marketable_routes.rb', __FILE__)
       end
 
+      initializer 'add nested set options' do |app|
+        if defined?(ActionView)
+          require File.expand_path('../pages/nested_set_options', __FILE__)
+          ActionView::Base.class_eval do
+            include NestedSetOptions
+          end
+        end
+      end
+
     end
   end
 end

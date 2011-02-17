@@ -6,15 +6,13 @@ module Admin
     crudify :page
 
     def link_to
-      @pages = Page.paginate :page => params[:page],
-                             :conditions => {:parent_id => nil},
-                             :order => 'position ASC',
-                             :per_page => Page.per_page(dialog=true)
+      @pages = Page.asc(:position).paginate :page => params[:page],
+                                            :conditions => {:parent_id => nil},
+                                            :per_page => Page.per_page(dialog=true)
 
       if ::Refinery::Plugins.registered.names.include?('refinery_files')
-        @resources = Resource.paginate :page => params[:resource_page],
-                                       :order => 'created_at DESC',
-                                       :per_page => Resource.per_page(dialog=true)
+        @resources = Resource.desc(:created_at).paginate :page => params[:resource_page],
+                                                         :per_page => Resource.per_page(dialog=true)
 
         # resource link
         if params[:current_link].present?
@@ -85,3 +83,4 @@ module Admin
 
   end
 end
+

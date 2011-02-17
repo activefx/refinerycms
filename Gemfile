@@ -3,16 +3,18 @@ source 'http://rubygems.org'
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails'
 
-if RUBY_PLATFORM == 'java'
-  gem 'activerecord-jdbcsqlite3-adapter', '>= 1.0.2', :platform => :jruby
-else
-  gem 'sqlite3'
-end
+#if RUBY_PLATFORM == 'java'
+#  gem 'activerecord-jdbcsqlite3-adapter', '>= 1.0.2', :platform => :jruby
+#else
+#  gem 'sqlite3'
+#end
 
-gem 'mongoid', :git => 'git://github.com/mongoid/mongoid.git', :branch => 'safe_master' #'>= 2.0.0.rc.1'
-gem 'bson_ext', '>= 1.2.0'
+gem 'mongoid', :git => 'git://github.com/mongoid/mongoid.git'
+gem 'bson_ext', '>= 1.2.1'
 gem 'mongoid_slug', :require => 'mongoid/slug'
-gem 'mongoid_nested_set'
+gem 'mongoid_nested_set', :git => 'git://github.com/activefx/mongoid_nested_set.git'
+gem 'mongoid_search', :git => 'git://github.com/activefx/mongoid_search_relevant.git'
+gem 'devise', '~> 1.1.5'
 
 # Use unicorn as the web server
 # gem 'unicorn'
@@ -36,7 +38,7 @@ gem 'refinerycms',              :path => '.'
 
 group :development, :test do
   # RSpec
-  gem 'rspec-rails',            '= 2.3'
+  gem 'rspec-rails',            '>= 2.5.0'
   # Cucumber
   gem 'capybara'
   gem 'database_cleaner', :git => 'git://github.com/bmabey/database_cleaner.git'
@@ -55,7 +57,8 @@ group :development, :test do
   gem 'autotest-notification'
   # Mongoid
     # original mongoid-rspec unfortunately overwrites save
-  gem 'mongoid-rspec', :git => 'git://github.com/codebeige/mongoid-rspec.git'
+  #gem 'mongoid-rspec', :git => 'git://github.com/codebeige/mongoid-rspec.git'
+  gem 'mongoid-rspec', :git => 'git://github.com/durran/mongoid-rspec.git'
 end
 
 # END REFINERY CMS ============================================================

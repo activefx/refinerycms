@@ -5,7 +5,8 @@ Feature: Manage Files
   I want to create and manage files
 
   Background:
-    Given I am a logged in refinery user
+    Given I have no users
+    And I am a logged in refinery user
     And I have no files
 
   @files-valid @valid
@@ -41,3 +42,4 @@ Feature: Manage Files
     And I follow "Remove this file forever"
     Then I should see "'Refinery Is Awesome' was successfully removed."
     And I should have 0 files
+

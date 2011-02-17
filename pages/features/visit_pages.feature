@@ -5,7 +5,9 @@ Feature: Visit Pages
   I want to view pages
 
   Background:
-    Given A Refinery user exists
+    Given I have no users
+    And I have no pages
+    And A Refinery user exists
     And I have a page titled "Home" with a custom url "/"
     And I have a page titled "About"
     And I have a page titled "ä ö ü spéciål chåråctÉrs"
@@ -21,12 +23,14 @@ Feature: Visit Pages
 
   Scenario: Content Page
     When I go to the page titled "About"
+    Then Display the page
     Then I should see "Home"
     And I should see "About"
     And I should see "About" within ".selected > a"
 
   Scenario: Special Characters Title
     When I go to the page titled "ä ö ü spéciål chåråctÉrs"
+    Then Display the page
     Then I should see "Home"
     And I should see "About"
     And I should see "ä ö ü spéciål chåråctÉrs"
@@ -45,3 +49,4 @@ Feature: Visit Pages
     Then I should see "Home"
     And I should see "About"
     And I should see "Home" within ".selected > a"
+

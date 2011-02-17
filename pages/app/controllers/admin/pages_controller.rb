@@ -7,7 +7,7 @@ module Admin
             :include => [:parts, :slugs, :children, :parent, :translations],
             :paging => false
 
-    rescue_from FriendlyId::ReservedError, :with => :show_errors_for_reserved_slug
+    # rescue_from FriendlyId::ReservedError, :with => :show_errors_for_reserved_slug
 
     def new
       @page = Page.new
@@ -17,6 +17,10 @@ module Admin
     end
 
   protected
+
+    def find_page
+      @page = Page.find_by_slug(params[:id])
+    end
 
     def globalize!
       Thread.current[:globalize_locale] = (params[:switch_locale] || (@page.present? && @page.slug.present? && @page.slug.locale) || ::Refinery::I18n.default_frontend_locale)
@@ -35,3 +39,4 @@ module Admin
 
   end
 end
+

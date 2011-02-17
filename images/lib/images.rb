@@ -1,22 +1,28 @@
 require 'rack/cache'
 require 'dragonfly'
+require 'mongoid'
 require 'refinery'
 
 module Refinery
   module Images
     class Engine < Rails::Engine
       initializer 'images-with-dragonfly' do |app|
+
+        db = YAML.load_file(Rails.root.join('config/mongoid.yml'))[Rails.env]['database']
+
         app_images = Dragonfly[:images]
         app_images.configure_with(:imagemagick)
         app_images.configure_with(:rails) do |c|
-          c.datastore.root_path = Rails.root.join('public', 'system', 'images').to_s
+          c.datastore = Dragonfly::DataStorage::MongoDataStore.new :database => db
+          #c.datastore.root_path = Rails.root.join('public', 'system', 'images').to_s
           c.url_path_prefix = '/system/images'
           c.secret = RefinerySetting.find_or_set(:dragonfly_secret,
                                                 Array.new(24) { rand(256) }.pack('C*').unpack('H*').first)
         end
         app_images.configure_with(:heroku, ENV['S3_BUCKET']) if Refinery.s3_backend
 
-        app_images.define_macro(ActiveRecord::Base, :image_accessor)
+        #app_images.define_macro(ActiveRecord::Base, :image_accessor)
+        #app_images.define_macro_on_include(Mongoid::Document, :image_accessor)
         app_images.analyser.register(Dragonfly::Analysis::ImageMagickAnalyser)
         app_images.analyser.register(Dragonfly::Analysis::FileCommandAnalyser)
 
@@ -28,8 +34,9 @@ module Refinery
         # /system/images/BAhbB1sHOgZmIiMyMDEwLzA5LzAxL1NTQ19DbGllbnRfQ29uZi5qcGdbCDoGcDoKdGh1bWIiDjk0MngzNjAjYw/refinery_is_awesome.jpg
         # Officially the way to do it, from: http://markevans.github.com/dragonfly/file.URLs.html
         app_images.url_suffix = proc{|job|
-          object_file_name = job.uid_basename.gsub(%r{^(\d{4}|\d{2})[_/]\d{2}[_/]\d{2}[_/]\d{2,3}[_/](\d{2}/\d{2}/\d{3}/)?}, '')
-          "/#{object_file_name}#{job.encoded_extname || job.uid_extname}"
+          "/#{job.name}"
+#          object_file_name = job.uid_basename.gsub(%r{^(\d{4}|\d{2})[_/]\d{2}[_/]\d{2}[_/]\d{2,3}[_/](\d{2}/\d{2}/\d{3}/)?}, '')
+#          "/#{object_file_name}#{job.encoded_extname || job.uid_extname}"
         }
 
         ### Extend active record ###
@@ -57,3 +64,4 @@ module Refinery
     end
   end
 end
+

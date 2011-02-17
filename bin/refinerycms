@@ -37,9 +37,7 @@ module Refinery
       @input = input
       @options = {
         :database => {
-          :adapter => 'sqlite3',
-          :username => 'root',
-          :password => ''
+          :adapter => 'mongoid'
         },
         :from_version => '0.9.8',
         :force => false,
@@ -58,18 +56,18 @@ module Refinery
         opts.separator "Specific Options:"
 
         # Rails supports more options, but Refinery is only tested on these three
-        databases = %w(mysql postgresql sqlite3)
+        databases = %w(mongoid)
         opts.on("-d DATABASE", "--database DATABASE", databases, "Select the database (default sqlite3)", "  #{databases.join('/')}") do |db|
           @options[:database][:adapter] = db
         end
 
-        opts.on("-u USERNAME", '--database-username USERNAME', String, "Set the database username", '  (default root)') do |username|
-          @options[:database][:username] = username
-        end
+#        opts.on("-u USERNAME", '--database-username USERNAME', String, "Set the database username", '  (default root)') do |username|
+#          @options[:database][:username] = username
+#        end
 
-        opts.on("-p PASSWORD", '--database-password PASSWORD', String, "Set the database password", "  (default '')") do |password|
-          @options[:database][:password] = password
-        end
+#        opts.on("-p PASSWORD", '--database-password PASSWORD', String, "Set the database password", "  (default '')") do |password|
+#          @options[:database][:password] = password
+#        end
 
         opts.on("-g", "--gems gem1,gem2,gem3", Array, "Additional gems to install") do |gems|
           @options[:gems] = gems.reject {|g| g.to_s =~ /^(refinerycms|rmagick)$/}.map {|g| "gem '#{g.to_s}'"}
@@ -218,9 +216,9 @@ module Refinery
       if rails_command.blank?
         # Generate a rails application
         rails_command = "rails new \"#{@app_path}\""
-        rails_command << " --database #{@options[:database][:adapter]}"
+        #rails_command << " --database #{@options[:database][:adapter]}"
         rails_command << " --force" if @options[:force]
-        rails_command << " --skip-test-unit --skip-prototype"
+        rails_command << " --skip-test-unit --skip-prototype --skip-active-record"
       end
       rails_output = run_command(rails_command, {:cd => false})
       # Detect non-success or a blank rails output or starting with "Can't initialize" or "Error"
@@ -298,11 +296,11 @@ module Refinery
       end
 
       # Override database username and password
-      unless @options[:update]
-        # Override username and password
-        find_and_replace('config/database.yml', %r{username:.*}, "username: #{@options[:database][:username]}")
-        find_and_replace('config/database.yml', %r{password:.*}, "password: #{@options[:database][:password]}")
-      end
+#      unless @options[:update]
+#        # Override username and password
+#        find_and_replace('config/database.yml', %r{username:.*}, "username: #{@options[:database][:username]}")
+#        find_and_replace('config/database.yml', %r{password:.*}, "password: #{@options[:database][:password]}")
+#      end
 
       # Specify the correct version of the Refinery CMS gem (may be git source).
       src = Refinery.version !~ /\.pre$/ ? "'= #{Refinery.version}'" : ":git => 'git://github.com/resolve/refinerycms'"
@@ -413,3 +411,4 @@ module Refinery
 end
 
 Refinery::AppGenerator.new(ARGV).run! if $0 =~ %r{refinerycms$}
+

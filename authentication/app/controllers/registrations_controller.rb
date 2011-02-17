@@ -11,8 +11,9 @@ class RegistrationsController < Devise::RegistrationsController
 
   # This method should only be used to create the first Refinery user.
   def create
-    @user = User.new(params[:user])
     @selected_plugin_titles = params[:user][:plugins] || []
+    params[:user].delete(:plugins)
+    @user = User.new(params[:user])
 
     @user.save if @user.valid?
 
@@ -62,6 +63,9 @@ protected
 
   def refinery_users_exist?
     Role[:refinery].users.any?
+    #Temporary workaround
+    #Role[:refinery].user_ids.any?
   end
 
 end
+

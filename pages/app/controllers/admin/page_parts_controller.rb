@@ -10,6 +10,7 @@ module Admin
     end
 
     def destroy
+      #debugger
       part = PagePart.find(params[:id])
       page = part.page
       if part.destroy
@@ -22,3 +23,4 @@ module Admin
 
   end
 end
+

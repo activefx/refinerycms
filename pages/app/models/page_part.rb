@@ -12,6 +12,8 @@ class PagePart
   #belongs_to :page
   embedded_in :page, :inverse_of => :parts
 
+  default_scope asc(:position)
+
   #validates :title, :presence => true
   validates_presence_of :title
 
@@ -24,6 +26,16 @@ class PagePart
   end
 
   before_save :normalise_text_fields
+
+  # Extractable Methods
+
+  def self.table_exists?
+    included_modules.include? Mongoid::Document
+  end
+
+  def self.column_names
+    fields
+  end
 
 protected
   def normalise_text_fields

@@ -53,7 +53,7 @@ module Refinery
         if (options[:page_title][:wrap_if_not_chained] and title.empty?) and options[:page_title][:tag].present?
           css = " class='#{options[:page_title][:class]}'" if options[:page_title][:class].present?
           final_title = "<#{options[:page_title][:tag]}#{css}>#{final_title}</#{options[:page_title][:tag]}>"
-        end
+        end unless options[:page_title].nil?
 
         if title.empty?
           return final_title.to_s.html_safe
@@ -65,3 +65,4 @@ module Refinery
     end
   end
 end
+

@@ -22,7 +22,7 @@ module Refinery
         app_resources.configure_with(:heroku, ENV['S3_BUCKET']) if Refinery.s3_backend
 
         #app_resources.define_macro(ActiveRecord::Base, :resource_accessor)
-        app_resources.define_macro_on_include(Mongoid::Document, :resource_accessor)
+        #app_resources.define_macro_on_include(Mongoid::Document, :resource_accessor)
         app_resources.analyser.register(Dragonfly::Analysis::FileCommandAnalyser)
         app_resources.content_disposition = :attachment
 
@@ -33,13 +33,10 @@ module Refinery
         # and adds the filename onto the end (say the file was 'refinery_is_awesome.pdf')
         # /system/images/BAhbB1sHOgZmIiMyMDEwLzA5LzAxL1NTQ19DbGllbnRfQ29uZi5qcGdbCDoGcDoKdGh1bWIiDjk0MngzNjAjYw/refinery_is_awesome.pdf
         # Officially the way to do it, from: http://markevans.github.com/dragonfly/file.URLs.html
-#        app_resources.url_suffix = proc{|job|
-#          object_file_name = job.uid_basename.gsub(%r{^(\d{4}|\d{2})[_/]\d{2}[_/]\d{2}[_/]\d{2,3}[_/](\d{2}/\d{2}/\d{3}/)?}, '')
-#          "/#{object_file_name}#{job.encoded_extname || job.uid_extname}"
-#        }
-
         app_resources.url_suffix = proc{|job|
-          "/#{job.temp_object.name}"
+          "/#{job.name}"
+          #object_file_name = job.uid_basename.gsub(%r{^(\d{4}|\d{2})[_/]\d{2}[_/]\d{2}[_/]\d{2,3}[_/](\d{2}/\d{2}/\d{3}/)?}, '')
+          #"/#{object_file_name}#{job.encoded_extname || job.uid_extname}"
         }
 
         ### Extend active record ###

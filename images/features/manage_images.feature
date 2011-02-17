@@ -5,7 +5,8 @@ Feature: Manage Images
   I want to create and manage images
 
   Background:
-    Given I am a logged in refinery user
+    Given I have no users
+    And I am a logged in refinery user
     And I have no images
 
   @images-valid @valid
@@ -47,3 +48,4 @@ Feature: Manage Images
     And I follow "Remove this image forever"
     Then I should see "'Beach' was successfully removed."
     And I should have 0 images
+

@@ -22,14 +22,14 @@ end
 
 Given /^I (only )?have a page titled "?([^\"]*)"?$/ do |only, title|
   Page.delete_all if only
-  PagePart.delete_all if only
+  #PagePart.delete_all if only
   page = Page.create(:title => title)
   page.parts << PagePart.new(:title => 'testing', :position => 0)
   page
 end
 
 Given /^the page titled "?([^\"]*)"? is a child of "?([^\"]*)"?$/ do |title, parent_title|
-  Page.where(:title => title).first.update_attribute(:parent, Page.where(:title => parent_title).first)
+  Page.where(:title => title).first.update_attribute(:parent_id, Page.where(:title => parent_title).first.id)
 end
 
 Given /^the page titled "?([^\"]*)"? is not shown in the menu$/ do |title|
@@ -45,9 +45,11 @@ Then /^I should have ([0-9]+) pages?$/ do |count|
 end
 
 Then /^I should have a page at \/(.+)$/ do |url|
-  Page.all.count{|page| page.url[:path].to_s.include?(url)}.should == 1
+  count = Page.all.to_a.inject(0){|r,p| p.url[:id].to_s.include?(url) ? (r+1) : r}
+  count.should == 1
 end
 
 Then /^I should have (\d+) page_parts$/ do |count|
-  PagePart.count.should == count.to_i
+  Page.all.collect{|page| page.parts}.count.should == count.to_i
 end
+

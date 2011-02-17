@@ -1,6 +1,27 @@
 # encoding: utf-8
 
-class Image < ActiveRecord::Base
+class Image
+  include Mongoid::Document
+  include Mongoid::Timestamps
+  include Mongoid::Search
+
+  field :image_mime_type, :type => String
+  field :image_name, :type => String
+  field :image_size, :type => Integer
+  field :image_width, :type => Integer
+  field :image_height, :type => Integer
+  field :image_uid, :type => String
+  field :image_ext, :type => String
+
+  # Extractable Methods
+
+  def self.table_exists?
+    included_modules.include? Mongoid::Document
+  end
+
+  def self.column_names
+    fields
+  end
 
   # What is the max image size a user can upload
   MAX_SIZE_IN_MB = 5
@@ -9,11 +30,14 @@ class Image < ActiveRecord::Base
 
   validates :image, :presence  => {},
                     :length    => { :maximum => MAX_SIZE_IN_MB.megabytes }
-  validates_property :mime_type, :of => :image, :in => %w(image/jpeg image/png image/gif image/tiff),
-                     :message => :incorrect_format
 
-  # Docs for acts_as_indexed http://github.com/dougal/acts_as_indexed
-  acts_as_indexed :fields => [:title]
+  validates_property :mime_type, :of => :image, :in => %w(image/jpeg image/png image/gif image/tiff),
+                      :message => :incorrect_format
+
+#    # Docs for acts_as_indexed http://github.com/dougal/acts_as_indexed
+#    #acts_as_indexed :fields => [:title]
+  # Docs for Mongoid Search http://github.com/mauriciozaffari/mongoid_search
+  search_in :title
 
   # when a dialog pops up with images, how many images per page should there be
   PAGES_PER_DIALOG = 18
@@ -28,6 +52,11 @@ class Image < ActiveRecord::Base
   delegate :size, :mime_type, :url, :width, :height, :to => :image
 
   class << self
+
+    def find_by_image_name(image_name)
+      where(:image_name => image_name).first
+    end
+
     # How many images per page should be displayed?
     def per_page(dialog = false, has_size_options = false)
       if dialog
@@ -52,8 +81,8 @@ class Image < ActiveRecord::Base
 
   # Get a thumbnail job object given a geometry.
   def thumbnail(geometry = nil)
-    if geometry.is_a?(Symbol) and self.class.user_image_sizes.keys.include?(geometry)
-      geometry = self.class.user_image_sizes[geometry]
+    if geometry.present? and self.class.user_image_sizes.keys.include?(geometry.to_s)
+      geometry = self.class.user_image_sizes[geometry.to_s]
     end
 
     if geometry.present? && !geometry.is_a?(Symbol)
@@ -70,3 +99,14 @@ class Image < ActiveRecord::Base
   end
 
 end
+
+#    t.string   "image_mime_type"
+#    t.string   "image_name"
+#    t.integer  "image_size"
+#    t.integer  "image_width"
+#    t.integer  "image_height"
+#    t.datetime "created_at"
+#    t.datetime "updated_at"
+#    t.string   "image_uid"
+#    t.string   "image_ext"
+
