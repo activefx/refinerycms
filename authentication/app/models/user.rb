@@ -109,6 +109,10 @@ class User
     fields
   end
 
+  def self.base_class
+    self
+  end
+
   def plugins=(*plugin_names)
     plugin_names = plugin_names.first
     if persisted? # don't add plugins when the user_id is nil.

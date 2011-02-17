@@ -5,12 +5,23 @@ def setup_environment
   ENV["RAILS_ENV"] ||= 'test'
   require File.expand_path("../../config/environment", __FILE__)
   require 'rspec/rails'
+  require 'database_cleaner'
 
   # Requires supporting files with custom matchers and macros, etc,
   # in ./support/ and its subdirectories.
   Dir[File.expand_path('../support/**/*.rb', __FILE__)].each {|f| require f}
 
   RSpec.configure do |config|
+
+#    config.before(:suite) do
+#      DatabaseCleaner.strategy = :truncation
+#      DatabaseCleaner.orm = "mongoid"
+#    end
+
+#    config.before(:each) do
+#      DatabaseCleaner.clean
+#    end
+
     # == Mock Framework
     #
     # If you prefer to use mocha, flexmock or RR, uncomment the appropriate line:
@@ -25,8 +36,10 @@ def setup_environment
     # If you're not using ActiveRecord, or you'd prefer not to run each of your
     # examples within a transaction, comment the following line or assign false
     # instead of true.
-    config.use_transactional_fixtures = true
-    config.use_instantiated_fixtures  = false
+    #config.use_transactional_fixtures = true
+    #config.use_instantiated_fixtures  = false
+
+    config.include Mongoid::Matchers
   end
 end
 
@@ -75,3 +88,4 @@ def capture_stdout(&block)
   end
  fake.string
 end
+

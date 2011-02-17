@@ -8,6 +8,7 @@ require 'refinerycms-base'
 ## This is custom functionality written by Refinery CMS.
 def setup_environment
   ENV["RAILS_ENV"] ||= "test"
+  ENV['CUCUMBER_FORMAT'] = "pretty"
 
   if RbConfig::CONFIG["host_os"] =~ %r!(msdos|mswin|djgpp|mingw)!
     puts "Win32 users may experience cucumber/formatter/unicode errors.  Requirement ommited, see: /features/support/env.rb to re-add."
@@ -33,9 +34,8 @@ def setup_environment
   Capybara.default_selector = :css
 
   require 'database_cleaner'
-  require 'database_cleaner/cucumber'
-  DatabaseCleaner.strategy = :truncation
-  DatabaseCleaner.orm = "mongoid"
+  #require 'database_cleaner/cucumber'
+
 end
 
 def each_run
@@ -66,7 +66,11 @@ def each_run
   # How to clean your database when transactions are turned off. See
   # http://github.com/bmabey/database_cleaner for more info.
 
-  Before { DatabaseCleaner.clean }
+  Before do
+    DatabaseCleaner.orm = "mongoid"
+    DatabaseCleaner.strategy = :truncation
+    DatabaseCleaner.clean
+  end
 
 
   require 'fileutils'

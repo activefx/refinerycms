@@ -101,6 +101,20 @@ class Page
     fields
   end
 
+  def self.base_class
+    self
+  end
+
+  # Nested Set Helpers
+
+  def descendants_count
+    return (right - left - 1)/2
+  end
+
+  def has_descendants?
+    !descendants_count.zero?
+  end
+
   # Am I allowed to delete this page?
   # If a link_url is set we don't want to break the link so we don't allow them to delete
   # If deletable is set to false then we don't allow this page to be deleted. These are often Refinery system pages

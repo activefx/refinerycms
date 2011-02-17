@@ -23,6 +23,10 @@ class RefinerySetting
     fields
   end
 
+  def self.base_class
+    self
+  end
+
   # Model Specific Methods
 
   def self.find_or_initialize_by_name_and_scoping(options={})
