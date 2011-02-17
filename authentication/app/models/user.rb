@@ -1,3 +1,5 @@
+require 'devise'
+
 class User
   include Mongoid::Document
   include Mongoid::Timestamps
@@ -105,6 +107,10 @@ class User
 
   def self.column_names
     fields
+  end
+
+  def self.base_class
+    self
   end
 
   def plugins=(*plugin_names)
