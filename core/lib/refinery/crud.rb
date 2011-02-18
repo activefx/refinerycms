@@ -158,10 +158,15 @@ module Refinery
             conditions = conditions.empty? ? nil : conditions
 
             order = "#{options[:order]}"
-            @#{plural_name} = #{class_name}.where(conditions)
+            cursor = #{class_name}.where(conditions)
+
+            # Only supports first order argument right now
             unless order.empty?
-              @#{plural_name} = @#{plural_name}.order_by([order.scan(/\w+/).map{|i| i.downcase.to_sym}])
+              order_arguments = order.split.collect{|i| i.downcase.to_sym}
+              cursor = cursor.send(order_arguments[1], order_arguments[0]) unless (order_arguments.count < 2)
             end
+
+            @#{plural_name} = cursor
           end
 
           # Paginate a set of @#{plural_name} that may/may not already exist.
@@ -251,12 +256,12 @@ module Refinery
               # The list doesn't come to us in the correct order. Frustration.
               0.upto((newlist ||= params[:ul]).length - 1) do |index|
                 hash = newlist[index.to_s]
-                moved_item_id = hash['id'].split(/#{singular_name}\\_?/)
-                @current_#{singular_name} = #{class_name}.find_by_id(moved_item_id)
+                moved_item_id = hash['id'].split(/#{singular_name}\\_?/).last
+                @current_#{singular_name} = #{class_name}.find(moved_item_id)
 
                 if @current_#{singular_name}.respond_to?(:move_to_root)
                   if previous.present?
-                    @current_#{singular_name}.move_to_right_of(#{class_name}.find_by_id(previous))
+                    @current_#{singular_name}.move_to_right_of(#{class_name}.find(previous).id)
                   else
                     @current_#{singular_name}.move_to_root
                   end
@@ -275,18 +280,33 @@ module Refinery
               render :nothing => true
             end
 
-            def update_child_positions(node, #{singular_name})
+            def update_child_positions(node, current_page)
+
               0.upto(node['children'].length - 1) do |child_index|
                 child = node['children'][child_index.to_s]
-                child_id = child['id'].split(/#{singular_name}\_?/)
-                child_#{singular_name} = #{class_name}.find_by_id(child_id)
-                child_#{singular_name}.move_to_child_of(#{singular_name})
+                child_id = child['id'].split(/#{singular_name}\_?/).last
+                child_#{singular_name} = #{class_name}.find(child_id)
+                child_#{singular_name}.move_to_child_of(current_page.id)
 
                 if child['children'].present?
                   update_child_positions(child, child_#{singular_name})
                 end
               end
             end
+
+#            def update_child_positions(node, #{singular_name})
+#              debugger
+#              0.upto(node['children'].length - 1) do |child_index|
+#                child = node['children'][child_index.to_s]
+#                child_id = child['id'].split(/#{singular_name}\_?/).last
+#                child_#{singular_name} = #{class_name}.find(child_id)
+#                child_#{singular_name}.move_to_child_of(#{singular_name})
+
+#                if child['children'].present?
+#                  update_child_positions(child, child_#{singular_name})
+#                end
+#              end
+#            end
 
           )
         end
