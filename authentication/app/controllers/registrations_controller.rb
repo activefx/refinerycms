@@ -63,8 +63,6 @@ protected
 
   def refinery_users_exist?
     Role[:refinery].users.any?
-    #Temporary workaround
-    #Role[:refinery].user_ids.any?
   end
 
 end
