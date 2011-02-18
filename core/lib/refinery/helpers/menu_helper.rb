@@ -43,7 +43,9 @@ module Refinery
 
       def selected_page_or_descendant_page_selected?(page, collection = [], selected_item = nil)
         selected = false
-        selected = selected_item ? selected_item === page : selected_page?(page)
+        #debugger
+        #selected = selected_item ? selected_item === page : selected_page?(page)
+        selected = selected_item ? selected_item == page : selected_page?(page)
         selected = descendant_page_selected?(page, collection, selected_item) unless selected
         selected
       end
@@ -66,3 +68,4 @@ module Refinery
     end
   end
 end
+

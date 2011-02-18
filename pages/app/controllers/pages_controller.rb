@@ -18,11 +18,11 @@ class PagesController < ApplicationController
   def show
     # Find the page by the newer 'path' or fallback to the page's id if no path.
 
-    @page = Page.find_by_slug(params[:path] ? params[:path].to_s.split('/').last : params[:id])
+    @page = Page.find_by_slug("#{params[:path]}/#{params[:id]}".split('/').last)
 
-    if @page.try(:live?) or (@page and refinery_user? and current_user.authorized_plugins.include?("refinery_pages"))
+    if @page.try(:live?) || (@page && refinery_user? && current_user.authorized_plugins.include?("refinery_pages"))
       # if the admin wants this to be a "placeholder" page which goes to its first child, go to that instead.
-      if @page.skip_to_first_child and (first_live_child = @page.children.asc(:lft).where(:draft=>false).first).present?
+      if @page.skip_to_first_child && (first_live_child = @page.children.asc(:lft).where(:draft=>false).first).present?
         redirect_to first_live_child.url
       end
     else

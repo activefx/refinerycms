@@ -5,7 +5,7 @@ def setup_environment
   ENV["RAILS_ENV"] ||= 'test'
   require File.expand_path("../../config/environment", __FILE__)
   require 'rspec/rails'
-  require 'database_cleaner'
+#  require 'database_cleaner'
 
   # Requires supporting files with custom matchers and macros, etc,
   # in ./support/ and its subdirectories.
@@ -19,10 +19,6 @@ def setup_environment
 #    end
 
 #    config.before(:each) do
-#      DatabaseCleaner.start
-#    end
-
-#    config.after(:each) do
 #      DatabaseCleaner.clean
 #    end
 
@@ -50,8 +46,9 @@ end
 def each_run
 end
 
-unless RbConfig::CONFIG["host_os"] =~ %r!(msdos|mswin|djgpp|mingw)!
-  require 'rubygems'
+require 'rubygems'
+# If spork is available in the Gemfile it'll be used but we don't force it.
+unless RbConfig::CONFIG["host_os"] =~ %r!(msdos|mswin|djgpp|mingw)! or (begin; require 'spork'; rescue LoadError; nil end).nil?
   require 'spork'
 
   Spork.prefork do

@@ -9,8 +9,9 @@ module Admin
       }
     end
 
+    # This method is not going to work with Mongoid,
+    # but I'm not sure where its called from
     def destroy
-      #debugger
       part = PagePart.find(params[:id])
       page = part.page
       if part.destroy

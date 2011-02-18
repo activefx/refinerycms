@@ -20,6 +20,7 @@ module Admin
 
     def find_page
       @page = Page.find_by_slug(params[:id])
+      @page = @page.nil? ? Page.find(params[:id]) : @page
     end
 
     def globalize!

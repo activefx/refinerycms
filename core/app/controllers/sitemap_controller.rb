@@ -6,9 +6,10 @@ class SitemapController < ::Refinery::FastController
 
     respond_to do |format|
       format.xml do
-        @pages = Page.live.includes(:parts)
+        @pages = Page.live
       end
     end
   end
 
 end
+

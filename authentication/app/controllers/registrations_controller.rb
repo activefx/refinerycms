@@ -1,4 +1,4 @@
-class RegistrationsController < Devise::RegistrationsController
+class RegistrationsController < ::Devise::RegistrationsController
 
   # Protect these actions behind an admin login
   before_filter :redirect?, :only => [:new, :create]
@@ -63,8 +63,6 @@ protected
 
   def refinery_users_exist?
     Role[:refinery].users.any?
-    #Temporary workaround
-    #Role[:refinery].user_ids.any?
   end
 
 end

@@ -8,9 +8,7 @@ describe Role do
   it { should be_timestamped_document }
   it { should have_field(:title).of_type(String) }
   it { should validate_uniqueness_of(:title) }
-  #it { should reference_and_be_referenced_in_many(:users) }
-  # Temporary Workaround
-  it { should have_field(:user_ids).of_type(Array) }
+  it { should reference_and_be_referenced_in_many(:users) }
 
 end
 
@@ -84,6 +82,133 @@ describe User do
 
   before(:all) do
     User.delete_all
+    Role.delete_all
+  end
+
+  # Tests to confirm working Mongoid references_and_referenced_in_many relationship,
+  # some errors still occuring, for example with the destroy method ( user.roles.destroy(role) )
+  # Some duplication with other tests, will remove once issues are worked out
+  context "Roles Relationship", :roles => true do
+
+    before(:each) do
+      User.delete_all
+      Role.delete_all
+    end
+
+    it "should start each example without any users" do
+      User.count.should == 0
+    end
+
+    it "should start each example without any roles" do
+      Role.count.should == 0
+    end
+
+    it "references roles in the user model" do
+      User.should reference_and_be_referenced_in_many(:roles)
+    end
+
+    it "references users in the role model" do
+      Role.should reference_and_be_referenced_in_many(:users)
+    end
+
+    context "setting the relationships from the user side" do
+
+      before(:each) do
+        @user = Factory(:user)
+        @user.save
+        @role = Role.create(:title => 'refinery')
+      end
+
+      it "should add update both models when adding a role to a user" do
+        @user.roles << @role
+        @user.roles.size.should == 1
+      end
+
+      it "should add update both models when adding a role to a user" do
+        @user.roles << @role
+        @role.users.size.should == 1
+      end
+
+      it "should work with the [] accessor method" do
+        @user.roles << @role
+        Role[:refinery].users.size.should == 1
+      end
+
+      it "the role should be the same as the one accessible from the [] method" do
+        @role.should == Role[:refinery]
+      end
+
+      it "should add to the user's roles with the add_user method" do
+        @user.add_role(:refinery)
+        @user.roles.size.should == 1
+      end
+
+      it "should add to the role's users with the add_user method" do
+        @user.add_role(:refinery)
+        Role[:refinery].users.size.should == 1
+      end
+
+      it "should add to the role's users with the add_user method" do
+        @user.add_role(:refinery)
+        @role.reload
+        @role.users.size.should == 1
+      end
+
+      it "should return true from has_role? method when the user has the role" do
+        @user.add_role(:refinery)
+        @user.has_role?(:refinery).should be_true
+      end
+
+      it "should return false from has_role? method when the user does not have the role" do
+        @user.add_role(:refinery)
+        @user.has_role?(:something).should be_false
+      end
+
+      it "should destory the association when using remove_role" do
+        @user.add_role(:refinery)
+        @user.remove_role(:refinery)
+        @user.has_role?(:refinery).should be_false
+      end
+
+      it "should set multiple roles" do
+        @selected_role_names = ['First', 'Second', 'Third']
+        @user.roles = @selected_role_names.collect{|r| Role[r.downcase.to_sym]}
+        @user.has_role?(:first).should be_true
+        @user.has_role?(:second).should be_true
+        @user.has_role?(:third).should be_true
+      end
+
+    end
+
+    context "setting the relationships from the role side" do
+
+      before(:each) do
+        @user = Factory(:user)
+        @user.save
+        @role = Role.create(:title => 'refinery')
+      end
+
+      it "should add update both models when adding a user to a role" do
+        @role.users << @user
+        @user.roles.size.should == 1
+      end
+
+      it "should add update both models when adding a user to a role" do
+        @role.users << @user
+        @role.users.size.should == 1
+      end
+
+      it "should work with the [] accessor method" do
+        @role.users << @user
+        Role[:refinery].users.size.should == 1
+      end
+
+      it "the role should be the same as the one accessible from the [] method" do
+        Role[:refinery].should == @role
+      end
+
+    end
+
   end
 
   context "Roles" do
@@ -181,6 +306,11 @@ describe User do
 
       it "user with superuser role" do
         @user.can_delete?(@super_user).should be_false
+      end
+
+      it "if user count with refinery role <= 1" do
+        @user.remove_role(:refinery)
+        @super_user.can_delete?(@user).should be_false
       end
 
       it "if user count with refinery role <= 1" do

@@ -1,3 +1,5 @@
+require 'devise'
+
 class User
   include Mongoid::Document
   include Mongoid::Timestamps
@@ -37,7 +39,7 @@ class User
 
   #references_and_referenced_in_many :roles, :inverse_of => :users
   references_and_referenced_in_many :roles
-  after_save :update_roles
+  #after_save :update_roles
 
   # has_many :plugins, :class_name => "UserPlugin", :order => "position ASC", :dependent => :destroy
   references_many :plugins, :class_name => "UserPlugin", :dependent => :destroy, :index => true, :inverse_of => :user
@@ -107,6 +109,10 @@ class User
     fields
   end
 
+  def self.base_class
+    self
+  end
+
   def plugins=(*plugin_names)
     plugin_names = plugin_names.first
     if persisted? # don't add plugins when the user_id is nil.
@@ -126,20 +132,40 @@ class User
   end
 
   def can_delete?(user_to_delete = self)
+    #debugger
     user_to_delete.persisted? and
+    #debugger
     !user_to_delete.has_role?(:superuser) and
+    #debugger
     Role[:refinery].users.count > 1 and
+    #debugger
     id != user_to_delete.id
   end
 
+  # Temporary workaround for problems with Mongoid's many to many destroy method
+  def remove_role(title)
+    raise StandardError, "Role should be the title of the role not a role object." if title.is_a?(Role)
+    role = Role.where(:title => title.to_s.camelize).first
+    if role
+      self.role_ids = self.role_ids.delete_if{|r| r == role.id}
+      self.save
+      role.user_ids = role.user_ids.delete_if{|u| u == self.id}
+      role.save
+    else
+      false
+    end
+  end
+
   def add_role(title)
-    raise ArgumentException, "Role should be the title of the role not a role object." if title.is_a?(Role)
+    raise StandardError, "Role should be the title of the role not a role object." if title.is_a?(Role)
     roles << Role[title] unless has_role?(title)
   end
 
   def has_role?(title)
-    raise ArgumentException, "Role should be the title of the role not a role object." if title.is_a?(Role)
-    (role = Role.find_by_title(title.to_s.camelize)).present? and roles.collect{|r| r.id}.include?(role.id)
+    raise StandardError, "Role should be the title of the role not a role object." if title.is_a?(Role)
+    #(role = Role.find_by_title(title.to_s.camelize)).present? and roles.collect{|r| r.id}.include?(role.id)
+    role = Role.where(:title => title.to_s.camelize).first
+    role ? role.users.include?(self) : false
   end
 
   private

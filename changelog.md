@@ -1,3 +1,29 @@
+## 0.9.9.3 [17 February 2011]
+
+* Fixed faulty require statement that tried to load rack/cache before dragonfly. [Philip Arndt](https://github.com/parndt)
+
+## 0.9.9.2 [17 February 2011]
+
+* Removed ``activesupport`` requirement from ``bin/refinerycms``. [Philip Arndt](https://github.com/parndt)
+* Fixed an issue in some browsers with a particular jQuery selector. [Philip Arndt](https://github.com/parndt)
+* Modified some existing migrations to behave better when creating new applications. [Philip Arndt](https://github.com/parndt)
+* Fixed ``-u`` and ``-p`` support for ``bin/refinerycms``. [Philip Arndt](https://github.com/parndt)
+
+* [See full list](https://github.com/resolve/refinerycms/compare/0.9.9.1...0.9.9.2)
+
+## 0.9.9.1 [15 February 2011]
+
+* Fixed Firefox issue with WYMeditor. [Amanda Wagener](https:/github.com/awagener)
+* Gracefully exit ``bin/refinerycms`` on error. [Alexandre Girard](https://github.com/alx) and [Brian Stevens](https://github.com/bdstevens) and [Philip Arndt](https://github.com/parndt)
+* Added basic single table inheritance support to crudify. [Ken Nordquist](https://github.com/kenphused)
+* Removed most of the 0.9.8.9 specific ``--update`` logic in ``bin/refinerycms``. [Philip Arndt](https://github.com/parndt)
+* Added ``refinerycms-testing`` engine which reduces the main Gemfile complexity. [Philip Arndt](https://github.com/parndt)
+* Split the project into 10 separately released gems that include their own dependencies. [Philip Arndt](https://github.com/parndt)
+* New Vietnamese translation files added. [Alex Nguyen](https://github.com/tiendung) and Stefan N and Mario Nguyen
+* Improved JRuby support as well as the way that commands run in any ruby implementation. [Hiro Asari](https://github.com/BanzaiMan)
+
+* [See full list](https://github.com/resolve/refinerycms/compare/0.9.9...0.9.9.1)
+
 ## 0.9.9 [27 January 2011]
 
 * Better, more semantic HTML5. [Joe Sak](https://github.com/joemsak)

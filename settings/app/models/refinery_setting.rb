@@ -4,7 +4,7 @@ class RefinerySetting
   include Mongoid::Search
 
   field :name, :type => String
-  field :value, :type => Hash
+  field :value
   field :destroyable, :type => Boolean, :default => true
   field :scoping, :type => String
   field :restricted, :type => Boolean, :default => false
@@ -12,6 +12,8 @@ class RefinerySetting
   field :form_value_type, :type => String
 
   index :name
+
+  before_save :set_serialized_values
 
   # Extractable Methods
 
@@ -21,6 +23,10 @@ class RefinerySetting
 
   def self.column_names
     fields
+  end
+
+  def self.base_class
+    self
   end
 
   # Model Specific Methods
@@ -49,25 +55,23 @@ class RefinerySetting
     ['Checkbox', 'check_box']
   ]
 
-  #validates :name, :presence => true
-  validates_presence_of :name
+  validates :name, :presence => true
 
   #serialize :value # stores into YAML format
   #serialize :callback_proc_as_string
+
+  # Mongoid lacks a serialize method
+  def set_serialized_values
+    if self.value.is_a?(String)
+      self.value = YAML.load(self.value)
+    end
+  end
 
   # Docs for acts_as_indexed http://github.com/dougal/acts_as_indexed
   #acts_as_indexed :fields => [:name]
 
   # Docs for Mongoid Search http://github.com/mauriciozaffari/mongoid_search
   search_in :name
-
-#  before_save do |setting|
-#    setting.restricted = false if setting.restricted.nil?
-#  end
-
-#  after_save do |setting|
-#    setting.class.rewrite_cache
-#  end
 
   before_save :set_restricted_callback
 
