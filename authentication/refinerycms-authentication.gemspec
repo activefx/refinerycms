@@ -5,7 +5,7 @@ Gem::Specification.new do |s|
   s.version           = %q{0.9.9.3}
   s.summary           = %q{Authentication engine for Refinery CMS}
   s.description       = %q{The default authentication engine for Refinery CMS}
-  s.date              = %q{2011-02-17}
+  s.date              = %q{2011-02-18}
   s.email             = %q{info@refinerycms.com}
   s.homepage          = %q{http://refinerycms.com}
   s.rubyforge_project = %q{refinerycms}
@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
   s.executables       = %w()
 
   s.add_dependency 'refinerycms-core', '~> 0.9.9.3'
-  s.add_dependency 'devise',           '~> 1.1'
+  s.add_dependency 'devise',           '~> 1.1.7'
 
   s.files             = [
     'app',
@@ -32,7 +32,6 @@ Gem::Specification.new do |s|
     'app/mailers/user_mailer.rb',
     'app/models',
     'app/models/role.rb',
-    'app/models/roles_users.rb',
     'app/models/user.rb',
     'app/models/user_plugin.rb',
     'app/views',
@@ -81,12 +80,6 @@ Gem::Specification.new do |s|
     'config/locales/zh-CN.yml',
     'config/locales/zh-TW.yml',
     'config/routes.rb',
-    'db',
-    'db/migrate',
-    'db/migrate/20100913234705_create_refinerycms_authentication_schema.rb',
-    'db/migrate/20100929035252_add_missing_indexes_to_roles_users.rb',
-    'db/migrate/20101206013505_change_to_devise_users_table.rb',
-    'db/migrate/20110106184757_add_remember_created_at_to_users.rb',
     'features',
     'features/lost_password.feature',
     'features/manage_users.feature',
@@ -103,7 +96,6 @@ Gem::Specification.new do |s|
     'lib/generators/refinerycms_authentication_generator.rb',
     'lib/refinerycms-authentication.rb',
     'license.md',
-    'readme.md',
     'refinerycms-authentication.gemspec',
     'spec',
     'spec/models',

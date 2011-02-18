@@ -11,19 +11,19 @@ defaults: &defaults
   parameterize_keys: true
   persist_in_safe_mode: false
   raise_not_found_error: true
-  reconnect_time: 5
+  reconnect_time: 3
 
 development:
   <<: *defaults
-  database: refinery_app1_development
+  database: refinery_app_development
 
 test:
   <<: *defaults
-  database: refinery_app1_test
+  database: refinery_app_test
 
 cucumber:
   <<: *defaults
-  database: refinery_app1_cucumber
+  database: refinery_app_cucumber
 
 # set these environment variables on your prod server
 production:

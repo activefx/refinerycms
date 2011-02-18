@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
   s.executables       = %w(#{Pathname.glob(gempath.join('bin/*')).map{|d| d.relative_path_from(gempath)}.sort.join(" ")})
 
   s.add_dependency 'refinerycms-core', '~> #{::Refinery::Version}'
-  s.add_dependency 'devise',           '~> 1.1'
+  s.add_dependency 'devise',           '~> 1.1.7'
 
   s.files             = [
     '#{%w( **/{*,.rspec,.gitignore,.yardopts} ).map { |file| Pathname.glob(gempath.join(file)) }.flatten.reject{|f|
@@ -32,3 +32,4 @@ EOF
 
 (gemfile = gempath.join("#{gemname}.gemspec")).open('w') {|f| f.puts(gemspec)}
 puts `cd #{gempath} && gem build #{gemfile}` if ARGV.any?{|a| a == "BUILD=true"}
+

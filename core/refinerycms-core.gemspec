@@ -5,7 +5,7 @@ Gem::Specification.new do |s|
   s.version           = %q{0.9.9.3}
   s.summary           = %q{Core engine for Refinery CMS}
   s.description       = %q{The core of Refinery CMS. This handles the common functionality and is required by most engines}
-  s.date              = %q{2011-02-17}
+  s.date              = %q{2011-02-18}
   s.email             = %q{info@refinerycms.com}
   s.homepage          = %q{http://refinerycms.com}
   s.rubyforge_project = %q{refinerycms}
@@ -17,10 +17,11 @@ Gem::Specification.new do |s|
   s.add_dependency 'refinerycms-base',            '~> 0.9.9.3'
   s.add_dependency 'refinerycms-settings',        '~> 0.9.9.3'
   s.add_dependency 'refinerycms-generators',      '~> 0.9.9.3'
-  s.add_dependency 'acts_as_indexed',             '~> 0.7'
-  s.add_dependency 'friendly_id_globalize3',      '~> 3.2.0'
-  s.add_dependency 'globalize3',                  '>= 0.1.0.beta'
-  s.add_dependency 'moretea-awesome_nested_set',  '= 1.4.3.1'
+  s.add_dependency 'mongoid',                     '~> 2.0.0.rc.7'
+  s.add_dependency 'mongoid_search',              '~> 0.1.2'
+  s.add_dependency 'mongoid_slug',                '~> 0.6.3'
+  s.add_dependency 'mongoid_nested_set',          '~> 0.1.2'
+  s.add_dependency 'dragonfly',                   '~> 0.8.2'
   s.add_dependency 'rails',                       '~> 3.0.3'
   s.add_dependency 'rdoc',                        '>= 2.5.11' # helps fix ubuntu
   s.add_dependency 'truncate_html',               '~> 0.5'
@@ -102,10 +103,8 @@ Gem::Specification.new do |s|
     'config/locales/zh-CN.yml',
     'config/locales/zh-TW.yml',
     'config/routes.rb',
-    'crud.md',
     'doc',
     'doc/included-jquery-ui-packages.jpg',
-    'engines.md',
     'features',
     'features/search.feature',
     'features/site_bar.feature',
@@ -130,12 +129,10 @@ Gem::Specification.new do |s|
     'lib/generators/templates/autotest/autotest.rb',
     'lib/generators/templates/autotest/discover.rb',
     'lib/generators/templates/config',
-    'lib/generators/templates/config/database.yml.mysql',
-    'lib/generators/templates/config/database.yml.postgresql',
-    'lib/generators/templates/config/database.yml.sqlite3',
     'lib/generators/templates/config/i18n-js.yml',
     'lib/generators/templates/config/initializers',
     'lib/generators/templates/config/initializers/devise.rb',
+    'lib/generators/templates/config/mongoid.yml',
     'lib/generators/templates/config/settings.rb',
     'lib/generators/templates/db',
     'lib/generators/templates/db/seeds.rb',

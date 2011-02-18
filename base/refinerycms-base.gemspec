@@ -5,7 +5,7 @@ Gem::Specification.new do |s|
   s.version           = %q{0.9.9.3}
   s.summary           = %q{Base engine for Refinery CMS}
   s.description       = %q{The basic base for Refinery CMS Refinery CMS}
-  s.date              = %q{2011-02-17}
+  s.date              = %q{2011-02-18}
   s.email             = %q{info@refinerycms.com}
   s.homepage          = %q{http://refinerycms.com}
   s.rubyforge_project = %q{refinerycms}
@@ -15,10 +15,6 @@ Gem::Specification.new do |s|
   s.executables       = %w()
 
   s.files             = [
-    'db',
-    'db/migrate',
-    'db/migrate/20100913234706_create_refinerycms_core_schema.rb',
-    'db/migrate/20101217113424_add_locale_to_slugs.rb',
     'lib',
     'lib/base',
     'lib/base/refinery.rb',

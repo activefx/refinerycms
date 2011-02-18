@@ -1,7 +1,6 @@
 require 'dragonfly'
 require 'rack/cache'
 require 'refinerycms-core'
-#require 'mongoid'
 
 module Refinery
   module Resources

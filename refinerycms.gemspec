@@ -4,7 +4,7 @@ Gem::Specification.new do |s|
   s.name              = %q{refinerycms}
   s.version           = %q{0.9.9.3}
   s.description       = %q{A Ruby on Rails CMS that supports Rails 3. It's easy to extend and sticks to 'the Rails way' where possible.}
-  s.date              = %q{2011-02-17}
+  s.date              = %q{2011-02-18}
   s.summary           = %q{A Ruby on Rails CMS that supports Rails 3}
   s.email             = %q{info@refinerycms.com}
   s.homepage          = %q{http://refinerycms.com}
@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.authors           = ['Resolve Digital', 'Philip Arndt', 'David Jones', 'Steven Heidel']
   s.license           = %q{MIT}
   s.require_paths     = %w(lib)
-  s.executables       = %w(refinerycms)
+  s.executables       = %w()
 
   # Bundler
   s.add_dependency    'bundler',                    '~> 1.0.10'
@@ -28,45 +28,8 @@ Gem::Specification.new do |s|
   s.add_dependency    'refinerycms-settings',       '~> 0.9.9.3'
 
   s.files             = [
-    '.gitignore',
-    '.rspec',
-    '.yardopts',
-    'Gemfile',
-    'Gemfile',
-    'Gemfile.lock',
-    'Rakefile',
-    'app',
-    'app/views',
-    'app/views/sitemap',
-    'app/views/sitemap/index.xml.builder',
-    'autotest',
-    'autotest/autotest.rb',
-    'autotest/discover.rb',
-    'bin',
-    'bin/refinerycms',
-    'changelog.md',
-    'changelog.md',
-    'config',
-    'config/cucumber.yml',
-    'config/database.yml.mysql',
-    'config/database.yml.postgresql',
-    'config/database.yml.sqlite3',
-    'config/environments',
-    'config/environments/development.rb',
-    'config/environments/production.rb',
-    'config/environments/test.rb',
-    'config/settings.rb',
-    'config.ru',
-    'lib',
-    'lib/refinery.rb',
-    'lib/refinerycms.rb',
-    'license.md',
-    'license.md',
-    'readme.md',
-    'readme.md',
-    'refinerycms.gemspec',
-    'spec',
-    'spec/rcov.opts',
-    'spec/spec_helper.rb'
+    'gemspec.rb',
+    'refinery.rb',
+    'refinerycms.rb'
   ]
 end

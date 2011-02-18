@@ -5,7 +5,7 @@ Gem::Specification.new do |s|
   s.version           = %q{0.9.9.3}
   s.summary           = %q{Images engine for Refinery CMS}
   s.description       = %q{Handles all image upload and processing functionality in Refinery CMS.}
-  s.date              = %q{2011-02-17}
+  s.date              = %q{2011-02-18}
   s.email             = %q{info@refinerycms.com}
   s.homepage          = %q{http://refinerycms.com}
   s.rubyforge_project = %q{refinerycms}
@@ -62,9 +62,6 @@ Gem::Specification.new do |s|
     'config/locales/zh-CN.yml',
     'config/locales/zh-TW.yml',
     'config/routes.rb',
-    'db',
-    'db/migrate',
-    'db/migrate/20100913234707_create_refinerycms_images_schema.rb',
     'features',
     'features/manage_images.feature',
     'features/step_definitions',
@@ -82,7 +79,6 @@ Gem::Specification.new do |s|
     'lib/generators/refinerycms_images_generator.rb',
     'lib/refinerycms-images.rb',
     'license.md',
-    'readme.md',
     'refinerycms-images.gemspec',
     'spec',
     'spec/models',

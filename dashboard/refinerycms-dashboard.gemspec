@@ -5,7 +5,7 @@ Gem::Specification.new do |s|
   s.version           = %q{0.9.9.3}
   s.summary           = %q{Dashboard engine for Refinery CMS}
   s.description       = %q{The dashboard is usually the first engine the user sees in the backend of Refinery CMS. It displays useful information and contains links to common functionality.}
-  s.date              = %q{2011-02-17}
+  s.date              = %q{2011-02-18}
   s.email             = %q{info@refinerycms.com}
   s.homepage          = %q{http://refinerycms.com}
   s.rubyforge_project = %q{refinerycms}
@@ -64,7 +64,6 @@ Gem::Specification.new do |s|
     'lib/gemspec.rb',
     'lib/refinerycms-dashboard.rb',
     'license.md',
-    'readme.md',
     'refinerycms-dashboard.gemspec'
   ]
 

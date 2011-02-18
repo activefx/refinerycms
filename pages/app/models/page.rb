@@ -7,7 +7,6 @@ class Page
   include Mongoid::Search
 
   field :title,                 :type => String
-#  field :parent_id,             :type => Integer
   field :position,              :type => Integer
   field :path,                  :type => String
   field :meta_keywords,         :type => String
@@ -21,9 +20,6 @@ class Page
   field :draft,                 :type => Boolean, :default => false
   field :browser_title,         :type => String
   field :skip_to_first_child,   :type => Boolean, :default => false
-#  field :lft,                   :type => Integer
-#  field :rgt,                   :type => Integer
-#  field :depth,                 :type => Integer
 
   index :depth
   index :lft
@@ -32,8 +28,8 @@ class Page
 
   #translates :title, :meta_keywords, :meta_description, :browser_title if self.respond_to?(:translates)
   attr_accessor :locale # to hold temporarily
-  #validates :title, :presence => true
-  validates_presence_of :title
+
+  validates :title, :presence => true
 
   acts_as_nested_set
 

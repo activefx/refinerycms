@@ -1,5 +1,4 @@
 require 'dragonfly'
-#require 'mongoid'
 require 'rack/cache'
 require 'refinerycms-core'
 

@@ -31,3 +31,4 @@ EOF
 
 (gemfile = gempath.join("#{gemname}.gemspec")).open('w') {|f| f.puts(gemspec)}
 puts `cd #{gempath} && gem build #{gemfile}` if ARGV.any?{|a| a == "BUILD=true"}
+

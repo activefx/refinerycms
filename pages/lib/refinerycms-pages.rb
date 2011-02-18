@@ -1,4 +1,5 @@
 require 'refinerycms-core'
+require 'mongoid'
 require 'mongoid_nested_set'
 #require 'globalize3'
 

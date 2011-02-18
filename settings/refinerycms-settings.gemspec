@@ -5,7 +5,7 @@ Gem::Specification.new do |s|
   s.version           = %q{0.9.9.3}
   s.summary           = %q{Settings engine for Refinery CMS}
   s.description       = %q{The default settings engine that is required by Refinery CMS core. Adds programmer creatable, user editable settings for each engine.}
-  s.date              = %q{2011-02-17}
+  s.date              = %q{2011-02-18}
   s.email             = %q{info@refinerycms.com}
   s.homepage          = %q{http://refinerycms.com}
   s.rubyforge_project = %q{refinerycms}
@@ -57,10 +57,6 @@ Gem::Specification.new do |s|
     'config/locales/zh-CN.yml',
     'config/locales/zh-TW.yml',
     'config/routes.rb',
-    'db',
-    'db/migrate',
-    'db/migrate/20100913234710_create_refinerycms_settings_schema.rb',
-    'db/migrate/20100926142529_add_value_type_to_refinery_settings.rb',
     'features',
     'features/manage_refinery_settings.feature',
     'features/step_definitions',
@@ -73,7 +69,6 @@ Gem::Specification.new do |s|
     'lib/generators/refinerycms_settings_generator.rb',
     'lib/refinerycms-settings.rb',
     'license.md',
-    'readme.md',
     'refinerycms-settings.gemspec',
     'spec',
     'spec/models',

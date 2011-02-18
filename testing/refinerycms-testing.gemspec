@@ -5,7 +5,7 @@ Gem::Specification.new do |s|
   s.version           = %q{0.9.9.3}
   s.summary           = %q{Testing plugin for Refinery CMS}
   s.description       = %q{This plugin adds the ability to run cucumber and rspec against the RefineryCMS gem while inside a RefineryCMS project}
-  s.date              = %q{2011-02-17}
+  s.date              = %q{2011-02-18}
   s.email             = %q{info@refinerycms.com}
   s.homepage          = %q{http://refinerycms.com}
   s.rubyforge_project = %q{refinerycms}
@@ -17,6 +17,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'refinerycms-core', '~> 0.9.9.3'
   # RSpec
   s.add_dependency 'rspec-rails',       '~> 2.5'
+  s.add_dependency 'mongoid-rspec',     '~> 1.3.2'
 
   # Cucumber
   s.add_dependency 'capybara',          '>= 0.4.1.1'
