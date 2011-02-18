@@ -5,12 +5,13 @@ describe RefinerySetting do
   it { should be_mongoid_document }
   it { should be_timestamped_document }
   it { should have_field(:name).of_type(String) }
-  it { should have_field(:value).of_type(Hash) }
+  it { should have_field(:value) }
   it { should have_field(:destroyable).of_type(Boolean).with_default_value_of(true) }
   it { should have_field(:scoping).of_type(String) }
   it { should have_field(:restricted).of_type(Boolean).with_default_value_of(false) }
   it { should have_field(:callback_proc_as_string).of_type(String) }
   it { should have_field(:form_value_type).of_type(String) }
+  it { should validate_presence_of(:name) }
 
   before(:each) do
     # Not sure why these were being called each time,
