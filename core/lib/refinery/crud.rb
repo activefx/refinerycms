@@ -152,9 +152,6 @@ module Refinery
           # And eager loading is applied as specified into crudify.
 
           def find_all_#{plural_name}(conditions = #{options[:conditions].inspect})
-##            @#{plural_name} = #{class_name}.where(conditions).includes(
-##                                #{options[:include].map(&:to_sym).inspect}
-##                              ).order("#{options[:order]}")
             conditions = conditions.empty? ? nil : conditions
 
             order = "#{options[:order]}"
@@ -293,20 +290,6 @@ module Refinery
                 end
               end
             end
-
-#            def update_child_positions(node, #{singular_name})
-#              debugger
-#              0.upto(node['children'].length - 1) do |child_index|
-#                child = node['children'][child_index.to_s]
-#                child_id = child['id'].split(/#{singular_name}\_?/).last
-#                child_#{singular_name} = #{class_name}.find(child_id)
-#                child_#{singular_name}.move_to_child_of(#{singular_name})
-
-#                if child['children'].present?
-#                  update_child_positions(child, child_#{singular_name})
-#                end
-#              end
-#            end
 
           )
         end
