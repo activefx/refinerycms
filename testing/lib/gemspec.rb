@@ -22,7 +22,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'refinerycms-core', '~> #{::Refinery::Version}'
   # RSpec
   s.add_dependency 'rspec-rails',       '~> 2.5'
-  s.add_dependency 'mongoid-rspec',     '~> 1.3.2'
+  s.add_dependency 'mongoid-rspec',     '>= 1.3.2'
 
   # Cucumber
   s.add_dependency 'capybara',          '>= 0.4.1.1'

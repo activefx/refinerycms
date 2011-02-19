@@ -80,5 +80,16 @@ config/rackspace_cloudfiles.yml
 your_*.*
 db/schema.rb
 
+# Bundler
+authentication/Gemfile.lock
+base/Gemfile.lock
+core/Gemfile.lock
+dashboard/Gemfile.lock
+images/Gemfile.lock
+pages/Gemfile.lock
+resources/Gemfile.lock
+settings/Gemfile.lock
+testing/Gemfile.lock
+
 # END REFINERY CMS DEVELOPMENT =================================================
 

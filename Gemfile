@@ -16,7 +16,7 @@ gem 'bson_ext', '>= 1.2.1'
 gem 'mongoid_slug', :require => 'mongoid/slug'
 gem 'mongoid_nested_set', :git => 'git://github.com/activefx/mongoid_nested_set.git'
 gem 'mongoid_search', :git => 'git://github.com/activefx/mongoid_search_relevant.git'
-gem 'devise', '~> 1.1.6'
+gem 'devise', :git => 'git://github.com/plataformatec/devise.git'
 
 # Use unicorn as the web server
 # gem 'unicorn'
@@ -36,10 +36,19 @@ gem 'ruby-debug19', :require => 'ruby-debug'
 # REFINERY CMS ================================================================
 # Anything you put in here will be overridden when the app gets updated.
 
-# gem 'refinerycms', '~> 0.9.9.1'
+#gem 'refinerycms', :path => '.'
+gem 'refinerycms-authentication', :path => 'authentication'
+gem 'refinerycms-base', :path => 'base'
+gem 'refinerycms-core', :path => 'core'
+gem 'refinerycms-dashboard', :path => 'dashboard'
+gem 'refinerycms-images', :path => 'images'
+gem 'refinerycms-pages', :path => 'pages'
+gem 'refinerycms-resources', :path => 'resources'
+gem 'refinerycms-settings', :path => 'settings'
+gem 'refinerycms-generators', :path => '../refinerycms-generators'
 
 group :development, :test do
-  gem 'refinerycms-testing',    '~> 0.9.9.1'
+  gem 'refinerycms-testing', :path => 'testing'
   gem 'mongoid-rspec', :git => 'git://github.com/durran/mongoid-rspec.git'
 end
 

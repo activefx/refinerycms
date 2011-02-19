@@ -1,0 +1,7 @@
+source "http://www.rubygems.org"
+
+gemspec
+
+gem 'refinerycms-core', :path => '../core'
+gem 'devise', :git => 'git://github.com/plataformatec/devise.git'
+
