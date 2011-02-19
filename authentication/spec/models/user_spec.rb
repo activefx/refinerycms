@@ -66,11 +66,11 @@ describe User do
 
   context "devise modules" do
     subject { User }
-    it { should_not be_confirmable }
+    it { should be_confirmable }
     it { should be_database_authenticatable }
     it { should_not be_encryptable } #because we're using bcrypt
-    it { should_not be_lockable }
-    it { should_not be_omniauthable }
+    it { should be_lockable }
+    it { should be_omniauthable }
     it { should be_recoverable }
     it { should be_registerable }
     it { should be_rememberable }

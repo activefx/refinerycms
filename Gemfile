@@ -17,6 +17,7 @@ gem 'mongoid_slug', :require => 'mongoid/slug'
 gem 'mongoid_nested_set', :git => 'git://github.com/activefx/mongoid_nested_set.git'
 gem 'mongoid_search', :git => 'git://github.com/activefx/mongoid_search_relevant.git'
 gem 'devise', :git => 'git://github.com/plataformatec/devise.git'
+gem 'oa-oauth', :require => 'omniauth/oauth'
 
 # Use unicorn as the web server
 # gem 'unicorn'
@@ -49,6 +50,7 @@ gem 'refinerycms-generators', :path => '../refinerycms-generators'
 
 group :development, :test do
   gem 'refinerycms-testing', :path => 'testing'
+  gem 'mynyml-redgreen', :require => 'redgreen'
   gem 'mongoid-rspec', :git => 'git://github.com/durran/mongoid-rspec.git'
 end
 

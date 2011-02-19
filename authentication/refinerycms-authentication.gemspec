@@ -16,9 +16,11 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'refinerycms-core', '~> 0.9.9.3'
   s.add_dependency 'devise',           '~> 1.2.rc'
+  s.add_dependency 'oa-oauth'
 
   s.files             = [
     'Gemfile',
+    'Gemfile.lock',
     'app',
     'app/controllers',
     'app/controllers/admin',

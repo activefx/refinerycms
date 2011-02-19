@@ -47,15 +47,24 @@ class User
   #has_friendly_id :username, :use_slug => true
   slug :username, :index => true
 
+  # ORIGINAL REFINERY DEVISE SETTINGS
   # Include default devise modules. Others available are:
   # :token_authenticatable, :confirmable, :lockable and :timeoutable
-  devise :database_authenticatable, :registerable, :recoverable, :rememberable, :trackable, :validatable
+  # devise :database_authenticatable, :registerable, :recoverable, :rememberable, :trackable, :validatable
+
+  ## NEW DEVISE SETTINGS
+  # Include default devise modules. Others available are:
+  # :token_authenticatable, :encryptable, :timeoutable
+  devise :database_authenticatable, :registerable,  :confirmable,
+         :recoverable, :rememberable, :trackable, :validatable, :lockable,
+         :omniauthable, :omniauth_providers => [:facebook]
 
   # Setup accessible (or protected) attributes for your model
   # :login is a virtual attribute for authenticating by either username or email
   # This is in addition to a real persisted field like 'username'
   attr_accessor :login
-  attr_accessible :email, :password, :password_confirmation, :remember_me, :username, :plugins, :login
+  attr_accessible :email, :password, :password_confirmation,
+                  :remember_me, :username, :plugins, :login
 
   validates :username, :presence => true, :uniqueness => true
 

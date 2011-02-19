@@ -33,13 +33,16 @@ Gem::Specification.new do |s|
   s.add_dependency 'factory_girl'
 
   # Autotest
+  s.add_dependency 'mynyml-redgreen'
   s.add_dependency 'autotest'
-  s.add_dependency 'autotest-rails'
+  s.add_dependency 'autotest-rails-pure'
   s.add_dependency 'autotest-notification'
+  s.add_dependency 'ZenTest'
 
   s.files             = [
     '.rspec',
     'Gemfile',
+    'Gemfile.lock',
     'config',
     'config/cucumber.yml',
     'features',

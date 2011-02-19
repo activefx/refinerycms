@@ -24,6 +24,7 @@ class RegistrationsController < ::Devise::RegistrationsController
       if Role[:refinery].users.count == 1
         # this is the superuser if this user is the only user.
         @user.add_role(:superuser)
+        @user.confirm! if User.confirmable?
         @user.save
 
         # set this user as the recipient of inquiry notifications, if we're using that engine.
