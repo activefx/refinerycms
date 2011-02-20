@@ -21,9 +21,10 @@ class RegistrationsController < ::Devise::RegistrationsController
       @user.add_role(:refinery)
       @user.plugins = @selected_plugin_titles
       @user.save
-      if Role[:refinery].users.count == 1
+      if Role[:refinery].actors.where(:_type => 'User').count == 1
         # this is the superuser if this user is the only user.
         @user.add_role(:superuser)
+        @user.confirm! if User.confirmable?
         @user.save
 
         # set this user as the recipient of inquiry notifications, if we're using that engine.
@@ -39,7 +40,7 @@ class RegistrationsController < ::Devise::RegistrationsController
       flash[:message] = "<h2>#{t('welcome', :scope => 'users.create', :who => @user.username).gsub(/\.$/, '')}.</h2>".html_safe
 
       site_name_setting = RefinerySetting.find_or_create_by_name('site_name', :value => "Company Name")
-      if site_name_setting.value.to_s =~ /^(|Company\ Name)$/ or Role[:refinery].users.count == 1
+      if site_name_setting.value.to_s =~ /^(|Company\ Name)$/ or Role[:refinery].actors.where(:_type => 'User').count == 1
         flash[:message] << "<p>#{t('setup_website_name_html', :scope => 'users',
                                    :link => edit_admin_refinery_setting_url(site_name_setting, :dialog => true),
                                    :title => t('edit', :scope => 'admin.refinery_settings'))}</p>".html_safe
@@ -62,7 +63,7 @@ protected
   end
 
   def refinery_users_exist?
-    Role[:refinery].users.any?
+    Role[:refinery].actors.where(:_type => 'User').any?
   end
 
 end

@@ -40,12 +40,23 @@ Feature: Lost Password
       And I should see "If you are having issues try copying and pasting the URL from your email into your browser or restarting the reset password process."
 
     @users-password-reset
-    Scenario: Reset password page (valid reset_code)
+    Scenario: Reset password page (invalid password)
       Given I am requesting password reset
       When I go to the reset password page
       And I fill in "Password" with "cukes"
       And I fill in "Password confirmation" with "cukes"
       And I press "Reset password"
+      Then I should see "There were problems with the following fields"
+      And I should see "Password is too short"
+
+    @users-password-reset
+    Scenario: Reset password page (valid reset_code)
+      Given I am requesting password reset
+      When I go to the reset password page
+      And I fill in "Password" with "icuked"
+      And I fill in "Password confirmation" with "icuked"
+      And I press "Reset password"
+      Then Display the page
       Then I should be on the admin root
       And I should see "Password reset successfully for"
 

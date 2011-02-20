@@ -8,21 +8,21 @@ describe Role do
   it { should be_timestamped_document }
   it { should have_field(:title).of_type(String) }
   it { should validate_uniqueness_of(:title) }
-  it { should reference_and_be_referenced_in_many(:users) }
+  it { should reference_and_be_referenced_in_many(:actors) }
 
 end
 
-describe UserPlugin do
+describe ActorPlugin do
 
   it { should be_mongoid_document }
   it { should be_timestamped_document }
   it { should have_field(:name).of_type(String) }
   it { should have_field(:position).of_type(Integer) }
-  it { should be_referenced_in(:user).as_inverse_of(:plugins) }
+  it { should be_referenced_in(:actor).as_inverse_of(:plugins) }
 
 end
 
-describe User do
+describe Actor do
 
   it { should be_mongoid_document }
   it { should be_timestamped_document }
@@ -64,12 +64,16 @@ describe User do
   it { should reference_and_be_referenced_in_many(:roles) }
   it { should reference_many(:plugins) }
 
+end
+
+describe User do
+
   context "devise modules" do
     subject { User }
     it { should_not be_confirmable }
     it { should be_database_authenticatable }
     it { should_not be_encryptable } #because we're using bcrypt
-    it { should_not be_lockable }
+    it { should be_lockable }
     it { should_not be_omniauthable }
     it { should be_recoverable }
     it { should be_registerable }
@@ -80,8 +84,28 @@ describe User do
     it { should be_validatable }
   end
 
+  it "should inherit from the Actor class" do
+    User.should < Actor
+  end
+
+  it "should not be valid without any attributes" do
+    User.new.should_not be_valid
+  end
+
+  it "should be valid with valid attributes" do
+    Factory.build(:user).should be_valid
+  end
+
+  it "should belong to the appropriate class from the corresponding factory" do
+    Factory(:user).is_a?(User).should == true
+  end
+
+  it "should belong to the appropriate class from the corresponding factory (refinery user)" do
+    Factory(:refinery_user).is_a?(User).should == true
+  end
+
   before(:all) do
-    User.delete_all
+    Actor.delete_all
     Role.delete_all
   end
 
@@ -91,7 +115,7 @@ describe User do
   context "Roles Relationship", :roles => true do
 
     before(:each) do
-      User.delete_all
+      Actor.delete_all
       Role.delete_all
     end
 
@@ -108,7 +132,7 @@ describe User do
     end
 
     it "references users in the role model" do
-      Role.should reference_and_be_referenced_in_many(:users)
+      Role.should reference_and_be_referenced_in_many(:actors)
     end
 
     context "setting the relationships from the user side" do
@@ -126,12 +150,12 @@ describe User do
 
       it "should add update both models when adding a role to a user" do
         @user.roles << @role
-        @role.users.size.should == 1
+        @role.actors.size.should == 1
       end
 
       it "should work with the [] accessor method" do
         @user.roles << @role
-        Role[:refinery].users.size.should == 1
+        Role[:refinery].actors.size.should == 1
       end
 
       it "the role should be the same as the one accessible from the [] method" do
@@ -145,13 +169,13 @@ describe User do
 
       it "should add to the role's users with the add_user method" do
         @user.add_role(:refinery)
-        Role[:refinery].users.size.should == 1
+        Role[:refinery].actors.size.should == 1
       end
 
       it "should add to the role's users with the add_user method" do
         @user.add_role(:refinery)
         @role.reload
-        @role.users.size.should == 1
+        @role.actors.size.should == 1
       end
 
       it "should return true from has_role? method when the user has the role" do
@@ -189,18 +213,18 @@ describe User do
       end
 
       it "should add update both models when adding a user to a role" do
-        @role.users << @user
+        @role.actors << @user
         @user.roles.size.should == 1
       end
 
       it "should add update both models when adding a user to a role" do
-        @role.users << @user
-        @role.users.size.should == 1
+        @role.actors << @user
+        @role.actors.size.should == 1
       end
 
       it "should work with the [] accessor method" do
-        @role.users << @user
-        Role[:refinery].users.size.should == 1
+        @role.actors << @user
+        Role[:refinery].actors.size.should == 1
       end
 
       it "the role should be the same as the one accessible from the [] method" do
@@ -291,7 +315,7 @@ describe User do
 
   describe "#can_delete?" do
     before(:each) do
-      User.delete_all
+      Actor.delete_all
       Role.delete_all
       @user = Factory(:refinery_user)
       @user_not_persisted = Factory.build(:refinery_user)
@@ -314,7 +338,7 @@ describe User do
       end
 
       it "if user count with refinery role <= 1" do
-        Role[:refinery].users.delete(@user)
+        Role[:refinery].actors.delete(@user)
         @super_user.can_delete?(@user).should be_false
       end
 
@@ -368,7 +392,7 @@ describe User do
 
     it "deletes associated plugins" do
       @user.destroy
-      UserPlugin.find_by_user_id(@user.id).should be_nil
+      ActorPlugin.find_by_actor_id(@user.id).should be_nil
     end
   end
 end

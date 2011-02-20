@@ -25,7 +25,9 @@
   #get 'refinery/logout', :to => "sessions#destroy", :as => :logout
 
   scope(:path => 'refinery', :as => 'admin', :module => 'admin') do
+    resources :site_users, :except => :show
     resources :users, :except => :show
   end
 
 end
+

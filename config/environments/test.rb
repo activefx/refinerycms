@@ -34,3 +34,4 @@ RefineryApp::Application.configure do
   config.active_support.deprecation = :stderr
 end
 Refinery.rescue_not_found = false
+

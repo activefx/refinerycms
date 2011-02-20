@@ -25,3 +25,4 @@ RefineryApp::Application.configure do
 end
 
 Refinery.rescue_not_found = false
+

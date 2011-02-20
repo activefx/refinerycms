@@ -3,9 +3,8 @@ class Role
   include Mongoid::Timestamps
 
   field :title, :type => String
-  #field :user_ids, :type => Array, :default => []
 
-  references_and_referenced_in_many :users #, :stored_as => :array, :inverse_of => :roles
+  references_and_referenced_in_many :actors
 
   before_validation :camelize_title
   validates :title, :uniqueness => true
@@ -36,6 +35,13 @@ class Role
     find_or_create_by_title(title.to_s.camelize)
   end
 
+  def users
+    actors.where(:_type => 'User')
+  end
+
+  def site_users
+    actors.where(:_type => 'SiteUser')
+  end
 
 end
 

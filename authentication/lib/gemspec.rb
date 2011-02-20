@@ -21,6 +21,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'refinerycms-core', '~> #{::Refinery::Version}'
   s.add_dependency 'devise',           '~> 1.2.rc'
+  s.add_dependency 'oa-oauth'
 
   s.files             = [
     '#{%w( **/{*,.rspec,.gitignore,.yardopts} ).map { |file| Pathname.glob(gempath.join(file)) }.flatten.reject{|f|
