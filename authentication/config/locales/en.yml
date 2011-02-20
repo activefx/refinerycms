@@ -1,8 +1,8 @@
 en:
   plugins:
     refinery_users:
-      title: Users
-      description: Manage users
+      title: Admins
+      description: Manage admins
   admin:
     users:
       delete: Remove this user forever
@@ -70,3 +70,4 @@ en:
         password_confirmation: Password confirmation
         email: Email
         remember_me: Remember me
+

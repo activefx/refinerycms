@@ -56,6 +56,7 @@ Feature: Lost Password
       And I fill in "Password" with "icuked"
       And I fill in "Password confirmation" with "icuked"
       And I press "Reset password"
+      Then Display the page
       Then I should be on the admin root
       And I should see "Password reset successfully for"
 

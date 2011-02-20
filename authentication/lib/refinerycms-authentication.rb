@@ -45,3 +45,4 @@ module Refinery
 end
 
 ::Refinery.engines << 'authentication'
+
