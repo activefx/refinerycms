@@ -152,13 +152,13 @@ module Refinery
           # And eager loading is applied as specified into crudify.
 
           def find_all_#{plural_name}(conditions = #{options[:conditions].inspect})
-            conditions = conditions.empty? ? nil : conditions
+            conditions = (conditions.blank? || conditions.empty?) ? nil : conditions
 
             order = "#{options[:order]}"
             cursor = #{class_name}.where(conditions)
 
             # Only supports first order argument right now
-            unless order.empty?
+            unless order.blank? || order.empty?
               order_arguments = order.split.collect{|i| i.downcase.to_sym}
               cursor = cursor.send(order_arguments[1], order_arguments[0]) unless (order_arguments.count < 2)
             end
@@ -171,6 +171,11 @@ module Refinery
             # If we have already found a set then we don't need to again
             find_all_#{plural_name} if @#{plural_name}.nil?
 
+            params[:page] = if params[:page].to_i.is_a?(Integer) && params[:page].to_i > 0
+              params[:page]
+            else
+              1
+            end
             paging_options = {:page => params[:page]}
 
             # Seems will_paginate doesn't always use the implicit method.

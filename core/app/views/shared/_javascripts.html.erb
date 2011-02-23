@@ -1,5 +1,19 @@
+<%
+  js_caching = Rails.root.writable? and RefinerySetting.find_or_set(:use_resource_caching, true)
+  login = defined?(login) ? login : login?
+-%>
 <%= yield :before_javascript_libraries -%>
+
+<%= jquery_include_tags    :caching => js_caching -%>
+
+<%= javascript_include_tag 'rails.js' %>
+
+<%= javascript_include_tag 'jquery/jquery.corner.js' -%>
+<%= javascript_include_tag 'jquery/jquery.timers.js' -%>
+
 <%= yield :javascript_libraries %>
+
+
 <%= yield :after_javascript_libraries %>
 <% if request.env['HTTP_USER_AGENT'] =~ /MSIE/ %>
   <!--[if lt IE 7 ]>
@@ -7,4 +21,8 @@
     <script> DD_belatedPNG.fix('img, .png_bg'); //fix any <img> or .png_bg background-images </script>
   <![endif]-->
 <% end %>
+
+<%= javascript_include_tag 'application'  -%>
+
 <%= yield :javascripts -%>
+

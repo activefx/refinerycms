@@ -4,6 +4,7 @@ class Actor
   include Mongoid::Document
   include Mongoid::Timestamps
   include Mongoid::Slug
+  include Mongoid::Search
 
   # Model Fields
   field :username,              :type => String,  :default => ""
@@ -53,6 +54,8 @@ class Actor
   attr_accessible nil
 
   validates :username, :presence => true, :uniqueness => true
+
+  search_in :username
 
   DEVISE_MODULES  = [ :confirmable, :database_authenticatable, :encryptable,
                       :lockable, :omniauthable, :recoverable, :registerable,

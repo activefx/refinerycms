@@ -14,6 +14,8 @@ module Refinery
       base.send :include, Refinery::Helpers::SiteBarHelper
       base.send :include, Refinery::Helpers::TagHelper
       base.send :include, Refinery::Helpers::TranslationHelper
+      base.send :include, Refinery::Helpers::TitleHelper
     end
   end
 end
+

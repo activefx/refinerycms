@@ -1,7 +1,10 @@
 module Admin
   class UsersController < Admin::BaseController
 
-    crudify :user, :order => 'username ASC', :title_attribute => 'username'
+    crudify :user,
+            :order => 'username ASC',
+            :title_attribute => 'username',
+            :sortable => false
 
     before_filter :load_available_plugins_and_roles, :only => [:new, :create, :edit, :update]
 

@@ -5,19 +5,19 @@ en:
       description: Manage admins
   admin:
     users:
-      delete: Remove this user forever
-      edit: Edit this user
+      delete: Remove this admin forever
+      edit: Edit this admin
       update:
-        cannot_remove_user_plugin_from_current_user: You cannot remove the 'Users' plugin from the currently logged in account.
+        cannot_remove_user_plugin_from_current_user: You cannot remove the 'Admins' plugin from the currently logged in account.
       form:
         blank_password_keeps_current: Leaving password blank keeps the current password
         plugin_access: Plugin access
         role_access: Role access
         enable_all: enable all
       index:
-        create_new_user: Add new user
+        create_new_user: Add new admin
       user:
-        email_user: Email this user
+        email_user: Email this admin
         preview: (%{who}) added %{created_at}
   sessions:
     new:

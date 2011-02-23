@@ -3,7 +3,7 @@
   # Add Devise necessary routes.
   # For Devise routes, see: https://github.com/plataformatec/devise
   #namespace :refinery do
-    devise_for :users, :path => :registrations, :controllers => {
+    devise_for :users, :path => :ctrlpnl, :controllers => {
       :sessions => 'sessions',
       :registrations => 'registrations',
       :passwords => 'passwords'
@@ -25,7 +25,6 @@
   #get 'refinery/logout', :to => "sessions#destroy", :as => :logout
 
   scope(:path => 'refinery', :as => 'admin', :module => 'admin') do
-    resources :site_users, :except => :show
     resources :users, :except => :show
   end
 
