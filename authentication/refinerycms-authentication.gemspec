@@ -5,7 +5,7 @@ Gem::Specification.new do |s|
   s.version           = %q{0.9.9.3}
   s.summary           = %q{Authentication engine for Refinery CMS}
   s.description       = %q{The default authentication engine for Refinery CMS}
-  s.date              = %q{2011-02-19}
+  s.date              = %q{2011-02-24}
   s.email             = %q{info@refinerycms.com}
   s.homepage          = %q{http://refinerycms.com}
   s.rubyforge_project = %q{refinerycms}
@@ -19,12 +19,9 @@ Gem::Specification.new do |s|
   s.add_dependency 'oa-oauth'
 
   s.files             = [
-    'Gemfile',
-    'Gemfile.lock',
     'app',
     'app/controllers',
     'app/controllers/admin',
-    'app/controllers/admin/site_users_controller.rb',
     'app/controllers/admin/users_controller.rb',
     'app/controllers/passwords_controller.rb',
     'app/controllers/registrations_controller.rb',
@@ -38,17 +35,16 @@ Gem::Specification.new do |s|
     'app/models/actor.rb',
     'app/models/actor_plugin.rb',
     'app/models/role.rb',
-    'app/models/site_user.rb',
     'app/models/user.rb',
     'app/views',
     'app/views/admin',
-    'app/views/admin/site_admins',
-    'app/views/admin/site_admins/_form.html.erb',
-    'app/views/admin/site_admins/_user.html.erb',
-    'app/views/admin/site_admins/_users.html.erb',
-    'app/views/admin/site_admins/edit.html.erb',
-    'app/views/admin/site_admins/index.html.erb',
-    'app/views/admin/site_admins/new.html.erb',
+    'app/views/admin/users',
+    'app/views/admin/users/_form.html.erb',
+    'app/views/admin/users/_user.html.erb',
+    'app/views/admin/users/_users.html.erb',
+    'app/views/admin/users/edit.html.erb',
+    'app/views/admin/users/index.html.erb',
+    'app/views/admin/users/new.html.erb',
     'app/views/layouts',
     'app/views/layouts/login.html.erb',
     'app/views/passwords',
@@ -95,7 +91,6 @@ Gem::Specification.new do |s|
     'features/support',
     'features/support/factories.rb',
     'features/support/paths.rb',
-    'features/users.feature',
     'lib',
     'lib/authenticated_system.rb',
     'lib/gemspec.rb',

@@ -5,7 +5,7 @@ Gem::Specification.new do |s|
   s.version           = %q{0.9.9.3}
   s.summary           = %q{Core engine for Refinery CMS}
   s.description       = %q{The core of Refinery CMS. This handles the common functionality and is required by most engines}
-  s.date              = %q{2011-02-19}
+  s.date              = %q{2011-02-24}
   s.email             = %q{info@refinerycms.com}
   s.homepage          = %q{http://refinerycms.com}
   s.rubyforge_project = %q{refinerycms}
@@ -29,8 +29,6 @@ Gem::Specification.new do |s|
   s.add_dependency 'app',                         '>= 1.0.3'
 
   s.files             = [
-    'Gemfile',
-    'Gemfile.lock',
     'app',
     'app/controllers',
     'app/controllers/admin',
@@ -132,9 +130,15 @@ Gem::Specification.new do |s|
     'lib/generators/templates/autotest/autotest.rb',
     'lib/generators/templates/autotest/discover.rb',
     'lib/generators/templates/config',
+    'lib/generators/templates/config/app',
+    'lib/generators/templates/config/app/development.rb',
+    'lib/generators/templates/config/app/production.rb',
+    'lib/generators/templates/config/app/test.rb',
+    'lib/generators/templates/config/app.rb',
     'lib/generators/templates/config/i18n-js.yml',
     'lib/generators/templates/config/initializers',
     'lib/generators/templates/config/initializers/devise.rb',
+    'lib/generators/templates/config/initializers/mailer.rb',
     'lib/generators/templates/config/mongoid.yml',
     'lib/generators/templates/config/settings.rb',
     'lib/generators/templates/db',
@@ -161,6 +165,7 @@ Gem::Specification.new do |s|
     'lib/refinery/helpers/script_helper.rb',
     'lib/refinery/helpers/site_bar_helper.rb',
     'lib/refinery/helpers/tag_helper.rb',
+    'lib/refinery/helpers/title_helper.rb',
     'lib/refinery/helpers/translation_helper.rb',
     'lib/refinery/link_renderer.rb',
     'lib/refinery/plugin.rb',
