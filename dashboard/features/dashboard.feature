@@ -5,7 +5,7 @@ Feature: Dashboard
   I want to use the dashboard
 
   Background:
-    Given I am a logged in refinery user
+    Given I am a logged in refinery administrator
     When I go to the Dashboard
 
   @dashboard-add
@@ -33,3 +33,4 @@ Feature: Dashboard
   Scenario: Upload an Image Button
     When I follow "Upload an image"
     Then I should be on the new image form
+

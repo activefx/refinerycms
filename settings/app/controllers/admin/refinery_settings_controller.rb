@@ -19,7 +19,7 @@ module Admin
     end
 
     def new
-      if current_user.has_role?(:superuser) and params[:form_value_type].present?
+      if current_administrator.has_role?(:superuser) and params[:form_value_type].present?
         @refinery_setting = RefinerySetting.new(:form_value_type => params[:form_value_type])
       else
         @refinery_setting = RefinerySetting.new(:form_value_type => 'text_area')
@@ -36,7 +36,7 @@ module Admin
     def find_all_refinery_settings
       @refinery_settings = RefinerySetting.asc(:name)
 
-      unless current_user.has_role?(:superuser)
+      unless current_administrator.has_role?(:superuser)
         @refinery_settings = @refinery_settings.excludes(:restricted => true)
       end
 
@@ -50,7 +50,7 @@ module Admin
 
       @refinery_settings = RefinerySetting.search(term).asc(:name)
 
-      unless current_user.has_role?(:superuser)
+      unless current_administrator.has_role?(:superuser)
         @refinery_settings = @refinery_settings.excludes(:restricted => true)
       end
 

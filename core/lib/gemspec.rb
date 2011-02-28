@@ -32,6 +32,8 @@ Gem::Specification.new do |s|
   s.add_dependency 'truncate_html',               '~> 0.5'
   s.add_dependency 'will_paginate',               '~> 3.0.pre'
   s.add_dependency 'app',                         '>= 1.0.3'
+  s.add_dependency 'haml',                        '>= 3.0.25'
+  s.add_dependency 'haml-rails',                  '>= 0.3.4'
 
   s.files             = [
     '#{%w( **/{*,.rspec,.gitignore,.yardopts} ).map { |file| Pathname.glob(gempath.join(file)) }.flatten.reject{|f|

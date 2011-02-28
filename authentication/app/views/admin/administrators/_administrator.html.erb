@@ -1,0 +1,20 @@
+<li id="sortable_<%= administrator.id %>" class='clearfix record <%= cycle("on", "on-hover") %>'>
+  <span class='title'>
+    <strong><%= administrator.username %></strong>
+    <span class="preview">
+      <%= t('.preview', :who => administrator.email, :created_at => l(administrator.created_at, :format => :short)) %>
+    </span>
+  </span>
+  <span class='actions'>
+    <%= mail_to administrator.email, refinery_icon_tag('email_go.png'),
+                :title => t('.email_administrator') %>
+    <%= link_to refinery_icon_tag('application_edit.png'), edit_admin_administrator_path(administrator),
+                :title => t('edit', :scope => 'admin.administrators')%>
+    <%= link_to refinery_icon_tag('delete.png'), admin_administrator_path(administrator),
+                :class => "cancel confirm-delete",
+                :title => t('delete', :scope => 'admin.administrators'),
+                :method => :delete,
+                :confirm => t('message', :scope => 'shared.admin.delete', :title => administrator.username) if current_administrator.can_delete?(administrator) %>
+  </span>
+</li>
+

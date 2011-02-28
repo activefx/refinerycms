@@ -1,9 +1,9 @@
-<% content_for :header, t('fill_form', :scope => 'users.new') %>
-<%= form_for :user, :url => user_registration_path do |f| -%>
+<% content_for :header, t('fill_form', :scope => 'administrators.new') %>
+<%= form_for :administrator, :url => administrator_registration_path do |f| -%>
 
   <%= render :partial => "/shared/admin/error_messages",
              :locals => {
-               :object => @user,
+               :object => @administrator,
                :include_object_name => true
              } %>
 
@@ -26,7 +26,7 @@
 
   <% if just_installed? %>
     <% Refinery::Plugins.registered.in_menu.names.sort.each do |plugin| -%>
-      <%= hidden_field_tag 'user[plugins][]', plugin, :id => "plugins_#{plugin.downcase.gsub(" ", "_")}" %>
+      <%= hidden_field_tag 'administrator[plugins][]', plugin, :id => "plugins_#{plugin.downcase.gsub(" ", "_")}" %>
     <% end -%>
   <% end -%>
 
@@ -34,8 +34,9 @@
              :locals => {
                :f => f,
                :submit_continue => false,
-               :submit_button_text => t('sign_up', :scope => 'users.new'),
+               :submit_button_text => t('sign_up', :scope => 'administrators.new'),
                :hide_delete => true,
                :hide_cancel => true
              }%>
 <% end -%>
+

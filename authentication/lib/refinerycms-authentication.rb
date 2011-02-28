@@ -15,6 +15,7 @@ module Refinery
       config.autoload_paths += %W( #{config.root}/lib )
 
       config.after_initialize do
+        # Register the user's plugin
         ::Refinery::Plugin.register do |plugin|
           plugin.name = "refinery_users"
           plugin.version = %q{0.9.9}
@@ -24,6 +25,18 @@ module Refinery
             :title => 'login'
           }
           plugin.url = {:controller => "/admin/users"}
+        end
+
+        # Register the administrator's plugin
+        ::Refinery::Plugin.register do |plugin|
+          plugin.name = "refinery_administrators"
+          plugin.version = %q{0.9.9}
+          plugin.menu_match = /(refinery|admin)\/administrators$/
+          plugin.activity = {
+            :class => Administrator,
+            :title => 'login'
+          }
+          plugin.url = {:controller => "/admin/administrators"}
         end
       end
     end

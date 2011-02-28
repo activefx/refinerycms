@@ -47,7 +47,7 @@ module Refinery
 
         # Rails supports more options, but Refinery is only tested on these three
         databases = %w(mongoid)
-        opts.on("-d DATABASE", "--database DATABASE", databases, "Select the database (default sqlite3)", "  #{databases.join('/')}") do |db|
+        opts.on("-d DATABASE", "--database DATABASE", databases, "Select the database (default mongoid)", "  #{databases.join('/')}") do |db|
           @options[:database][:adapter] = db
         end
 
@@ -122,6 +122,7 @@ module Refinery
 #          puts note
 #        end
 #        run_command("rake -f \"#{@app_path.join('Rakefile')}\" db:create", {:fail => "Unable to create the application's database"})
+        run_command("rails generate mongoid:config", {:fail => "creation of Mongoid config file failed."})
       else
         # Update the current application.
         update!
@@ -265,8 +266,18 @@ module Refinery
       # Insert the current REFINERY CMS section (you shouldn't put anything in here).
       refinery_gemfile_contents = Refinery.root.join('Gemfile').read
       refinery_gems = refinery_gemfile_contents.match(/# REFINERY CMS =+.*# END REFINERY CMS =+/m)[0]
+      # Need longer term solution to set paths for custom refinerycms implementations
       refinery_gems.gsub!("# gem 'refinerycms'", "gem 'refinerycms'") # Enable refinerycms
-      refinery_gems.gsub!("gem 'refinerycms-testing'", "# gem 'refinerycms-testing'") # Disable testing
+      refinery_gems.gsub!(":path => '", ":path => '../refinerycms/")
+
+      # Fix Generator Path
+      refinery_gems.gsub!("'../refinerycms/../refinerycms-generators'", "'../refinerycms-generators'")
+
+      # Fix Refinery Path
+      refinery_gems.gsub!(":path => '../refinerycms/../refinerycms', '../refinerycms'")
+
+      #refinery_gems.gsub!("gem 'refinerycms-", "# gem 'refinerycms-")
+      #refinery_gems.gsub!("gem 'refinerycms-testing'", "# gem 'refinerycms-testing'") # Disable testing
       unless @options[:update]
         app_gemfile = @app_path.join('Gemfile')
         FileUtils::cp app_gemfile, "#{app_gemfile}.backup"
@@ -290,8 +301,8 @@ module Refinery
 #      end
 
       # Specify the correct version of the Refinery CMS gem (may be git source).
-      src = Refinery.version !~ /\.pre$/ ? "'= #{Refinery.version}'" : ":git => 'git://github.com/resolve/refinerycms'"
-      find_and_replace('Gemfile', %r{gem 'refinerycms',.*}, "gem 'refinerycms',              #{src}")
+#      src = Refinery.version !~ /\.pre$/ ? "'= #{Refinery.version}'" : ":git => 'git://github.com/resolve/refinerycms'"
+#      find_and_replace('Gemfile', %r{gem 'refinerycms',.*}, "gem 'refinerycms',              #{src}")
 
       # Add in AWS-S3 for Heroku
       find_and_replace('Gemfile', "# gem 'aws-s3', :require => 'aws/s3'",

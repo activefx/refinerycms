@@ -3,6 +3,10 @@ Given %r`not logged in$` do
   visit destroy_user_session_path
 end
 
+Given %r`not logged in as an administrator$` do
+  visit destroy_administrator_session_path
+end
+
 Given /locale is (.+?)$/ do |locale|
   if defined?(::Refinery::I18n)
     ::Refinery::I18n.current_locale = locale.to_sym
@@ -34,8 +38,16 @@ When %r`enter the password "(.+)-123"$` do |login|
   fill_in 'user_session[password]', :with => "#{login}-123"
 end
 
+When %r`enter the administrator username "(.+)"$` do |login|
+  fill_in 'administrator_session[login]'   , :with => login
+end
+
+When %r`enter the administrator password "(.+)-123"$` do |login|
+  fill_in 'administrator_session[password]', :with => "#{login}-123"
+end
+
 When %r`press the login button$` do
-  click_button 'Sign In'
+  click_button 'Sign in'
 end
 
 Then %r`not be allowed to log in$` do

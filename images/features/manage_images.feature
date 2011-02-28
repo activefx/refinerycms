@@ -5,8 +5,8 @@ Feature: Manage Images
   I want to create and manage images
 
   Background:
-    Given I have no users
-    And I am a logged in refinery user
+    Given I have no site interactors
+    And I am a logged in refinery administrator
     And I have no images
 
   @images-valid @valid

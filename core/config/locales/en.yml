@@ -7,7 +7,7 @@ en:
       title: Dialogs
       description: Refinery dialogs plugin
   welcome:
-    there_are_no_users: There are no users yet, so we'll set you up first.
+    there_are_no_administrators: There are no administrators yet, so we'll set you up first.
     remember_admin_location: "Remember your Refinery admin area is at:"
     lets_start: Alright let's get you setup so you can login...
     continue: Continue...
@@ -73,3 +73,4 @@ en:
   time:
     formats:
       short: "%A, %d %B %Y"
+

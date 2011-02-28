@@ -1,15 +1,13 @@
-# require 'devise'
-#require 'actor'
-
 class User < Actor
 
   attr_accessible :email, :password, :password_confirmation,
                   :remember_me, :username, :plugins, :login
 
   # Include default devise modules. Others available are:
-  # :token_authenticatable, :confirmable, and :timeoutable
-  devise :database_authenticatable, :registerable, :recoverable,
-         :rememberable, :trackable, :validatable, :lockable
+  # :token_authenticatable, :encryptable, :timeoutable
+  devise :database_authenticatable, :registerable,  :confirmable,
+         :recoverable, :rememberable, :trackable, :validatable, :lockable #,
+         #:omniauthable, :omniauth_providers => [:facebook]
 
   class << self
     # Find user by email or username.
