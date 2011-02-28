@@ -6,8 +6,8 @@ class User < Actor
   # Include default devise modules. Others available are:
   # :token_authenticatable, :encryptable, :timeoutable
   devise :database_authenticatable, :registerable,  :confirmable,
-         :recoverable, :rememberable, :trackable, :validatable, :lockable #,
-         #:omniauthable, :omniauth_providers => [:facebook]
+         :recoverable, :rememberable, :trackable, :validatable, :lockable,
+         :omniauthable, :omniauth_providers => [:facebook]
 
   class << self
     # Find user by email or username.

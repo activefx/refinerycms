@@ -7,6 +7,7 @@ Feature: Site Bar
   Background:
     Given I have no site interactors
     And I have a page titled "Home" with a custom url "/"
+    And A Refinery administrator exists
     And I am not logged in as an administrator
 
   Scenario: Not logged in
