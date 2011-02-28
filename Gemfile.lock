@@ -22,8 +22,47 @@ GIT
       rspec (~> 2)
 
 GIT
+  remote: git://github.com/intridea/omniauth.git
+  revision: 31cb192c0c95811da75915df9b5a50f11629bf05
+  specs:
+    oa-basic (0.2.0.beta3)
+      multi_json (~> 0.0.2)
+      nokogiri (~> 1.4.2)
+      oa-core (= 0.2.0.beta3)
+      rest-client (~> 1.6.0)
+    oa-core (0.2.0.beta3)
+      rack (~> 1.1)
+    oa-enterprise (0.2.0.beta3)
+      net-ldap (~> 0.1.1)
+      nokogiri (~> 1.4.2)
+      oa-core (= 0.2.0.beta3)
+      pyu-ruby-sasl (~> 0.0.3.1)
+      rubyntlm (~> 0.1.1)
+    oa-more (0.2.0.beta3)
+      multi_json (~> 0.0.2)
+      oa-core (= 0.2.0.beta3)
+      rest-client (~> 1.6.0)
+    oa-oauth (0.2.0.beta3)
+      multi_json (~> 0.0.2)
+      nokogiri (~> 1.4.2)
+      oa-core (= 0.2.0.beta3)
+      oauth (~> 0.4.0)
+      oauth2 (~> 0.1.1)
+    oa-openid (0.2.0.beta3)
+      oa-core (= 0.2.0.beta3)
+      rack-openid (~> 1.2.0)
+      ruby-openid-apps-discovery
+    omniauth (0.2.0.beta3)
+      oa-basic (= 0.2.0.beta3)
+      oa-core (= 0.2.0.beta3)
+      oa-enterprise (= 0.2.0.beta3)
+      oa-more (= 0.2.0.beta3)
+      oa-oauth (= 0.2.0.beta3)
+      oa-openid (= 0.2.0.beta3)
+
+GIT
   remote: git://github.com/jnicklas/capybara.git
-  revision: 04360cc2918338564a17971f8691f79bbc9172c9
+  revision: cb8de0c05e64985be1f591db37aea46629d20b39
   specs:
     capybara (0.4.1.1)
       celerity (>= 0.7.9)
@@ -37,7 +76,7 @@ GIT
 
 GIT
   remote: git://github.com/mongoid/mongoid.git
-  revision: b425f2035169b6a98bc6df1db7ca58f0f9b3dadc
+  revision: 3186f6ff643da876ce2358334834285cd6a4ebad
   specs:
     mongoid (2.0.0.rc.7)
       activemodel (~> 3.0)
@@ -47,7 +86,7 @@ GIT
 
 GIT
   remote: git://github.com/plataformatec/devise.git
-  revision: 42d002702c65b58b21ee2b35bbc9aa1e8fb51c1d
+  revision: e4cae200f4a55a86774ba98a3182d4c9fb7b0436
   specs:
     devise (1.2.rc)
       bcrypt-ruby (~> 2.1.2)
@@ -62,34 +101,35 @@ PATH
 PATH
   remote: .
   specs:
-    refinerycms (0.9.9.3)
+    refinerycms (0.9.9.4)
       bundler (~> 1.0.10)
-      refinerycms-authentication (~> 0.9.9.3)
-      refinerycms-base (~> 0.9.9.3)
-      refinerycms-core (~> 0.9.9.3)
-      refinerycms-dashboard (~> 0.9.9.3)
-      refinerycms-images (~> 0.9.9.3)
-      refinerycms-pages (~> 0.9.9.3)
-      refinerycms-resources (~> 0.9.9.3)
-      refinerycms-settings (~> 0.9.9.3)
+      refinerycms-authentication (~> 0.9.9.4)
+      refinerycms-base (~> 0.9.9.4)
+      refinerycms-core (~> 0.9.9.4)
+      refinerycms-dashboard (~> 0.9.9.4)
+      refinerycms-images (~> 0.9.9.4)
+      refinerycms-pages (~> 0.9.9.4)
+      refinerycms-resources (~> 0.9.9.4)
+      refinerycms-settings (~> 0.9.9.4)
 
 PATH
   remote: authentication
   specs:
-    refinerycms-authentication (0.9.9.3)
+    refinerycms-authentication (0.9.9.4)
       devise (~> 1.2.rc)
       oa-oauth
-      refinerycms-core (~> 0.9.9.3)
+      omniauth (>= 0.2.0.beta3)
+      refinerycms-core (~> 0.9.9.4)
 
 PATH
   remote: base
   specs:
-    refinerycms-base (0.9.9.3)
+    refinerycms-base (0.9.9.4)
 
 PATH
   remote: core
   specs:
-    refinerycms-core (0.9.9.3)
+    refinerycms-core (0.9.9.4)
       app (>= 1.0.3)
       dragonfly (~> 0.8.2)
       haml (>= 3.0.25)
@@ -100,50 +140,50 @@ PATH
       mongoid_slug (~> 0.6.3)
       rails (~> 3.0.3)
       rdoc (>= 2.5.11)
-      refinerycms-base (~> 0.9.9.3)
+      refinerycms-base (~> 0.9.9.4)
       refinerycms-generators (~> 0.9.9.3)
-      refinerycms-settings (~> 0.9.9.3)
+      refinerycms-settings (~> 0.9.9.4)
       truncate_html (~> 0.5)
       will_paginate (~> 3.0.pre)
 
 PATH
   remote: dashboard
   specs:
-    refinerycms-dashboard (0.9.9.3)
-      refinerycms-core (~> 0.9.9.3)
+    refinerycms-dashboard (0.9.9.4)
+      refinerycms-core (~> 0.9.9.4)
 
 PATH
   remote: images
   specs:
-    refinerycms-images (0.9.9.3)
+    refinerycms-images (0.9.9.4)
       dragonfly (~> 0.8.2)
       rack-cache (>= 0.5.3)
-      refinerycms-core (~> 0.9.9.3)
+      refinerycms-core (~> 0.9.9.4)
 
 PATH
   remote: pages
   specs:
-    refinerycms-pages (0.9.9.3)
-      refinerycms-core (~> 0.9.9.3)
+    refinerycms-pages (0.9.9.4)
+      refinerycms-core (~> 0.9.9.4)
 
 PATH
   remote: resources
   specs:
-    refinerycms-resources (0.9.9.3)
+    refinerycms-resources (0.9.9.4)
       dragonfly (~> 0.8.2)
       rack-cache (>= 0.5.3)
-      refinerycms-core (~> 0.9.9.3)
+      refinerycms-core (~> 0.9.9.4)
 
 PATH
   remote: settings
   specs:
-    refinerycms-settings (0.9.9.3)
-      refinerycms-base (~> 0.9.9.3)
+    refinerycms-settings (0.9.9.4)
+      refinerycms-base (~> 0.9.9.4)
 
 PATH
   remote: testing
   specs:
-    refinerycms-testing (0.9.9.3)
+    refinerycms-testing (0.9.9.4)
       ZenTest
       autotest
       autotest-notification
@@ -159,7 +199,7 @@ PATH
       mongoid-rspec (>= 1.3.2)
       mynyml-redgreen
       rack-test (~> 0.5.6)
-      refinerycms-core (~> 0.9.9.3)
+      refinerycms-core (~> 0.9.9.4)
       rspec-rails (~> 2.5)
 
 GEM
@@ -167,12 +207,12 @@ GEM
   specs:
     ZenTest (4.5.0)
     abstract (1.0.0)
-    actionmailer (3.0.4)
-      actionpack (= 3.0.4)
+    actionmailer (3.0.5)
+      actionpack (= 3.0.5)
       mail (~> 2.2.15)
-    actionpack (3.0.4)
-      activemodel (= 3.0.4)
-      activesupport (= 3.0.4)
+    actionpack (3.0.5)
+      activemodel (= 3.0.5)
+      activesupport (= 3.0.5)
       builder (~> 2.1.2)
       erubis (~> 2.6.6)
       i18n (~> 0.4)
@@ -180,19 +220,19 @@ GEM
       rack-mount (~> 0.6.13)
       rack-test (~> 0.5.7)
       tzinfo (~> 0.3.23)
-    activemodel (3.0.4)
-      activesupport (= 3.0.4)
+    activemodel (3.0.5)
+      activesupport (= 3.0.5)
       builder (~> 2.1.2)
       i18n (~> 0.4)
-    activerecord (3.0.4)
-      activemodel (= 3.0.4)
-      activesupport (= 3.0.4)
+    activerecord (3.0.5)
+      activemodel (= 3.0.5)
+      activesupport (= 3.0.5)
       arel (~> 2.0.2)
       tzinfo (~> 0.3.23)
-    activeresource (3.0.4)
-      activemodel (= 3.0.4)
-      activesupport (= 3.0.4)
-    activesupport (3.0.4)
+    activeresource (3.0.5)
+      activemodel (= 3.0.5)
+      activesupport (= 3.0.5)
+    activesupport (3.0.5)
     addressable (2.2.4)
     app (1.0.3)
     archive-tar-minitar (0.5.2)
@@ -227,7 +267,7 @@ GEM
     erubis (2.6.6)
       abstract (>= 1.0.0)
     factory_girl (1.3.3)
-    faraday (0.5.6)
+    faraday (0.5.7)
       addressable (~> 2.2.4)
       multipart-post (~> 1.1.0)
       rack (>= 1.1.0, < 2)
@@ -257,50 +297,49 @@ GEM
     mime-types (1.16)
     mongo (1.2.4)
       bson (>= 1.2.4)
-    mongoid_slug (0.6.3)
+    mongoid_slug (0.6.4)
       mongoid (~> 2.0.0.rc.7)
       stringex (~> 1.2.0)
     multi_json (0.0.5)
     multipart-post (1.1.0)
     mynyml-redgreen (0.7.1)
       term-ansicolor (>= 1.0.4)
+    net-ldap (0.1.1)
     nokogiri (1.4.4)
-    oa-core (0.1.6)
-      rack (~> 1.1)
-    oa-oauth (0.1.6)
-      multi_json (~> 0.0.2)
-      nokogiri (~> 1.4.2)
-      oa-core (= 0.1.6)
-      oauth (~> 0.4.0)
-      oauth2 (~> 0.1.0)
     oauth (0.4.4)
     oauth2 (0.1.1)
       faraday (~> 0.5.0)
       multi_json (~> 0.0.4)
     orm_adapter (0.0.4)
     polyglot (0.3.1)
+    pyu-ruby-sasl (0.0.3.2)
     rack (1.2.1)
     rack-cache (1.0)
       rack (>= 0.4)
     rack-mount (0.6.13)
       rack (>= 1.0.0)
+    rack-openid (1.2.0)
+      rack (>= 1.1.0)
+      ruby-openid (>= 2.1.8)
     rack-test (0.5.7)
       rack (>= 1.0)
-    rails (3.0.4)
-      actionmailer (= 3.0.4)
-      actionpack (= 3.0.4)
-      activerecord (= 3.0.4)
-      activeresource (= 3.0.4)
-      activesupport (= 3.0.4)
+    rails (3.0.5)
+      actionmailer (= 3.0.5)
+      actionpack (= 3.0.5)
+      activerecord (= 3.0.5)
+      activeresource (= 3.0.5)
+      activesupport (= 3.0.5)
       bundler (~> 1.0)
-      railties (= 3.0.4)
-    railties (3.0.4)
-      actionpack (= 3.0.4)
-      activesupport (= 3.0.4)
+      railties (= 3.0.5)
+    railties (3.0.5)
+      actionpack (= 3.0.5)
+      activesupport (= 3.0.5)
       rake (>= 0.8.7)
       thor (~> 0.14.4)
     rake (0.8.7)
     rdoc (3.5.3)
+    rest-client (1.6.1)
+      mime-types (>= 1.16)
     rspec (2.5.0)
       rspec-core (~> 2.5.0)
       rspec-expectations (~> 2.5.0)
@@ -322,8 +361,12 @@ GEM
       columnize (>= 0.3.1)
       linecache19 (>= 0.5.11)
       ruby-debug-base19 (>= 0.11.19)
+    ruby-openid (2.1.8)
+    ruby-openid-apps-discovery (1.2.0)
+      ruby-openid (>= 2.1.7)
     ruby_core_source (0.1.4)
       archive-tar-minitar (>= 0.5.2)
+    rubyntlm (0.1.1)
     rubyzip (0.9.4)
     selenium-webdriver (0.1.3)
       childprocess (~> 0.1.5)
@@ -357,6 +400,7 @@ DEPENDENCIES
   mongoid_slug
   mynyml-redgreen
   oa-oauth
+  omniauth!
   refinerycms!
   refinerycms-authentication!
   refinerycms-base!

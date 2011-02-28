@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name              = %q{refinerycms-authentication}
-  s.version           = %q{0.9.9.3}
+  s.version           = %q{0.9.9.4}
   s.summary           = %q{Authentication engine for Refinery CMS}
   s.description       = %q{The default authentication engine for Refinery CMS}
   s.date              = %q{2011-02-28}
@@ -14,8 +14,9 @@ Gem::Specification.new do |s|
   s.require_paths     = %w(lib)
   s.executables       = %w()
 
-  s.add_dependency 'refinerycms-core', '~> 0.9.9.3'
+  s.add_dependency 'refinerycms-core', '~> 0.9.9.4'
   s.add_dependency 'devise',           '~> 1.2.rc'
+  s.add_dependency 'omniauth',         '>= 0.2.0.beta3'
   s.add_dependency 'oa-oauth'
 
   s.files             = [
@@ -27,13 +28,6 @@ Gem::Specification.new do |s|
     'app/controllers/administrator_passwords_controller.rb',
     'app/controllers/administrator_registrations_controller.rb',
     'app/controllers/administrator_sessions_controller.rb',
-    'app/controllers/users',
-    'app/controllers/users/confirmations_controller.rb',
-    'app/controllers/users/omniauth_callbacks_controller.rb',
-    'app/controllers/users/passwords_controller.rb',
-    'app/controllers/users/registrations_controller.rb',
-    'app/controllers/users/sessions_controller.rb',
-    'app/controllers/users/unlocks_controller.rb',
     'app/helpers',
     'app/helpers/administrators_helper.rb',
     'app/helpers/sessions_helper.rb',
@@ -128,7 +122,6 @@ Gem::Specification.new do |s|
     'features/manage_users.feature',
     'features/step_definitions',
     'features/step_definitions/authentication_steps.rb',
-    'features/step_definitions/lost_password.rb',
     'features/support',
     'features/support/factories.rb',
     'features/support/paths.rb',

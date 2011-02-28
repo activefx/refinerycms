@@ -30,6 +30,7 @@ gem 'mongoid_slug', :require => 'mongoid/slug'
 gem 'mongoid_nested_set', :git => 'git://github.com/activefx/mongoid_nested_set.git'
 gem 'mongoid_search', :git => 'git://github.com/activefx/mongoid_search_relevant.git'
 gem 'devise', :git => 'git://github.com/plataformatec/devise.git'
+gem 'omniauth', :git => 'git://github.com/intridea/omniauth.git'
 gem 'oa-oauth', :require => 'omniauth/oauth'
 
 # gem 'refinerycms', :path => '../refinerycms'
