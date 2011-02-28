@@ -1,6 +1,23 @@
+## 0.9.9.5 [Not Released]
+
+* Added ``<div class='inner'>`` to `_content_page` for better control over CSS for each section. Please see [086abfcae2c83330346e28d1e40004cff8a27720](https://github.com/resolve/refinerycms/commit/086abfcae2c83330346e28d1e40004cff8a27720) for what changed if this affects you. [Stefan Mielke](https://github.com/caplod)
+* Menu performance improvements. [David Reese](https://github.com/whatcould)
+* [See full list](https://github.com/resolve/refinerycms/compare/0.9.9.4...0.9.9.5)
+
+## 0.9.9.4 [24 February 2011]
+
+* Added ``doc/guides`` for textile based guides that power http://refinerycms.com/guides. [Steven Heidel](https://github.com/stevenheidel) and [Philip Arndt](https://github.com/parndt)
+* Allowed multiple resource pickers on one form. [Phil Spitler](https://github.com/philspitler)
+* Solved YAML parsing issues introduced by change to Psych. [Aaron Patterson](https://github.com/tenderlove) and [Uģis Ozols](https://github.com/ugisozols)
+* Updated page to use a localized cache key if frontend translations are enabled. [Bryan Mahoney](https://github.com/DynamoMTL)
+* Upgraded modernizr to version 1.7. [Jon Roberts](https://github.com/emptyflask)
+* Fixed an issue with the 'add page parts' functionality inserting new parts in the wrong place. [Philip Arndt](https://github.com/parndt)
+* [See full list](https://github.com/resolve/refinerycms/compare/0.9.9.3...0.9.9.4)
+
 ## 0.9.9.3 [17 February 2011]
 
 * Fixed faulty require statement that tried to load rack/cache before dragonfly. [Philip Arndt](https://github.com/parndt)
+* [See full list](https://github.com/resolve/refinerycms/compare/0.9.9.2...0.9.9.3)
 
 ## 0.9.9.2 [17 February 2011]
 
@@ -8,7 +25,6 @@
 * Fixed an issue in some browsers with a particular jQuery selector. [Philip Arndt](https://github.com/parndt)
 * Modified some existing migrations to behave better when creating new applications. [Philip Arndt](https://github.com/parndt)
 * Fixed ``-u`` and ``-p`` support for ``bin/refinerycms``. [Philip Arndt](https://github.com/parndt)
-
 * [See full list](https://github.com/resolve/refinerycms/compare/0.9.9.1...0.9.9.2)
 
 ## 0.9.9.1 [15 February 2011]
@@ -21,7 +37,6 @@
 * Split the project into 10 separately released gems that include their own dependencies. [Philip Arndt](https://github.com/parndt)
 * New Vietnamese translation files added. [Alex Nguyen](https://github.com/tiendung) and Stefan N and Mario Nguyen
 * Improved JRuby support as well as the way that commands run in any ruby implementation. [Hiro Asari](https://github.com/BanzaiMan)
-
 * [See full list](https://github.com/resolve/refinerycms/compare/0.9.9...0.9.9.1)
 
 ## 0.9.9 [27 January 2011]
@@ -66,7 +81,6 @@
 * Sped up WYMeditor load times. [Philip Arndt](https://github.com/parndt)
 * Fixed several issues for Internet Explorer. [Josef Šimánek](https://github.com/simi)
 * Added installation option for [Duostack](http://duostack.com) hosting service. [Philip Arndt](https://github.com/parndt) and [David E. Chen](https://github.com/dchen)
-
 * [See full list](https://github.com/resolve/refinerycms/compare/0.9.8.9...0.9.9)
 
 ## 0.9.8.9 [21 December 2010]
