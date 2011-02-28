@@ -173,6 +173,7 @@ class Actor
   end
 
   def can_delete?(user_to_delete = self)
+    self.is_a?(Administrator) and
     user_to_delete.persisted? and
     !user_to_delete.has_role?(:superuser) and
     Role[:refinery].actors.count > 1 and

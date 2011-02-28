@@ -19,12 +19,18 @@ module AuthenticatedSystem
     #end
 
     def refinery_user?
-      user_signed_in? && current_user.has_role?(:refinery)
+      administrator_signed_in? && current_administrator.has_role?(:refinery)
+    end
+
+    def anybody_signed_in?
+      administrator_signed_in? || user_signed_in?
     end
 
     def self.included(base)
       if base.respond_to? :helper_method
-        base.send :helper_method, :current_user, :current_user_session, :user_signed_in?, :refinery_user?
+        base.send :helper_method, :current_user, :current_user_session, :user_signed_in?,
+                  :current_administrator, :current_administrator_session, :administrator_signed_in?,
+                  :refinery_user?, :anybody_signed_in?
       end
     end
 

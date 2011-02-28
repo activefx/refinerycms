@@ -5,9 +5,9 @@ Feature: Visit Pages
   I want to view pages
 
   Background:
-    Given I have no users
+    Given I have no site interactors
     And I have no pages
-    And A Refinery user exists
+    And A Refinery administrator exists
     And I have a page titled "Home" with a custom url "/"
     And I have a page titled "About"
     And I have a page titled "ä ö ü spéciål chåråctÉrs"

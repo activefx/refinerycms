@@ -5,8 +5,8 @@ Feature: Search
   I want to use search
 
   Background:
-    Given I have no users
-    And I am a logged in refinery user
+    Given I have no site interactors
+    And I am a logged in refinery administrator
 
   @search-existing
   Scenario Outline: Search Existing Item

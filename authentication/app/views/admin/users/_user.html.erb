@@ -1,4 +1,4 @@
-<li id="sortable_<%= user.id %>" class='clearfix record <%= cycle("on", "on-hover") %>'>
+<li class='clearfix record <%= cycle("on", "on-hover") %>' id="<%= dom_id(user) -%>">
   <span class='title'>
     <strong><%= user.username %></strong>
     <span class="preview">
@@ -8,12 +8,16 @@
   <span class='actions'>
     <%= mail_to user.email, refinery_icon_tag('email_go.png'),
                 :title => t('.email_user') %>
-    <%= link_to refinery_icon_tag('application_edit.png'), edit_admin_user_path(user),
-                :title => t('edit', :scope => 'admin.users')%>
-    <%= link_to refinery_icon_tag('delete.png'), admin_user_path(user),
-                :class => "cancel confirm-delete",
-                :title => t('delete', :scope => 'admin.users'),
-                :method => :delete,
-                :confirm => t('message', :scope => 'shared.admin.delete', :title => user.username) if current_user.can_delete?(user) %>
+    <%# link_to refinery_icon_tag("application_go.png"), site_user_url(site_user),
+        :title => t('.view_live_html'),
+        :target => "_blank" %>
+    <%= link_to refinery_icon_tag("application_edit.png"), edit_admin_user_path(user),
+         :title => t('.edit') %>
+    <%= link_to refinery_icon_tag("delete.png"), admin_user_path(user),
+        :class => "cancel confirm-delete",
+        :title => t('.delete'),
+        :confirm => t('message', :scope => 'shared.admin.delete', :title => user.username),
+        :method => :delete %>
   </span>
 </li>
+

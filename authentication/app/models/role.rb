@@ -39,8 +39,8 @@ class Role
     actors.where(:_type => 'User')
   end
 
-  def site_users
-    actors.where(:_type => 'SiteUser')
+  def administrators
+    actors.where(:_type => 'Administrator')
   end
 
 end

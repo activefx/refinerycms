@@ -2,79 +2,15 @@ require 'spec_helper'
 
 Dir[File.expand_path('../../../features/support/factories.rb', __FILE__)].each {|f| require f}
 
-describe Role do
-
-  it { should be_mongoid_document }
-  it { should be_timestamped_document }
-  it { should have_field(:title).of_type(String) }
-  it { should validate_uniqueness_of(:title) }
-  it { should reference_and_be_referenced_in_many(:actors) }
-
-end
-
-describe ActorPlugin do
-
-  it { should be_mongoid_document }
-  it { should be_timestamped_document }
-  it { should have_field(:name).of_type(String) }
-  it { should have_field(:position).of_type(Integer) }
-  it { should be_referenced_in(:actor).as_inverse_of(:plugins) }
-
-end
-
-describe Actor do
-
-  it { should be_mongoid_document }
-  it { should be_timestamped_document }
-
-  # Model Fields
-  it { should have_field(:username).of_type(String).with_default_value_of("") }
-  # Devise Confirmable
-  it { should have_field(:confirmation_token).of_type(String) }
-  it { should have_field(:confirmed_at).of_type(Time) }
-  it { should have_field(:confirmation_sent_at).of_type(Time) }
-  # Devise Database Authenticable
-  it { should have_field(:email).of_type(String).with_default_value_of("") }
-  it { should have_field(:encrypted_password).of_type(String).with_default_value_of("") }
-  # Devise Encryptable
-  it { should have_field(:password_salt).of_type(String).with_default_value_of("") }
-  # Devise Lockable
-  it { should have_field(:failed_attempts).of_type(Integer).with_default_value_of(0) }
-  it { should have_field(:unlock_token).of_type(String) }
-  it { should have_field(:locked_at).of_type(Time) }
-  # Devise Recoverable
-  it { should have_field(:reset_password_token).of_type(String) }
-  # Devise Rememberable
-  it { should have_field(:remember_token).of_type(String) }
-  it { should have_field(:remember_created_at).of_type(Time) }
-  # Devise Token Authenticable
-  it { should have_field(:authentication_token).of_type(String) }
-  # Devise Trackable
-  it { should have_field(:sign_in_count).of_type(Integer).with_default_value_of(0) }
-  it { should have_field(:current_sign_in_at).of_type(Time) }
-  it { should have_field(:last_sign_in_at).of_type(Time) }
-  it { should have_field(:current_sign_in_ip).of_type(String) }
-  it { should have_field(:last_sign_in_ip).of_type(String) }
-  # Refinery Specific
-  it { should have_field(:persistence_token).of_type(String) }
-  it { should have_field(:perishable_token).of_type(String) }
-
-  it { should validate_presence_of(:username) }
-  it { should validate_uniqueness_of(:username) }
-  it { should reference_and_be_referenced_in_many(:roles) }
-  it { should reference_many(:plugins) }
-
-end
-
 describe User do
 
   context "devise modules" do
     subject { User }
-    it { should_not be_confirmable }
+    it { should be_confirmable }
     it { should be_database_authenticatable }
     it { should_not be_encryptable } #because we're using bcrypt
     it { should be_lockable }
-    it { should_not be_omniauthable }
+    it { should be_omniauthable }
     it { should be_recoverable }
     it { should be_registerable }
     it { should be_rememberable }
@@ -101,7 +37,7 @@ describe User do
   end
 
   it "should belong to the appropriate class from the corresponding factory (refinery user)" do
-    Factory(:refinery_user).is_a?(User).should == true
+    Factory(:site_user).is_a?(User).should == true
   end
 
   before(:all) do
@@ -207,7 +143,7 @@ describe User do
     context "setting the relationships from the role side" do
 
       before(:each) do
-        @user = Factory(:user)
+        @user= Factory(:user)
         @user.save
         @role = Role.create(:title => 'refinery')
       end
@@ -251,7 +187,7 @@ describe User do
       end
 
       it "does not add a Role to the User when this Role is already assigned to User" do
-        user = Factory(:refinery_user)
+        user = Factory(:site_user)
         lambda {
           user.add_role(:refinery)
         }.should_not change(user.roles, :count).by(1)
@@ -266,12 +202,12 @@ describe User do
       end
 
       it "returns the true if user has Role" do
-        user = Factory(:refinery_user)
+        user = Factory(:site_user)
         user.has_role?(:refinery).should be_true
       end
 
       it "returns false if user hasn't the Role" do
-        user = Factory(:refinery_user)
+        user = Factory(:site_user)
         user.has_role?(:refinery_fail).should be_false
       end
     end
@@ -317,9 +253,9 @@ describe User do
     before(:each) do
       Actor.delete_all
       Role.delete_all
-      @user = Factory(:refinery_user)
-      @user_not_persisted = Factory.build(:refinery_user)
-      @super_user = Factory(:refinery_user)
+      @user= Factory(:site_user)
+      @user_not_persisted = Factory.build(:site_user)
+      @super_user = Factory(:site_user)
       @super_user.add_role(:superuser)
     end
 
@@ -345,13 +281,12 @@ describe User do
       it "user himself" do
         @user.can_delete?(@user).should be_false
       end
-    end
 
-    context "allow to delete" do
-      it "if all conditions return true" do
-        @super_user.can_delete?(@user).should be_true
+      it "if all conditions return true, but user is not an administrator" do
+        @super_user.can_delete?(@user).should be_false
       end
     end
+
   end
 
   describe "#plugins=" do
@@ -375,7 +310,7 @@ describe User do
 
   describe "plugins association" do
     before(:each) do
-      @user = Factory(:user)
+      @user= Factory(:user)
       @plugin_list = ["refinery_one", "refinery_two", "refinery_three"]
       @user.plugins = @plugin_list
     end

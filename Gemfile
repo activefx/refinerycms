@@ -11,6 +11,19 @@ gemspec
 #  gem 'sqlite3'
 #end
 
+# Use unicorn as the web server
+# gem 'unicorn'
+# gem 'mongrel'
+
+# Deploy with Capistrano
+# gem 'capistrano'
+
+# For Heroku/s3:
+# gem 'aws-s3', :require => 'aws/s3'
+
+# REFINERY CMS ================================================================
+# Anything you put in here will be overridden when the app gets updated.
+
 gem 'mongoid', :git => 'git://github.com/mongoid/mongoid.git'
 gem 'bson_ext', '>= 1.2.1'
 gem 'mongoid_slug', :require => 'mongoid/slug'
@@ -19,39 +32,26 @@ gem 'mongoid_search', :git => 'git://github.com/activefx/mongoid_search_relevant
 gem 'devise', :git => 'git://github.com/plataformatec/devise.git'
 gem 'oa-oauth', :require => 'omniauth/oauth'
 
-# Use unicorn as the web server
-# gem 'unicorn'
-# gem 'mongrel'
-
-# Deploy with Capistrano
-# gem 'capistrano'
-
-# To use debugger
-# gem 'ruby-debug'
-# or in 1.9.x:
-gem 'ruby-debug19', :require => 'ruby-debug'
-
-# For Heroku/s3:
-# gem 'aws-s3', :require => 'aws/s3'
-
-# REFINERY CMS ================================================================
-# Anything you put in here will be overridden when the app gets updated.
-
-#gem 'refinerycms', :path => '.'
-#gem 'refinerycms-authentication', :path => 'authentication'
-#gem 'refinerycms-base', :path => 'base'
-#gem 'refinerycms-core', :path => 'core'
-#gem 'refinerycms-dashboard', :path => 'dashboard'
-#gem 'refinerycms-images', :path => 'images'
-#gem 'refinerycms-pages', :path => 'pages'
-#gem 'refinerycms-resources', :path => 'resources'
-#gem 'refinerycms-settings', :path => 'settings'
-#gem 'refinerycms-generators', :path => '../refinerycms-generators'
+# gem 'refinerycms', :path => '../refinerycms'
+gem 'refinerycms-authentication', :path => 'authentication'
+gem 'refinerycms-base', :path => 'base'
+gem 'refinerycms-core', :path => 'core'
+gem 'refinerycms-dashboard', :path => 'dashboard'
+gem 'refinerycms-images', :path => 'images'
+gem 'refinerycms-pages', :path => 'pages'
+gem 'refinerycms-resources', :path => 'resources'
+gem 'refinerycms-settings', :path => 'settings'
+gem 'refinerycms-generators', :path => '../refinerycms-generators'
 
 group :development, :test do
   gem 'refinerycms-testing', :path => 'testing'
   gem 'mynyml-redgreen', :require => 'redgreen'
   gem 'mongoid-rspec', :git => 'git://github.com/durran/mongoid-rspec.git'
+  gem 'capybara', :git => 'git://github.com/jnicklas/capybara.git'
+  # To use debugger
+  # gem 'ruby-debug'
+  # or in 1.9.x:
+  gem 'ruby-debug19', :require => 'ruby-debug'
 end
 
 # END REFINERY CMS ============================================================

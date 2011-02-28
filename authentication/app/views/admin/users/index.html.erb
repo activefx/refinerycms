@@ -1,12 +1,37 @@
 <div id='records'>
-  <div class='pagination_container'>
-    <%= render :partial => 'users' %>
-  </div>
+  <% if searching? %>
+    <h2><%= t('results_for', :scope => 'shared.admin.search', :query => params[:search]) %></h2>
+  <% end %>
+  <% if @users.any? %>
+    <div class='pagination_container'>
+      <%= render :partial => 'users' %>
+    </div>
+  <% else %>
+    <p>
+      <% unless searching? %>
+        <strong>
+          <%= t('.no_items_yet') %>
+        </strong>
+      <% else %>
+        <%= t('no_results', :scope => 'shared.admin.search') %>
+      <% end %>
+    </p>
+  <% end %>
 </div>
 <div id='actions'>
   <ul>
+    <% if Admin::UsersController.searchable? %>
+      <li>
+        <%= render :partial => "/shared/admin/search",
+                    :locals => {
+                      :url => admin_users_url
+                    } %>
+      </li>
+    <% end %>
     <li>
-      <%= link_to t('.create_new_user'), new_admin_user_url, :class => "add_icon" %>
+      <%= link_to t('.create_new'), new_admin_user_url,
+                   :class => "add_icon" %>
     </li>
   </ul>
 </div>
+

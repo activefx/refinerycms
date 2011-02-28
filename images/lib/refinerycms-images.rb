@@ -15,7 +15,11 @@ module Refinery
     class Engine < ::Rails::Engine
       initializer 'images-with-dragonfly' do |app|
 
-        db = YAML.load_file(Rails.root.join('config/mongoid.yml'))[Rails.env]['database']
+        #if Rails.root.join('config', 'mongoid.yml').file?
+          db = YAML.load_file(Rails.root.join('config', 'mongoid.yml'))[Rails.env]['database']
+        #else
+        #  db = YAML.load_file(Refinery.roots('core').join(*%w(lib generators templates config mongoid.yml)))[Rails.env]['database']
+        #end
 
         app_images = Dragonfly[:images]
         app_images.configure_with(:imagemagick)

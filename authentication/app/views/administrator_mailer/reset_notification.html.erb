@@ -1,0 +1,13 @@
+<p>
+  <%= t('reset_request_received_for', :scope => 'administrator_mailer.reset_notification', :username => @administrator.username) %>
+</p>
+<p>
+  <%= t('visit_this_url', :scope => 'administrator_mailer.reset_notification') %>:
+</p>
+<p>
+  <%= @url %>
+</p>
+<p>
+  (<%= t('remain_same_if_no_action', :scope => 'administrator_mailer.reset_notification') %>)
+</p>
+

@@ -5,6 +5,8 @@ require 'mongoid_nested_set'
 require 'dragonfly'
 require 'truncate_html'
 require 'will_paginate'
+require 'app'
+require 'haml-rails'
 
 module Refinery
   autoload :Activity, File.expand_path('../refinery/activity', __FILE__)
@@ -142,6 +144,12 @@ module Refinery
       initializer 'set will_paginate link labels' do |app|
         WillPaginate::ViewHelpers.pagination_options[:previous_label] = "&laquo;".html_safe
         WillPaginate::ViewHelpers.pagination_options[:next_label] = "&raquo;".html_safe
+      end
+
+      initializer 'ensure App is initialised' do |app|
+        unless Rails.root.join('config', 'app.rb').file?
+          load Refinery.roots('core').join(*%w(lib generators templates config app.rb))
+        end
       end
 
       initializer 'ensure devise is initialised' do |app|

@@ -5,7 +5,7 @@ Gem::Specification.new do |s|
   s.version           = %q{0.9.9.3}
   s.summary           = %q{Core engine for Refinery CMS}
   s.description       = %q{The core of Refinery CMS. This handles the common functionality and is required by most engines}
-  s.date              = %q{2011-02-24}
+  s.date              = %q{2011-02-28}
   s.email             = %q{info@refinerycms.com}
   s.homepage          = %q{http://refinerycms.com}
   s.rubyforge_project = %q{refinerycms}
@@ -27,6 +27,8 @@ Gem::Specification.new do |s|
   s.add_dependency 'truncate_html',               '~> 0.5'
   s.add_dependency 'will_paginate',               '~> 3.0.pre'
   s.add_dependency 'app',                         '>= 1.0.3'
+  s.add_dependency 'haml',                        '>= 3.0.25'
+  s.add_dependency 'haml-rails',                  '>= 0.3.4'
 
   s.files             = [
     'app',
@@ -139,7 +141,6 @@ Gem::Specification.new do |s|
     'lib/generators/templates/config/initializers',
     'lib/generators/templates/config/initializers/devise.rb',
     'lib/generators/templates/config/initializers/mailer.rb',
-    'lib/generators/templates/config/mongoid.yml',
     'lib/generators/templates/config/settings.rb',
     'lib/generators/templates/db',
     'lib/generators/templates/db/seeds.rb',
