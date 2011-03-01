@@ -17,8 +17,8 @@
       = f.password_field :password_confirmation
     %p= f.submit "Sign up"
 
-//- content_for :body_content_right do
-//  = render :partial => "devise/shared/links"
+- content_for :body_content_right do
+  = render :partial => "users/shared/links"
 
 = render :partial => "/shared/content_page"
 

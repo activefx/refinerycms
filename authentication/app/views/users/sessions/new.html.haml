@@ -1,4 +1,5 @@
 - content_title "Sign In"
+
 - content_for :body_content_left do
   = form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f|
     %p
@@ -14,13 +15,9 @@
         = f.check_box :remember_me
         = f.label :remember_me
     %p= f.submit "Sign in"
-//- content_for :body_content_right do
-//  = render :partial => "devise/shared/links"
+
+- content_for :body_content_right do
+  = render :partial => "users/shared/links"
 
 = render :partial => "/shared/content_page"
-//- content_for :body_content_title do
-//  #flash_container
-//    = render :partial => '/shared/no_script'
-//    = render :partial => "/shared/message"
-//  %h1 Sign In
 

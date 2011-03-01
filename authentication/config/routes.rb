@@ -32,6 +32,8 @@
   get 'refinery', :to => 'admin/dashboard#index', :as => :refinery_root
   get 'refinery', :to => 'admin/dashboard#index', :as => :administrator_root
 
+  get '/home', :to => 'pages#home', :as => :user_root
+
   # Override Devise's other routes for convenience methods.
   #get 'refinery/login', :to => "sessions#new", :as => :new_user_session
   #get 'refinery/login', :to => "sessions#new", :as => :refinery_login

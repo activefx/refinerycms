@@ -40,6 +40,9 @@ module NavigationHelpers
   def path_to(page_name)
     case page_name
 
+    when /the user root/
+      user_root_path
+
     when /the admin root/
       admin_root_path
 

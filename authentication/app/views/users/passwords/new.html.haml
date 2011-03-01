@@ -10,8 +10,8 @@
       = f.email_field :email
     %p= f.submit "Send me reset password instructions"
 
-//- content_for :body_content_right do
-//  = render :partial => "devise/shared/links"
+- content_for :body_content_right do
+  = render :partial => "users/shared/links"
 
 = render :partial => "/shared/content_page"
 

@@ -1,8 +1,18 @@
-<h1 id='logo'>
-  <%= link_to RefinerySetting.find_or_set(:site_name, "Company Name"), root_path %>
-</h1>
+<div id='logo'>
+  <h1>
+    <%= link_to RefinerySetting.find_or_set(:site_name, "Company Name"), root_path %>
+  </h1>
+</div>
+<div id='status'>
+  <% if user_signed_in? %>
+    <%= render :partial => "/shared/user" %>
+  <% else %>
+    <%= render :partial => "/shared/visitor" %>
+  <% end %>
+</div>
 <%= render :partial => "/shared/menu",
            :locals => {
              :dom_id => 'menu',
              :css => 'menu'
            } -%>
+

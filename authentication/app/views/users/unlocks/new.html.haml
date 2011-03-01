@@ -9,8 +9,8 @@
       = f.email_field :email
     %p= f.submit "Resend unlock instructions"
 
-//- content_for :body_content_right do
-//  = render :partial => "devise/shared/links"
+- content_for :body_content_right do
+  = render :partial => "devise/shared/links"
 
 = render :partial => "/shared/content_page"
 
