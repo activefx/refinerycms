@@ -72,7 +72,11 @@ module Refinery
       end
 
       def just_installed?
-        Role[:refinery].administrators.empty?
+        if Administrator.devise_modules.include?(:registerable)
+          Role[:refinery].administrators.empty?
+        else
+          false
+        end
       end
 
       def local_request?
@@ -88,7 +92,6 @@ module Refinery
 
       # get all the pages to be displayed in the site menu.
       def find_pages_for_menu
-        #@menu_pages = Page.live.in_menu.order('lft ASC')
         @menu_pages = Page.live.in_menu.asc(:lft)
       end
 

@@ -33,5 +33,16 @@
                    :class => "add_icon" %>
     </li>
   </ul>
+  <h2>User Authentication Features</h2>
+  <ul>
+    <% Actor::DEVISE_MODULES.each do |devise_module| %>
+      <li>
+        <span class='<%= User.send("#{devise_module}?") ? 'success_icon' : 'failure_icon'%>'>
+          <%= devise_module.to_s.titleize %>
+          <%= send("#{devise_module}_help_tag", User) %>
+        </span>
+      </li>
+    <% end %>
+  </ul>
 </div>
 

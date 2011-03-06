@@ -206,6 +206,61 @@ class Actor
     role ? role.actors.include?(self) : false
   end
 
+  def type_for_path
+    raise StandardError, "Actor is not an administratable object." if self.class == Actor
+    self.class.to_s.downcase
+  end
+
+  def rememberable_status_helper
+    raise StandardError, "Actor is not an administratable object." if self.class == Actor
+    if self.remember_token.blank?
+      "#{self._type.downcase} does not currently have a remember cookie"
+    else
+      "#{self._type.downcase} currently has a remember cookie"
+    end
+  end
+
+  def self.confirmation_time_limit_helper
+    raise StandardError, "Actor is not an confirmable object." unless self.confirmable?
+    if self.confirm_within == 0
+      "#{self.to_s}s have an unlimited amount of time to confirm their account."
+    else
+      "#{self.to_s}s must confirm their account within #{self.confirm_within / 3600} hours."
+    end
+  end
+
+  def self.encryptor_name_helper
+    raise StandardError, "Actor is not an administratable object." if self == Actor
+    self.encryptor.to_s rescue 'bcrypt'
+  end
+
+  def self.failed_attempts_helper
+    return "" unless self.lock_strategy_enabled?(:failed_attempts)
+      "The authentication system is configured to lock a user's account " +
+      "after #{self.maximum_attempts} failed sign-in attempts. "
+  end
+
+  def self.unlock_strategy_helper
+    raise StandardError, "Actor is not an administratable object." if self == Actor
+    string = ""
+    string << "by waiting #{self.unlock_in / 60} minutes or " if self.unlock_strategy_enabled?(:time)
+    string << "by confirming via an emailed link or " if self.unlock_strategy_enabled?(:email)
+    string << "by an administrator"
+    string
+  end
+
+  def self.providers_helper
+    Devise.omniauth_providers.map{|p| p.to_s.titleize}.to_sentence
+  end
+
+  def self.timeout_helper
+    return "" unless self.class.respond_to?(:timeout_in)
+    "Sessions are currently configured to timeout in #{self.timeout_in_helper}."
+  end
+
+  def self.timeout_in_helper
+    "#{(self.timeout_in / 60).to_s} minutes"
+  end
 
 end
 

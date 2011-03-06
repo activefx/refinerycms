@@ -20,6 +20,7 @@ en:
       index:
         create_new_administrator: Add new admin
       administrator:
+        show: Administrator details
         delete: Delete this administrator
         edit: Edit this administrator
         email_administrator: Email this admin
@@ -39,6 +40,7 @@ en:
         no_items_yet: There are no Users yet. Click "Add new user" to add your first user.
         create_new_user: Add new user
       user:
+        show: User details
         delete: Delete this user
         edit: Edit this user
         email_user: Email this user
@@ -77,9 +79,72 @@ en:
   devise:
     failure:
       unauthenticated: You need to sign in before continuing.
-      invalid: "Sorry, your login or password was incorrect."
+      invalid: Sorry, your login or password was incorrect.
     administrator_sessions:
       signed_in: Signed in successfully.
+    confirmable:
+      confirmable_help: "The authentication system sends emails with confirmation instructions and verifies whether an account is already confirmed during sign in. This ensures that a valid email address is provided in order to sign up for an account. %{time_limit}"
+      account_confirmed: Account confirmed
+      account_unconfirmed: Account email unconfirmed
+      confirm: "Confirm this %{type}"
+      resend_confirmation: Resend confirmation instructions
+      confirmed: "%{type} was successfully confirmed."
+      successfully_resent: Confirmation instructions successfully resent.
+    database_authenticatable:
+      database_authenticatable_help: "The authentication system encrypts and stores a password in the database to validate the authenticity of a user while signing in. Currently, password encryption is handled by %{encryptor}."
+      working: Authentication via username/email and password is enabled.
+    lockable:
+      lockable_help: "Locking prevents a user from logging into the site. %{failed_attempts}The account can be unlocked %{unlock_strategies}."
+      locked: Account locked
+      unlock_account: Unlock account
+      resend_instructions: Resend unlock instructions
+      unlocked: Account unlocked
+      lock_account: Lock account
+      successfully_unlocked: "%{type}'s account successfully unlocked."
+      resent_instructions: Successfully resent account unlock instructions.
+      account_locked: "Successfully locked %{type} account."
+    omniauthable:
+      omniauthable_help: "Third party authentication allows users to login with and/or link existing accounts from preconfigured external authentication providers. Currently, users (and only users) can login with %{providers}."
+      enabled: "Third party authentication is enabled with %{providers}"
+    recoverable:
+      recoverable_help: Password recovery enables users to reset their password by sending reset instructions to the user by email. Administrators can also resend password reset instructions via the User and Administrator dashboards.
+      knows_password: "%{type} knows password"
+      generate_new_password_token: Generate new password reset code
+      email_password_token: Email password reset instructions
+      forgot_password: "%{type} forgot password"
+      delete_password_token: Delete password reset code
+      successfully_generated_token: Successfully created a new password reset code.
+      successfully_resent_token: "Successfully created a new password reset code and emailed reset instruction to the %{type}."
+      successfully_deleted_token: Successfully deleted password reset code.
+    registerable:
+      registerable_help: Registration handles signing up users through the site, and allows them to edit and destroy their account.
+      enabled: "%{type} registration is enabled"
+    rememberable:
+      rememberable_help: Account cookies are used to remember the user, allowing them to skip entering their login information when they revisit the site.
+      enabled: "Account remember cookies enabled, %{status}"
+      invalidate_cookie: "Invalidate cookie, requiring %{type} to re-enter login information next time they visit the site"
+      successfully_deleted_cookie: Successfully deleted remember cookie.
+    timeoutable:
+      timeoutable_help: "The timeout functionality expires logged in sessions that have no activity in a specified period of time, after which, users will be required to login again. %{timeout}"
+      enabled: "Sessions timeouts are enabled and configured to timeout in %{timeout_in}"
+    token_authenticatable:
+      token_authenticatable_help: Token Authentication signs in a user based on an authentication token (also known as a 'single access token'). The token can be given both through a query string or HTTP Basic Authentication.
+      enabled: Token / HTTP authentication enabled
+      generate_new_token: Generate new authentication token
+      delete_token: Delete authentication token
+      successfully_generated_token: Successfully generated a new authentication token.
+      problem_generating_token: There was a problem generating a new authentication token.
+      successfully_deleted_token: Successfully deleted authentication token.
+      problem_deleting_token: There was a problem deleting the authentication token.
+    trackable:
+      trackable_help: Tracking and statictics enables basic user analytics, such as tracking sign in count, timestamps, and IP address.
+      enabled: "%{type} tracking and statistics are enabled"
+    validatable:
+      validatable_help: "Users are required to provide a valid email address and a password that is %{password_length} characters long."
+      enabled: "%{type} has provided an email and password in valid formats"
+    encryptable:
+      encryptable_help: Encryptable adds support for other authentication mechanisms besides the built-in password encryptor Bcrypt (which is enabled by default when not using encrytable). Enabling encryptable allows for the use of sha1, sha512, clearance_sha1, authlogic_sha512, and restful_authentication_sha1 encryptors instead of bcrypt.
+      enabled: "Password encryption is enabled with %{encryptor}"
   roles:
     superuser: Superuser
     refinery: Refinery

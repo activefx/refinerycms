@@ -5,7 +5,7 @@ Gem::Specification.new do |s|
   s.version           = %q{0.9.9.4}
   s.summary           = %q{Testing plugin for Refinery CMS}
   s.description       = %q{This plugin adds the ability to run cucumber and rspec against the RefineryCMS gem while inside a RefineryCMS project}
-  s.date              = %q{2011-02-28}
+  s.date              = %q{2011-03-05}
   s.email             = %q{info@refinerycms.com}
   s.homepage          = %q{http://refinerycms.com}
   s.rubyforge_project = %q{refinerycms}
@@ -44,12 +44,18 @@ Gem::Specification.new do |s|
     'config',
     'config/cucumber.yml',
     'features',
+    'features/fixtures',
+    'features/fixtures/facebook_me.js',
+    'features/fixtures/facebook_me.response',
+    'features/fixtures/facebook_my_friends.response',
+    'features/fixtures/facebook_registration.yml',
     'features/step_definitions',
     'features/step_definitions/web_steps.rb',
     'features/support',
     'features/support/env.rb',
     'features/support/factories.rb',
     'features/support/negative_expectations_helper.rb',
+    'features/support/omniauth.rb',
     'features/support/paths.rb',
     'lib',
     'lib/gemspec.rb',

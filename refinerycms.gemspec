@@ -4,7 +4,7 @@ Gem::Specification.new do |s|
   s.name              = %q{refinerycms}
   s.version           = %q{0.9.9.4}
   s.description       = %q{A Ruby on Rails CMS that supports Rails 3. It's easy to extend and sticks to 'the Rails way' where possible.}
-  s.date              = %q{2011-02-28}
+  s.date              = %q{2011-03-05}
   s.summary           = %q{A Ruby on Rails CMS that supports Rails 3}
   s.email             = %q{info@refinerycms.com}
   s.homepage          = %q{http://refinerycms.com}
@@ -52,6 +52,7 @@ Gem::Specification.new do |s|
     'config/app/production.rb',
     'config/app/test.rb',
     'config/app.rb',
+    'config/app.rb.sample',
     'config/cucumber.yml',
     'config/environments',
     'config/environments/development.rb',
@@ -102,8 +103,6 @@ Gem::Specification.new do |s|
     'readme.md',
     'refinerycms.gemspec',
     'spec',
-    'spec/acceptance',
-    'spec/acceptance/acceptance_helper.rb',
     'spec/rcov.opts',
     'spec/spec_helper.rb'
   ]

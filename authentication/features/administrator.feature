@@ -10,7 +10,7 @@ Feature: Administrator
 
   Scenario: Login (successful login)
     Given I am on the administrative login page
-    And I have an refinery administrator named "admin"
+    And I have a refinery administrator named "admin"
     And I fill in "administrator_login" with "admin"
     And I fill in "administrator_password" with "greenandjuicy"
     And I press "Sign in"
@@ -19,7 +19,7 @@ Feature: Administrator
 
   Scenario: Login (unsuccessful login)
     Given I am on the administrative login page
-    And I have an refinery administrator named "admin"
+    And I have a refinery administrator named "admin"
     And I fill in "administrator_login" with "jdfhaljfhdsjkf"
     And I fill in "administrator_password" with "aksdfjlkdsjflk"
     And I press "Sign in"

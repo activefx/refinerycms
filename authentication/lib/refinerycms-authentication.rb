@@ -19,7 +19,7 @@ module Refinery
         ::Refinery::Plugin.register do |plugin|
           plugin.name = "refinery_users"
           plugin.version = %q{0.9.9}
-          plugin.menu_match = /(refinery|admin)\/users$/
+          plugin.menu_match = /(refinery|admin)\/(users|confirmables|lockables|recoverables|rememberables|token_authentications)$/
           plugin.activity = {
             :class => User,
             :title => 'login'
@@ -31,7 +31,7 @@ module Refinery
         ::Refinery::Plugin.register do |plugin|
           plugin.name = "refinery_administrators"
           plugin.version = %q{0.9.9}
-          plugin.menu_match = /(refinery|admin)\/administrators$/
+          plugin.menu_match = /(refinery|admin)\/(administrators|confirmables|lockables|recoverables|rememberables|token_authentications)$/
           plugin.activity = {
             :class => Administrator,
             :title => 'login'

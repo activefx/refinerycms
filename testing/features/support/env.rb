@@ -15,6 +15,7 @@ def setup_environment
   else
     require 'cucumber/formatter/unicode' # Remove this line if you don't want Cucumber Unicode support
   end
+  require 'cucumber/rails/rspec'
   require 'cucumber/rails/world'
   #require 'cucumber/rails/active_record'
   require 'cucumber/web/tableish'
@@ -25,6 +26,7 @@ def setup_environment
 
   require 'mongoid'
 
+  include ::Devise::TestHelpers
   include ::Devise::Controllers::UrlHelpers
 
   # Capybara defaults to XPath selectors rather than Webrat's default of CSS3. In
@@ -34,7 +36,7 @@ def setup_environment
   Capybara.default_selector = :css
 
   require 'database_cleaner'
-  #require 'database_cleaner/cucumber'
+  require 'database_cleaner/cucumber'
 
 end
 
@@ -66,16 +68,21 @@ def each_run
   # How to clean your database when transactions are turned off. See
   # http://github.com/bmabey/database_cleaner for more info.
 
-  Before do
-    DatabaseCleaner.orm = "mongoid"
-    DatabaseCleaner.strategy = :truncation
-    DatabaseCleaner.clean
-  end
+  # Before do
+  #   Mongoid.master.collections.reject { |c| c.name == 'system.indexes'}.each(&:drop)
+  # end
 
+  DatabaseCleaner.orm = "mongoid"
+  DatabaseCleaner.strategy = :truncation
+  Before { DatabaseCleaner.clean }
 
   require 'fileutils'
   require 'rails/generators'
-  #require 'rails/generators/scripts/generate'
+  # require 'rails/generators/scripts/generate'
+end
+
+def read_fixture(filename)
+  File.read(File.join(Rails.root.to_s, 'features', 'fixtures', filename))
 end
 
 require 'rubygems'

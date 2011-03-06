@@ -1,0 +1,24 @@
+%li{ :class => "clearfix record #{cycle("on", "on-hover")}" }
+  %span.title
+    %strong Password Recovery
+    = recoverable_help_tag
+    - unless actor.reset_password_token.blank?
+      %span.preview= "&nbsp;Code: #{actor.reset_password_token}".html_safe
+  %span.actions
+    - if actor.reset_password_token.blank?
+      = link_to refinery_icon_tag("tick.png"), "#",
+        :title => t('devise.recoverable.knows_password', :type => actor._type)
+      = link_to refinery_icon_tag("key_add.png"), send("admin_#{actor.type_for_path}_recoverables_path", actor.id), :method => :post,
+        :title => t('devise.recoverable.generate_new_password_token')
+      = link_to refinery_icon_tag("email_go.png"), send("admin_#{actor.type_for_path}_recoverables_path", actor.id), :method => :put,
+        :title => t('devise.recoverable.email_password_token')
+    - else
+      = link_to refinery_icon_tag("cross.png"), "#",
+        :title => t('devise.recoverable.forgot_password', :type => actor._type)
+      = link_to refinery_icon_tag("key_add.png"), send("admin_#{actor.type_for_path}_recoverables_path", actor.id), :method => :post,
+        :title => t('devise.recoverable.generate_new_password_token')
+      = link_to refinery_icon_tag("email_go.png"), send("admin_#{actor.type_for_path}_recoverables_path", actor.id), :method => :put,
+        :title => t('devise.recoverable.email_password_token')
+      = link_to refinery_icon_tag("delete.png"), send("admin_#{actor.type_for_path}_recoverables_path", actor.id), :method => :delete,
+        :title => t('devise.recoverable.delete_password_token')
+

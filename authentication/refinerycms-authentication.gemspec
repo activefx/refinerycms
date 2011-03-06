@@ -5,7 +5,7 @@ Gem::Specification.new do |s|
   s.version           = %q{0.9.9.4}
   s.summary           = %q{Authentication engine for Refinery CMS}
   s.description       = %q{The default authentication engine for Refinery CMS}
-  s.date              = %q{2011-02-28}
+  s.date              = %q{2011-03-06}
   s.email             = %q{info@refinerycms.com}
   s.homepage          = %q{http://refinerycms.com}
   s.rubyforge_project = %q{refinerycms}
@@ -24,10 +24,17 @@ Gem::Specification.new do |s|
     'app/controllers',
     'app/controllers/admin',
     'app/controllers/admin/administrators_controller.rb',
+    'app/controllers/admin/confirmables_controller.rb',
+    'app/controllers/admin/lockables_controller.rb',
+    'app/controllers/admin/recoverables_controller.rb',
+    'app/controllers/admin/rememberables_controller.rb',
+    'app/controllers/admin/token_authentications_controller.rb',
     'app/controllers/admin/users_controller.rb',
     'app/controllers/administrator_passwords_controller.rb',
     'app/controllers/administrator_registrations_controller.rb',
     'app/controllers/administrator_sessions_controller.rb',
+    'app/controllers/users',
+    'app/controllers/users/omniauth_callbacks_controller.rb',
     'app/helpers',
     'app/helpers/administrators_helper.rb',
     'app/helpers/sessions_helper.rb',
@@ -40,6 +47,7 @@ Gem::Specification.new do |s|
     'app/models/administrator.rb',
     'app/models/role.rb',
     'app/models/user.rb',
+    'app/models/user_token.rb',
     'app/views',
     'app/views/admin',
     'app/views/admin/administrators',
@@ -49,6 +57,7 @@ Gem::Specification.new do |s|
     'app/views/admin/administrators/edit.html.erb',
     'app/views/admin/administrators/index.html.erb',
     'app/views/admin/administrators/new.html.erb',
+    'app/views/admin/administrators/show.html.haml',
     'app/views/admin/users',
     'app/views/admin/users/_form.html.erb',
     'app/views/admin/users/_user.html.erb',
@@ -56,6 +65,7 @@ Gem::Specification.new do |s|
     'app/views/admin/users/edit.html.erb',
     'app/views/admin/users/index.html.erb',
     'app/views/admin/users/new.html.erb',
+    'app/views/admin/users/show.html.haml',
     'app/views/administrator_mailer',
     'app/views/administrator_mailer/reset_notification.html.erb',
     'app/views/administrator_mailer/reset_notification.text.plain.erb',
@@ -68,6 +78,20 @@ Gem::Specification.new do |s|
     'app/views/administrator_sessions/new.html.erb',
     'app/views/layouts',
     'app/views/layouts/login.html.erb',
+    'app/views/shared',
+    'app/views/shared/admin',
+    'app/views/shared/admin/_confirmable.html.haml',
+    'app/views/shared/admin/_database_authenticatable.html.haml',
+    'app/views/shared/admin/_encryptable.html.haml',
+    'app/views/shared/admin/_lockable.html.haml',
+    'app/views/shared/admin/_omniauthable.html.haml',
+    'app/views/shared/admin/_recoverable.html.haml',
+    'app/views/shared/admin/_registerable.html.haml',
+    'app/views/shared/admin/_rememberable.html.haml',
+    'app/views/shared/admin/_timeoutable.html.haml',
+    'app/views/shared/admin/_token_authenticatable.html.haml',
+    'app/views/shared/admin/_trackable.html.haml',
+    'app/views/shared/admin/_validatable.html.haml',
     'app/views/users',
     'app/views/users/confirmations',
     'app/views/users/confirmations/new.html.haml',
@@ -135,6 +159,9 @@ Gem::Specification.new do |s|
     'license.md',
     'refinerycms-authentication.gemspec',
     'spec',
+    'spec/controllers',
+    'spec/controllers/users',
+    'spec/controllers/users/omniauth_callbacks_controller_spec.rb',
     'spec/models',
     'spec/models/administrator_spec.rb',
     'spec/models/user_spec.rb'

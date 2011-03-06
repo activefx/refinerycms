@@ -31,7 +31,7 @@ module Refinery
         end
 
         def error_404(exception=nil)
-          if (@page = Page.find_by_menu_match("^/404$", :include => [:parts, :slugs])).present?
+          if (@page = Page.where(:menu_match => "^/404$").first).present?
             params[:action] = 'error_404'
             # change any links in the copy to the admin_root_path
             # and any references to "home page" to "Dashboard"

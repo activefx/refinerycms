@@ -1,0 +1,8 @@
+%li{ :class => "clearfix record #{cycle("on", "on-hover")}" }
+  %span.title
+    %strong Session Timeout
+    = timeoutable_help_tag
+  %span.actions
+    = link_to refinery_icon_tag("tick.png"), "#",
+      :title => t('devise.timeoutable.enabled', :timeout_in => actor.class.timeout_in_helper)
+

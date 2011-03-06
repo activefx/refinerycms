@@ -1,6 +1,8 @@
 require 'devise'
 require 'app'
 
+require 'openid/store/filesystem'
+
 # Use this hook to configure devise mailer, warden hooks and so forth. The first
 # four configuration values can also be set straight in your models.
 Devise.setup do |config|
@@ -175,6 +177,9 @@ Devise.setup do |config|
   # Add a new OmniAuth provider. Check the wiki for more information on setting
   # up on your models and hooks.
   # config.omniauth :github, 'APP_ID', 'APP_SECRET', :scope => 'user,public_repo'
+  config.omniauth :facebook, App.facebook_app_id, App.facebook_app_secret
+  config.omniauth :twitter, App.twitter_app_id, App.twitter_app_secret
+  config.omniauth :google_apps, OpenID::Store::Filesystem.new('/tmp'), :domain => 'gmail.com'
 
   # ==> Warden configuration
   # If you want to use other strategies, that are not supported by Devise, or
@@ -185,5 +190,50 @@ Devise.setup do |config|
   #   manager.intercept_401 = false
   #   manager.default_strategies(:scope => :user).unshift :some_external_strategy
   # end
+
+  # monkey patch
+  # From https://github.com/holden/devise-omniauth-example/blob/master/config/initializers/devise.rb
+
+  require 'openid/store/nonce'
+  require 'openid/store/interface'
+  module OpenID
+    module Store
+      class Memcache < Interface
+        def use_nonce(server_url, timestamp, salt)
+          return false if (timestamp - Time.now.to_i).abs > Nonce.skew
+          ts = timestamp.to_s # base 10 seconds since epoch
+          nonce_key = key_prefix + 'N' + server_url + '|' + ts + '|' + salt
+          result = @cache_client.add(nonce_key, '', expiry(Nonce.skew + 5))
+
+          return result #== true (edited 10/25/10)
+  #        return !!(result =~ /^STORED/)
+        end
+      end
+    end
+  end
+
+  class Hash
+    def recursive_find_by_key(key)
+      # Create a stack of hashes to search through for the needle which
+      # is initially this hash
+      stack = [ self ]
+
+      # So long as there are more haystacks to search...
+      while (to_search = stack.pop)
+        # ...keep searching for this particular key...
+        to_search.each do |k, v|
+          # ...and return the corresponding value if it is found.
+          return v if (k == key)
+
+          # If this value can be recursively searched...
+          if (v.respond_to?(:recursive_find_by_key))
+            # ...push that on to the list of places to search.
+            stack << v
+          end
+        end
+      end
+    end
+  end
+
 end
 

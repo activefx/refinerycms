@@ -1,0 +1,18 @@
+%li{ :class => "clearfix record #{cycle("on", "on-hover")}" }
+  %span.title
+    %strong Account Confirmation
+    = confirmable_help_tag(actor.class)
+    - unless actor.confirmed?
+      %span.preview= "&nbsp;Code: #{actor.confirmation_token}".html_safe
+  %span.actions
+    - if actor.confirmed?
+      = link_to refinery_icon_tag("tick.png"), "#",
+        :title => t('devise.confirmable.account_confirmed')
+    - else
+      = link_to refinery_icon_tag("cross.png"), "#",
+        :title => t('devise.confirmable.account_unconfirmed')
+      = link_to refinery_icon_tag("user_add.png"), send("admin_#{actor.type_for_path}_confirmables_path", actor.id), :method => :post,
+        :title => t('devise.confirmable.confirm', :type => actor.type_for_path)
+      = link_to refinery_icon_tag("email_go.png"), send("admin_#{actor.type_for_path}_confirmables_path", actor.id), :method => :put,
+        :title => t('devise.confirmable.resend_confirmation')
+
