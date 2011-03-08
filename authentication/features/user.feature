@@ -136,3 +136,44 @@ Feature: User
 #    Then I should be on the admin root
 #    And I should see "Password reset successfully for"
 
+#Feature: Registration
+#  In order to use My Great Application
+#  As a user
+#  I want to be able to register
+#
+#  Scenario: 'Standard Registration'
+#    Given I am not currently logged in
+#    When I am on the signup page
+#    Then I should see "Sign Up"
+#    And I fill in "Name (required)" with "Mickey Dolenz"
+#    And I fill in "Email (required)" with "mickey@monkees.com"
+#    And I fill in "Password (required)" with "password"
+#    And I fill in "Password confirmation" with "password"
+#    And I press "Register"
+#    Then I should see "Sign Up - Confirm Your Account"
+#    Then I should be on the registration thank you page
+#    Then "mickey@monkees.com" should receive an email
+#    When I open the email
+#    Then I should see "Confirm my account" in the email body
+#    When I follow "Confirm my account" in the email
+#    Then I should be on the welcome page
+#    And I should see "Welcome to the Great Application"
+#
+#  Scenario: 'Accepting an invitation'
+#    Given I am not currently logged in
+#    And the "Boys and Girls Club" invites "mickey@monkees.com" to join
+#    Then "mickey@monkees.com" should receive an email
+#    When I open the email
+#    Then I should see "Accept Invitation" in the email body
+#    When I follow "Accept Invitation" in the email
+#    Then I should be on the signup page
+#    Then I should see "Sign Up"
+#    And I fill in "Name (required)" with "Mickey Dolenz"
+#    And the "Email (required)" field should contain "mickey@monkees.com"
+#    And I fill in "Password (required)" with "password"
+#    And I fill in "Password confirmation" with "password"
+#    And I press "Register"
+#    Then the account "mickey@monkees.com" should be "activated"
+#    Then I should be on the accept/decline invitation page
+#    And I should see "Join the Boys and Girls Club"
+

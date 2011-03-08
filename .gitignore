@@ -5,6 +5,14 @@ db/*.sqlite3-journal
 *.log
 tmp/**/*
 
+# Database
+config/database.yml
+config/mongoid.yml
+
+# Services
+config/amazon_s3.yml
+config/rackspace_cloudfiles.yml
+
 # Documentation
 doc/api
 doc/app
