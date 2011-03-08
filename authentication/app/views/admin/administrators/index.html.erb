@@ -9,5 +9,16 @@
       <%= link_to t('.create_new_administrator'), new_admin_administrator_url, :class => "add_icon" %>
     </li>
   </ul>
+  <h2>Admin Authentication Features</h2>
+  <ul>
+    <% Actor::DEVISE_MODULES.each do |devise_module| %>
+      <li>
+        <span class='<%= Administrator.send("#{devise_module}?") ? 'success_icon' : 'failure_icon'%>'>
+          <%= devise_module.to_s.titleize %>
+          <%= send("#{devise_module}_help_tag", User) %>
+        </span>
+      </li>
+    <% end %>
+  </ul>
 </div>
 

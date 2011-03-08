@@ -1,7 +1,9 @@
 ::Refinery::Application.routes.draw do
 
 
-  devise_for :users#, :controllers => {
+  devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks" }
+
+  #, :controllers => {
 #    :confirmations => "users/confirmations",
 #    :omniauth_callbacks => "users/omniauth_callbacks",
 #    :passwords => "users/passwords",
@@ -41,8 +43,20 @@
   #get 'refinery/logout', :to => "sessions#destroy", :as => :logout
 
   scope(:path => 'refinery', :as => 'admin', :module => 'admin') do
-    resources :administrators, :except => :show
-    resources :users, :except => :show
+    resources :administrators do
+      resource :token_authentications, :controller => 'token_authentications'
+      resource :rememberables, :controller => 'rememberables'
+      resource :recoverables, :controller => 'recoverables'
+      resource :confirmables, :controller => 'confirmables'
+      resource :lockables, :controller => 'lockables'
+    end
+    resources :users do
+      resource :token_authentications, :controller => 'token_authentications'
+      resource :rememberables, :controller => 'rememberables'
+      resource :recoverables, :controller => 'recoverables'
+      resource :confirmables, :controller => 'confirmables'
+      resource :lockables, :controller => 'lockables'
+    end
   end
 
 end

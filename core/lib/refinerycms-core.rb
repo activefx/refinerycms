@@ -5,6 +5,7 @@ require 'mongoid_nested_set'
 require 'dragonfly'
 require 'truncate_html'
 require 'will_paginate'
+require 'show_for'
 require 'app'
 require 'haml-rails'
 
@@ -77,6 +78,16 @@ module Refinery
             return_path
           end
         end
+
+        # Don't have to keep hitting the database to check if Refinery
+        # was just installed, only check check if devise modules
+        # include registerable, and only make administrators registerable
+        # if there are none with the refinery role
+        if Role[:refinery].administrators.empty?
+          Administrator.class_eval do
+            devise :registerable
+          end
+        end
       end
 
       # Register the plugin
@@ -98,6 +109,7 @@ module Refinery
           plugin.always_allow_access = true
           plugin.menu_match = /(refinery|admin)\/(refinery_)?dialogs/
         end
+
       end
 
       # Run other initializer code that used to be in config/initializers/

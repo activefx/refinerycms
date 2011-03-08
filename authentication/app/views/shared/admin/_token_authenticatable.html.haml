@@ -1,0 +1,14 @@
+%li{ :class => "clearfix record #{cycle("on", "on-hover")}" }
+  %span.title
+    %strong Token / HTTP Authentication
+    = token_authenticatable_help_tag
+    - unless actor.authentication_token.blank?
+      %span.preview= "&nbsp;Code: #{actor.authentication_token}".html_safe
+  %span.actions
+    = link_to refinery_icon_tag("tick.png"), "#",
+      :title => t('devise.token_authenticatable.enabled')
+    = link_to refinery_icon_tag("tick.png"), send("admin_#{actor.type_for_path}_token_authentications_path", actor.id), :method => :post,
+      :title => t('devise.token_authenticatable.generate_new_token')
+    = link_to refinery_icon_tag("tick.png"), send("admin_#{actor.type_for_path}_token_authentications_path", actor.id), :method => :delete,
+      :title => t('devise.token_authenticatable.delete_token')
+

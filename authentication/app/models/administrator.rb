@@ -4,8 +4,8 @@ class Administrator < Actor
                   :remember_me, :username, :plugins, :login
 
   # Include default devise modules. Others available are:
-  # :token_authenticatable, :confirmable, and :timeoutable
-  devise :database_authenticatable, :registerable, :recoverable,
+  # :registerable, :token_authenticatable, :confirmable, and :timeoutable
+  devise :database_authenticatable, :recoverable,
          :rememberable, :trackable, :validatable, :lockable
 
   class << self

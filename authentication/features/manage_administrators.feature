@@ -60,3 +60,97 @@ Feature: Manage Administrators
     And I should see "cucumber was successfully updated."
     And I should see "cucumber (green@cucumber.com)"
 
+  @lockable @administrators-lockable
+  Scenario: Lock Account
+    Given I have a refinery administrator named "steven"
+    And I am a logged in refinery administrator
+    And I go to the administrator account details for "steven"
+    And I follow "Lock account"
+    Then I should be on the administrator account details for "steven"
+    And I should see "Successfully locked administrator account"
+    And I should see "Account locked on"
+
+  @lockable @administrators-lockable
+  Scenario: Unlock Account
+    Given I have a locked refinery administrator named "steven"
+    And I am a logged in refinery administrator
+    And I go to the administrator account details for "steven"
+    And I follow "Unlock account"
+    Then I should be on the administrator account details for "steven"
+    And I should see "Administrator's account successfully unlocked"
+
+  @lockable @administrators-lockable
+  Scenario: Resend Unlock Instructions
+    Given I have a locked refinery administrator named "steven"
+    And I am a logged in refinery administrator
+    And I go to the administrator account details for "steven"
+    And I follow "Resend unlock instructions"
+    Then I should be on the administrator account details for "steven"
+    And I should see "Successfully resent account unlock instructions"
+
+  @recoverable @administrators-recoverable
+  Scenario: Generate Password Recovery Code
+    Given I have a forgetful refinery administrator named "steven"
+    And I am a logged in refinery administrator
+    And I go to the administrator account details for "steven"
+    And I follow "Generate new password reset code"
+    Then I should be on the administrator account details for "steven"
+    And I should see "Successfully created a new password reset code"
+
+  @recoverable @administrators-recoverable
+  Scenario: Resend Password Recovery Instructions
+    Given I have a forgetful refinery administrator named "steven"
+    And I am a logged in refinery administrator
+    And I go to the administrator account details for "steven"
+    And I follow "Email password reset instructions"
+    Then I should be on the administrator account details for "steven"
+    And I should see "Successfully created a new password reset code and emailed reset instruction to the administrator"
+
+  @recoverable @administrators-recoverable
+  Scenario: Delete Password Recovery Code
+    Given I have a forgetful refinery administrator named "steven"
+    And I am a logged in refinery administrator
+    And I go to the administrator account details for "steven"
+    And I follow "Delete password reset code"
+    Then I should be on the administrator account details for "steven"
+    And I should see "Successfully deleted password reset code"
+
+  @recoverable @administrators-recoverable
+  Scenario: Send Password Recovery Instructions
+    Given I have a refinery administrator named "steven"
+    And I am a logged in refinery administrator
+    And I go to the administrator account details for "steven"
+    And I follow "Email password reset instructions"
+    Then I should be on the administrator account details for "steven"
+    And I should see "Successfully created a new password reset code and emailed reset instruction to the administrator"
+    And I follow "Administrator forgot password"
+    And I should be on the administrator account details for "steven"
+
+  @rememberable @administrators-rememberable
+  Scenario: Invalidate Cookie
+    Given I have a logged in and remembered administrator named "steven"
+    And I go to the administrator account details for "steven"
+    And I follow "Invalidate cookie"
+    Then I should be on the administrator account details for "steven"
+    And I should see "Successfully deleted remember cookie"
+
+  @token_authenticatable @administrators-token_authenticatable
+  Scenario: Generate New Token
+    Given I am a logged in refinery administrator
+    And Administrator token authentication is enabled
+    And I have a refinery administrator named "steven"
+    And I go to the administrator account details for "steven"
+    And I follow "Generate new authentication token"
+    Then I should be on the administrator account details for "steven"
+    And I should see "Successfully generated a new authentication token"
+
+  @token_authenticatable @administrators-token_authenticatable
+  Scenario: Delete Authentication Token
+    Given I am a logged in refinery administrator
+    And Administrator token authentication is enabled
+    And I have a refinery administrator named "steven"
+    And I go to the administrator account details for "steven"
+    And I follow "Delete authentication token"
+    Then I should be on the administrator account details for "steven"
+    And I should see "Successfully deleted authentication token"
+

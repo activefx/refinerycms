@@ -1,0 +1,11 @@
+%li{ :class => "clearfix record #{cycle("on", "on-hover")}" }
+  %span.title
+    %strong Account Cookies
+    = rememberable_help_tag
+  %span.actions
+    = link_to refinery_icon_tag("tick.png"), "#",
+      :title => t('devise.rememberable.enabled', :status => actor.rememberable_status_helper)
+    - unless actor.remember_token.blank?
+      = link_to refinery_icon_tag("delete.png"), send("admin_#{actor.type_for_path}_rememberables_path", actor.id), :method => :delete,
+        :title => t('devise.rememberable.invalidate_cookie', :type => actor._type.downcase)
+

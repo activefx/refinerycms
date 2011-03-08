@@ -1,0 +1,87 @@
+#records
+  %h2 Authentication Features
+  %ul
+    - @user._type.constantize.devise_modules.each do |devise_module|
+      = render :partial => "shared/admin/#{devise_module.to_s}",
+                :locals => { :actor => @user }
+  %h2 Authentication Providers
+  %h2 Authorization & Roles
+#actions
+  %h2 User Details
+  %ul
+    %li
+      = link_to t('admin.users.user.edit'), edit_admin_user_path(@user), :class => "edit_icon"
+  %p
+    %strong Type:
+    %br
+    = @user._type
+  %p
+    %strong Username:
+    %br
+    = @user.username
+  %p
+    %strong Email:
+    %br
+    = @user.email
+  %p
+    %strong Joined on:
+    %br
+    = @user.created_at.to_s(:long)
+  - if User.confirmable? && @user.confirmed?
+    %p
+      %strong Account confirmed on:
+      %br
+      = @user.confirmed_at.to_s(:long)
+  - if @user.class.lock_strategy_enabled?(:failed_attempts)
+    %p
+      %strong Failed login attempts:
+      %br
+      = @user.failed_attempts.to_s
+  - if @user.access_locked?
+    %p
+      %strong Account locked on:
+      %br
+      = @user.locked_at.to_s(:long)
+  - unless @user.remember_token.blank?
+    %p
+      %strong Remember cookie status:
+      %br
+      - if (@user.remember_created_at + @user.class.remember_for) < Time.now
+        = "Cookie Expired"
+      - else
+        = "Expires in #{time_ago_in_words((@user.remember_created_at + @user.class.remember_for))}"
+    %p
+      %strong Cookie created on:
+      %br
+      = @user.remember_created_at.to_s(:long) unless @user.remember_created_at.nil?
+    %p
+      %strong Cookie expiration date:
+      %br
+      = (@user.remember_created_at + @user.class.remember_for).to_s(:long)
+  - if @user.class.trackable?
+    %p
+      %strong Sign in count:
+      %br
+      = @user.sign_in_count
+    %p
+      %strong Current sign in at:
+      %br
+      - if @user.current_sign_in_at.nil?
+        = "Never signed in"
+      - else
+        = @user.current_sign_in_at.to_s(:long)
+    - unless @user.current_sign_in_ip.blank?
+      %p
+        %strong Current sign in IP:
+        %br
+        = @user.current_sign_in_ip
+    - unless @user.last_sign_in_at.blank?
+      %p
+        %strong Last sign in at:
+        %br
+        = @user.last_sign_in_at.to_s(:long)
+      %p
+        %strong Last sign in IP:
+        %br
+        = @user.last_sign_in_ip
+

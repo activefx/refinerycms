@@ -33,6 +33,58 @@ Feature: User
     Then I should be on the home page
     And I should not see "Sign Out"
 
+#  @users-password-forgot
+#  Scenario: Forgot Password page (no email entered)
+#    And I am on the forgot password page
+#    When I press "Reset password"
+#    Then I should see "You did not enter an email address."
+
+#  @users-password-forgot
+#  Scenario: Forgot Password page (non existing email entered)
+#    Given I am on the forgot password page
+#    And I have a user with email "green@cukes.com"
+#    When I fill in "user_email" with "none@cukes.com"
+#    And I press "Reset password"
+#    Then I should see "Sorry, 'none@cukes.com' isn't associated with any accounts."
+#    And I should see "Are you sure you typed the correct email address?"
+
+#  @users-password-forgot
+#  Scenario: Forgot Password page (existing email entered)
+#    Given I am on the forgot password page
+#    And I have a user with email "green@cukes.com"
+#    When I fill in "user_email" with "green@cukes.com"
+#    And I press "Reset password"
+#    Then I should see "An email has been sent to you with a link to reset your password."
+
+#  @users-password-reset
+#  Scenario: Reset password page (invalid reset_code)
+#    Given I am not requesting password reset
+#    When I go to the reset password page
+#    Then I should be on the forgot password page
+#    And I should see "We're sorry, but this reset code has expired or is invalid."
+#    And I should see "If you are having issues try copying and pasting the URL from your email into your browser or restarting the reset password process."
+
+#  @users-password-reset
+#  Scenario: Reset password page (invalid password)
+#    Given I am requesting password reset
+#    When I go to the reset password page
+#    And I fill in "Password" with "cukes"
+#    And I fill in "Password confirmation" with "cukes"
+#    And I press "Reset password"
+#    Then I should see "There were problems with the following fields"
+#    And I should see "Password is too short"
+
+#  @users-password-reset
+#  Scenario: Reset password page (valid reset_code)
+#    Given I am requesting password reset
+#    When I go to the reset password page
+#    And I fill in "Password" with "icuked"
+#    And I fill in "Password confirmation" with "icuked"
+#    And I press "Reset password"
+#    Then I should be on the user root
+#    And I should see "Password reset successfully for"
+
+
 #  @administrators-password-forgot
 #  Scenario: Forgot Password page (no email entered)
 #    And I am on the administrative forgot password page
@@ -83,4 +135,45 @@ Feature: User
 #    And I press "Reset password"
 #    Then I should be on the admin root
 #    And I should see "Password reset successfully for"
+
+#Feature: Registration
+#  In order to use My Great Application
+#  As a user
+#  I want to be able to register
+#
+#  Scenario: 'Standard Registration'
+#    Given I am not currently logged in
+#    When I am on the signup page
+#    Then I should see "Sign Up"
+#    And I fill in "Name (required)" with "Mickey Dolenz"
+#    And I fill in "Email (required)" with "mickey@monkees.com"
+#    And I fill in "Password (required)" with "password"
+#    And I fill in "Password confirmation" with "password"
+#    And I press "Register"
+#    Then I should see "Sign Up - Confirm Your Account"
+#    Then I should be on the registration thank you page
+#    Then "mickey@monkees.com" should receive an email
+#    When I open the email
+#    Then I should see "Confirm my account" in the email body
+#    When I follow "Confirm my account" in the email
+#    Then I should be on the welcome page
+#    And I should see "Welcome to the Great Application"
+#
+#  Scenario: 'Accepting an invitation'
+#    Given I am not currently logged in
+#    And the "Boys and Girls Club" invites "mickey@monkees.com" to join
+#    Then "mickey@monkees.com" should receive an email
+#    When I open the email
+#    Then I should see "Accept Invitation" in the email body
+#    When I follow "Accept Invitation" in the email
+#    Then I should be on the signup page
+#    Then I should see "Sign Up"
+#    And I fill in "Name (required)" with "Mickey Dolenz"
+#    And the "Email (required)" field should contain "mickey@monkees.com"
+#    And I fill in "Password (required)" with "password"
+#    And I fill in "Password confirmation" with "password"
+#    And I press "Register"
+#    Then the account "mickey@monkees.com" should be "activated"
+#    Then I should be on the accept/decline invitation page
+#    And I should see "Join the Boys and Girls Club"
 

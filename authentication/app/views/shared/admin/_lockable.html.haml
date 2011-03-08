@@ -1,0 +1,20 @@
+%li{ :class => "clearfix record #{cycle("on", "on-hover")}" }
+  %span.title
+    %strong Account Locking
+    = lockable_help_tag(actor.class)
+    - if actor.access_locked?
+      %span.preview= "&nbsp;Code: #{actor.unlock_token}".html_safe
+  %span.actions
+    - if actor.access_locked?
+      = link_to refinery_icon_tag("cross.png"), "#",
+        :title => t('devise.lockable.locked')
+      = link_to refinery_icon_tag("key.png"), send("admin_#{actor.type_for_path}_lockables_path", actor.id), :method => :post,
+        :title => t('devise.lockable.unlock_account')
+      = link_to refinery_icon_tag("email_go.png"), send("admin_#{actor.type_for_path}_lockables_path", actor.id), :method => :put,
+        :title => t('devise.lockable.resend_instructions')
+    - else
+      = link_to refinery_icon_tag("tick.png"), "#",
+        :title => t('devise.lockable.unlocked')
+      = link_to refinery_icon_tag("lock.png"), send("admin_#{actor.type_for_path}_lockables_path", actor.id), :method => :delete,
+        :title => t('devise.lockable.lock_account')
+

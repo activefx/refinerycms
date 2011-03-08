@@ -5,7 +5,7 @@ Gem::Specification.new do |s|
   s.version           = %q{0.9.9.4}
   s.summary           = %q{Core engine for Refinery CMS}
   s.description       = %q{The core of Refinery CMS. This handles the common functionality and is required by most engines}
-  s.date              = %q{2011-02-28}
+  s.date              = %q{2011-03-05}
   s.email             = %q{info@refinerycms.com}
   s.homepage          = %q{http://refinerycms.com}
   s.rubyforge_project = %q{refinerycms}
@@ -26,6 +26,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'rdoc',                        '>= 2.5.11' # helps fix ubuntu
   s.add_dependency 'truncate_html',               '~> 0.5'
   s.add_dependency 'will_paginate',               '~> 3.0.pre'
+  s.add_dependency 'show_for',                    '>= 0.2.4'
   s.add_dependency 'app',                         '>= 1.0.3'
   s.add_dependency 'haml',                        '>= 3.0.25'
   s.add_dependency 'haml-rails',                  '>= 0.3.4'
@@ -69,6 +70,8 @@ Gem::Specification.new do |s|
     'app/views/shared/_message.html.erb',
     'app/views/shared/_no_script.html.erb',
     'app/views/shared/_site_bar.html.erb',
+    'app/views/shared/_user.html.erb',
+    'app/views/shared/_visitor.html.erb',
     'app/views/shared/admin',
     'app/views/shared/admin/_continue_editing.html.erb',
     'app/views/shared/admin/_error_messages.html.erb',

@@ -10,6 +10,8 @@
                 :title => t('.email_administrator') %>
     <%= link_to refinery_icon_tag('application_edit.png'), edit_admin_administrator_path(administrator),
                 :title => t('edit', :scope => 'admin.administrators')%>
+    <%= link_to refinery_icon_tag("application_go.png"), admin_administrator_path(administrator),
+         :title => t('.show') %>
     <%= link_to refinery_icon_tag('delete.png'), admin_administrator_path(administrator),
                 :class => "cancel confirm-delete",
                 :title => t('delete', :scope => 'admin.administrators'),

@@ -1,0 +1,87 @@
+#records
+  %h2 Authentication Features
+  %ul
+    - @administrator._type.constantize.devise_modules.each do |devise_module|
+      = render :partial => "shared/admin/#{devise_module.to_s}",
+                :locals => { :actor => @administrator }
+  %h2 Authentication Providers
+  %h2 Authorization & Roles
+#actions
+  %h2 Administrator Details
+  %ul
+    %li
+      = link_to t('admin.administrators.administrator.edit'), edit_admin_administrator_path(@administrator), :class => "edit_icon"
+  %p
+    %strong Type:
+    %br
+    = @administrator._type
+  %p
+    %strong Username:
+    %br
+    = @administrator.username
+  %p
+    %strong Email:
+    %br
+    = @administrator.email
+  %p
+    %strong Joined on:
+    %br
+    = @administrator.created_at.to_s(:long)
+  - if Administrator.confirmable? && @administrator.confirmed?
+    %p
+      %strong Account confirmed on:
+      %br
+      = @administrator.confirmed_at.to_s(:long)
+  - if @administrator.class.lock_strategy_enabled?(:failed_attempts)
+    %p
+      %strong Failed login attempts:
+      %br
+      = @administrator.failed_attempts.to_s
+  - if @administrator.access_locked?
+    %p
+      %strong Account locked on:
+      %br
+      = @administrator.locked_at.to_s(:long)
+  - unless @administrator.remember_token.blank?
+    %p
+      %strong Remember cookie status:
+      %br
+      - if (@administrator.remember_created_at + @administrator.class.remember_for) < Time.now
+        = "Cookie Expired"
+      - else
+        = "Expires in #{time_ago_in_words((@administrator.remember_created_at + @administrator.class.remember_for))}"
+    %p
+      %strong Cookie created on:
+      %br
+      = @administrator.remember_created_at.to_s(:long) unless @administrator.remember_created_at.nil?
+    %p
+      %strong Cookie expiration date:
+      %br
+      = (@administrator.remember_created_at + @administrator.class.remember_for).to_s(:long)
+  - if @administrator.class.trackable?
+    %p
+      %strong Sign in count:
+      %br
+      = @administrator.sign_in_count
+    %p
+      %strong Current sign in at:
+      %br
+      - if @administrator.current_sign_in_at.nil?
+        = "Never signed in"
+      - else
+        = @administrator.current_sign_in_at.to_s(:long)
+    - unless @administrator.current_sign_in_ip.blank?
+      %p
+        %strong Current sign in IP:
+        %br
+        = @administrator.current_sign_in_ip
+    - unless @administrator.last_sign_in_at.blank?
+      %p
+        %strong Last sign in at:
+        %br
+        = @administrator.last_sign_in_at.to_s(:long)
+      %p
+        %strong Last sign in IP:
+        %br
+        = @administrator.last_sign_in_ip
+
