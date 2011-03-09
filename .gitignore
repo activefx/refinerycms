@@ -19,7 +19,7 @@ config/app/*
 doc/api
 doc/app
 .yardoc
-core/app/.yardoc/**/*
+core/doc/.yardoc/**/*
 .yardopts
 
 # Public Uploads
