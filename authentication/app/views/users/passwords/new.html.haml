@@ -3,11 +3,10 @@
 - content_for :body_content_left do
   = form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :post }) do |f|
     = devise_error_messages!
-    %p
+    .field
       = f.label :email
-      %br/
-      = f.email_field :email
-    %p= f.submit "Send me reset password instructions"
+      = f.text_field :email
+    %p= f.submit "Send Instructions"
 
 - content_for :body_content_right do
   = render :partial => "users/shared/links"

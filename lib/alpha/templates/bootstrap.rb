@@ -33,14 +33,31 @@ apply File.expand_path("../gemfile.rb", __FILE__)
 # Setup RefineryCMS
 apply File.expand_path("../refinerycms.rb", __FILE__)
 
-## Apply Jammit
-#apply File.expand_path("../jammit.rb", __FILE__)
+# Setup Tests
+apply File.expand_path("../testing.rb", __FILE__)
+
+# Add NewRelic
+apply File.expand_path("../newrelic.rb", __FILE__)
 
 ## Apply HAML generator
-#apply File.expand_path("../haml_generator.rb", __FILE__)
+apply File.expand_path("../haml.rb", __FILE__)
 
 ## Apply rails clean up
-#apply File.expand_path("../rails_clean.rb", __FILE__)
+apply File.expand_path("../rails_clean.rb", __FILE__)
+
+## Apply evergreen and jasmin
+apply File.expand_path("../evergreen.rb", __FILE__)
+
+## Apply SASS
+apply File.expand_path("../sass.rb", __FILE__)
+
+## Finalize Application
+apply File.expand_path("../finalize.rb", __FILE__)
+
+
+
+## Apply Jammit
+#apply File.expand_path("../jammit.rb", __FILE__)
 
 ## Apply js
 #apply File.expand_path("../js.rb", __FILE__)
@@ -48,14 +65,8 @@ apply File.expand_path("../refinerycms.rb", __FILE__)
 ## Apply css
 #apply File.expand_path("../css.rb", __FILE__)
 
-## Apply evergreen and jasmin
-#apply File.expand_path("../evergreen.rb", __FILE__)
-
 ## Apply HTML5 Layout
 #apply File.expand_path("../application_layout.rb", __FILE__)
-
-## Apply SASS
-#apply File.expand_path("../sass.rb", __FILE__)
 
 ## Apply Test Suite
 #apply File.expand_path("../test_suite.rb", __FILE__)
@@ -98,7 +109,7 @@ apply File.expand_path("../refinerycms.rb", __FILE__)
 
 #login_msg = (ENV['PROLOGUE_ADMIN']) ? "Login to admin with email #{ENV['PROLOGUE_USER_EMAIL']} and password #{ENV['PROLOGUE_USER_PASSWORD']}" : ""
 
-login_msg = "ready"
+#login_msg = "ready"
 
 say <<-D
 
@@ -107,14 +118,12 @@ say <<-D
 
   ########################################################################
 
-  Prologue just added like 6 hours to your life.
+  Your application is almost ready to use:
 
-  Next run...
-  rake spec
-  rake cucumber
-  rails s
-
-  #{login_msg}
+  1) Copy your newrelic.yml to your config directory (sign up and log into newrelic.com to download file, be sure to disable sql features)
+  2) run "rake spec" and ensure all specs pass
+  3) run "rake cucumber" and ensure all features pass
+  4) run "rails s" to start your application
 
   ########################################################################
 D

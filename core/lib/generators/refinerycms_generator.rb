@@ -22,7 +22,8 @@ class RefinerycmsGenerator < ::Refinery::Generators::EngineInstaller
     end
 
     # First, effectively move / rename files that get in the way of Refinery CMS
-    %w(public/index.html config/cucumber.yml app/views/layouts/application.html.erb public/javascripts/rails.js).each do |roadblock|
+    %w(public/index.html config/cucumber.yml app/views/layouts/application.html.erb
+        public/javascripts/rails.js public/javascripts/application.js).each do |roadblock|
       if (roadblock_path = Rails.root.join(roadblock)).file?
         create_file "#{roadblock}.backup",
                     :verbose => true do roadblock_path.read end
@@ -32,7 +33,7 @@ class RefinerycmsGenerator < ::Refinery::Generators::EngineInstaller
 
     unless self.options[:update]
       # Copy asset files (JS, CSS) so they're ready to use.
-      %w(application.css formatting.css home.css theme.css).map{ |ss|
+      %w(formatting.css home.css theme.css).map{ |ss|
         Refinery.roots('core').join('public', 'stylesheets', ss)
       }.reject{|ss| !ss.file?}.each do |stylesheet|
         copy_file stylesheet,
@@ -41,6 +42,9 @@ class RefinerycmsGenerator < ::Refinery::Generators::EngineInstaller
       end
       copy_file Refinery.roots('core').join('public', 'javascripts', 'admin.js'),
                 Rails.root.join('public', 'javascripts', 'admin.js'),
+                :verbose => true
+      copy_file Refinery.roots('core').join('public', 'javascripts', 'application.js'),
+                Rails.root.join('public', 'javascripts', 'application.js'),
                 :verbose => true
     end
 
@@ -108,3 +112,4 @@ class RefinerycmsGenerator < ::Refinery::Generators::EngineInstaller
   end
 
 end
+
