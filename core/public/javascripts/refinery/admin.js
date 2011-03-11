@@ -165,7 +165,7 @@ init_interface = function() {
   });
 
   $('.form-actions .form-actions-left input:submit#submit_button').click(function(e) {
-    $("<img src='/images/refinery/icons/ajax-loader.gif' width='16' height='16' class='save-loader' />").appendTo($(this).parent());
+    $("<img src='/images/refinery/ajax-loader.gif' width='16' height='16' class='save-loader' />").appendTo($(this).parent());
   });
 
   $('a.suppress').live('click', function(e){
@@ -437,14 +437,14 @@ var link_tester = {
     loader_img.insertAfter($(textbox_id));
     result_span.insertAfter(loader_img);
 
-    $(textbox_id).bind('paste keypress',function(){
+    $(textbox_id).bind('paste blur',function(){
       $(textbox_id).stop(true); // Clear the current queue; if we weren't checking yet, cancel it.
       $(textbox_id + '_test_loader').hide();
       $(textbox_id + '_test_result').hide();
       $(textbox_id + '_test_result').removeClass('success_icon').removeClass('failure_icon');
 
-      // Wait one second before checking.
-      $(textbox_id).delay(1000).queue(function () {
+      // Wait 300ms before checking.
+      $(textbox_id).delay(300).queue(function () {
         $(textbox_id + '_test_loader').show();
         $(textbox_id + '_test_result').hide();
         $(textbox_id + '_test_result').removeClass('success_icon').removeClass('failure_icon');
