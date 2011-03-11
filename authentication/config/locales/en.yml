@@ -37,6 +37,7 @@ en:
         title: Users
         create_new: Add new user
         sorry_no_results: Sorry! There are no results found.
+      records:
         no_items_yet: There are no Users yet. Click "Add new user" to add your first user.
       actions:
         create_new: Add new user

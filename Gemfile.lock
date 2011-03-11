@@ -92,16 +92,9 @@ GIT
       warden (~> 1.0.3)
 
 PATH
-  remote: ../refinerycms-blog
-  specs:
-    refinerycms-blog (1.2)
-      filters_spam (~> 0.2)
-      refinerycms (~> 0.9.9.4)
-
-PATH
   remote: ../refinerycms-generators
   specs:
-    refinerycms-generators (0.9.9.4)
+    refinerycms-generators (1.0.0)
 
 PATH
   remote: .
@@ -284,7 +277,6 @@ GEM
       rack (>= 1.1.0, < 2)
     ffi (0.6.3)
       rake (>= 0.8.7)
-    filters_spam (0.3)
     gherkin (2.3.4)
       json (~> 1.4.6)
     git (1.2.5)
@@ -430,7 +422,6 @@ DEPENDENCIES
   refinerycms!
   refinerycms-authentication!
   refinerycms-base!
-  refinerycms-blog!
   refinerycms-core!
   refinerycms-dashboard!
   refinerycms-generators!

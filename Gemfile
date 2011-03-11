@@ -69,7 +69,7 @@ end
 # END REFINERY CMS DEVELOPMENT =================================================
 
 # USER DEFINED
-gem 'refinerycms-blog', :path => '../refinerycms-blog'
+# gem 'refinerycms-blog', :path => '../refinerycms-blog'
 # Specify additional Refinery CMS Engines here (all optional):
 # gem 'refinerycms-inquiries',    '~> 0.9'
 # gem 'refinerycms-news',         '~> 1.0'
