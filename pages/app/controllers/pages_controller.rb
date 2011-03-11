@@ -24,6 +24,8 @@ class PagesController < ApplicationController
       # if the admin wants this to be a "placeholder" page which goes to its first child, go to that instead.
       if @page.skip_to_first_child && (first_live_child = @page.children.asc(:lft).where(:draft=>false).first).present?
         redirect_to first_live_child.url
+      elsif @page.link_url.present?
+        redirect_to @page.link_url and return
       end
     else
       error_404

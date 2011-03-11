@@ -14,7 +14,6 @@ config/newrelic.yml
 config/amazon_s3.yml
 config/rackspace_cloudfiles.yml
 config/app.rb
-config/app/*
 
 # Documentation
 doc/api

@@ -1,48 +1,7 @@
-<div id='records'>
-  <% if searching? %>
-    <h2><%= t('results_for', :scope => 'shared.admin.search', :query => params[:search]) %></h2>
-  <% end %>
-  <% if @users.any? %>
-    <div class='pagination_container'>
-      <%= render :partial => 'users' %>
-    </div>
-  <% else %>
-    <p>
-      <% unless searching? %>
-        <strong>
-          <%= t('.no_items_yet') %>
-        </strong>
-      <% else %>
-        <%= t('no_results', :scope => 'shared.admin.search') %>
-      <% end %>
-    </p>
-  <% end %>
-</div>
-<div id='actions'>
-  <ul>
-    <% if Admin::UsersController.searchable? %>
-      <li>
-        <%= render :partial => "/shared/admin/search",
-                    :locals => {
-                      :url => admin_users_url
-                    } %>
-      </li>
-    <% end %>
-    <li>
-      <%= link_to t('.create_new'), new_admin_user_url,
-                   :class => "add_icon" %>
-    </li>
-  </ul>
-  <h2>User Authentication Features</h2>
-  <ul>
-    <% Actor::DEVISE_MODULES.each do |devise_module| %>
-      <li>
-        <span class='<%= User.send("#{devise_module}?") ? 'success_icon' : 'failure_icon'%>'>
-          <%= devise_module.to_s.titleize %>
-          <%= send("#{devise_module}_help_tag", User) %>
-        </span>
-      </li>
-    <% end %>
-  </ul>
-</div>
+<section id='records'>
+  <%= render :partial => 'records' %>
+</section>
+<aside id='actions'>
+  <%= render :partial => 'actions' %>
+</aside>
 

@@ -2,10 +2,12 @@ sl:
   plugins:
     refinery_dashboard:
       title: Nadzorna plošča
+      description: Podaja pregled aktivnosti v Refinery
   admin:
     dashboard:
       index:
         quick_tasks: Pogosta opravila
+      actions:
         add_a_new_page: Dodaj novo stran
         update_a_page: Uredi stran
         upload_a_image: Naloži sliko
@@ -15,7 +17,7 @@ sl:
       recent_activity:
         empty: V zadnjem času ni bilo nobene aktivnosti.
         latest_activity: Zadnje aktivnosti
-        see: Poglej '%{what}'
+        latest_activity_message: '%{what} %{kind} je bila %{action}'
       recent_inquiries:
         latest_inquiries: Latest inquiries
   updated:

@@ -44,16 +44,16 @@ Before('@omniauth') do
   }
 
 
-  OmniAuth.config.mock_auth[:facebook] = {
-    'uid' => '1234',
-    'user_info' => {},
-    'credentials' => {
-      'token' => @access_token.token,
-      'secret' => @access_token.secret
-    }, 'extra' => {
-      'access_token' => @access_token
-    }
-  }
+#  OmniAuth.config.mock_auth[:facebook] = {
+#    'uid' => '1234',
+#    'user_info' => {},
+#    'credentials' => {
+#      'token' => @access_token.token,
+#      'secret' => @access_token.secret
+#    }, 'extra' => {
+#      'access_token' => @access_token
+#    }
+#  }
 
 #      def user_data
 #          @data ||= MultiJson.decode(@access_token.get('/me', {}, { "Accept-Language" => "en-us,en;"}))

@@ -2,6 +2,8 @@ es:
   plugins:
     refinery_files:
       title: Archivos
+      description: Subir y enlazar archivos
+      article: masculino
   admin:
     resources:
       delete: Borrar este archivo para siempre
@@ -13,9 +15,10 @@ es:
         maximum_file_size: El peso máximo para el archivo es de %{megabytes} megabytes.
       resource:
         download: Descargar este archivo (%{size})
-      index:
+      actions:
         upload_new: Subir nuevo archivo
-        no_files_yet: Aún no hay archivos. Pulsa "Subir nuevos archivos" para añadir tu primer archivo.
+      records:
+        no_files_yet: Aún no hay archivos. Pulsa "Subir nuevo archivo" para añadir tu primer archivo.
       insert:
         existing: Archivo existente
         new: Nuevo archivo

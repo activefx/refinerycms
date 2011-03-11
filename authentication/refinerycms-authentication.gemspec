@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name              = %q{refinerycms-authentication}
-  s.version           = %q{0.9.9.4}
+  s.version           = %q{0.9.9.8}
   s.summary           = %q{Authentication engine for Refinery CMS}
   s.description       = %q{The default authentication engine for Refinery CMS}
   s.date              = %q{2011-03-10}
@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
   s.require_paths     = %w(lib)
   s.executables       = %w()
 
-  s.add_dependency 'refinerycms-core', '~> 0.9.9.4'
+  s.add_dependency 'refinerycms-core', '~> 0.9.9.8'
   s.add_dependency 'devise',           '~> 1.2.rc'
   s.add_dependency 'omniauth',         '>= 0.2.0.beta3'
   s.add_dependency 'oa-oauth'
@@ -34,6 +34,7 @@ Gem::Specification.new do |s|
     'app/controllers/administrator_registrations_controller.rb',
     'app/controllers/administrator_sessions_controller.rb',
     'app/controllers/users',
+    'app/controllers/users/authentications_controller.rb',
     'app/controllers/users/omniauth_callbacks_controller.rb',
     'app/helpers',
     'app/helpers/administrators_helper.rb',
@@ -59,7 +60,9 @@ Gem::Specification.new do |s|
     'app/views/admin/administrators/new.html.erb',
     'app/views/admin/administrators/show.html.haml',
     'app/views/admin/users',
+    'app/views/admin/users/_actions.html.erb',
     'app/views/admin/users/_form.html.erb',
+    'app/views/admin/users/_records.html.erb',
     'app/views/admin/users/_user.html.erb',
     'app/views/admin/users/_users.html.erb',
     'app/views/admin/users/edit.html.erb',
@@ -130,6 +133,7 @@ Gem::Specification.new do |s|
     'config/locales/pt-BR.yml',
     'config/locales/rs.yml',
     'config/locales/ru.yml',
+    'config/locales/sk.yml',
     'config/locales/sl.yml',
     'config/locales/sv.yml',
     'config/locales/vi.yml',
@@ -143,6 +147,7 @@ Gem::Specification.new do |s|
     'features/administrator.feature',
     'features/manage_administrators.feature',
     'features/manage_users.feature',
+    'features/omniauth.feature',
     'features/step_definitions',
     'features/step_definitions/authentication_steps.rb',
     'features/support',
@@ -162,7 +167,11 @@ Gem::Specification.new do |s|
     'spec/controllers/users',
     'spec/controllers/users/omniauth_callbacks_controller_spec.rb',
     'spec/models',
+    'spec/models/actor_plugin_spec.rb',
+    'spec/models/actor_spec.rb',
     'spec/models/administrator_spec.rb',
-    'spec/models/user_spec.rb'
+    'spec/models/role_spec.rb',
+    'spec/models/user_spec.rb',
+    'spec/models/user_token_spec.rb'
   ]
 end

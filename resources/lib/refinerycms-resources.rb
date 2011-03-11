@@ -13,6 +13,11 @@ module Refinery
     end
 
     class Engine < ::Rails::Engine
+
+      initializer "serve static assets" do |app|
+        app.middleware.insert_after ::ActionDispatch::Static, ::ActionDispatch::Static, "#{root}/public"
+      end
+
       initializer 'resources-with-dragonfly' do |app|
 
         #if Rails.root.join('config', 'mongoid.yml').file?
