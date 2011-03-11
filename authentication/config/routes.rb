@@ -51,6 +51,7 @@
       resource :lockables, :controller => 'lockables'
     end
     resources :users do
+      resources :authentications
       resource :token_authentications, :controller => 'token_authentications'
       resource :rememberables, :controller => 'rememberables'
       resource :recoverables, :controller => 'recoverables'

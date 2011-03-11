@@ -72,11 +72,13 @@ gem "launchy", :group => :cucumber
 gem "factory_girl_rails", :group => [:test, :cucumber]
 gem "faker", :group => [:test, :cucumber]
 gem "autotest", :group => [:test, :cucumber]
-gem "autotest-rails", :group => [:test, :cucumber]
+gem "autotest-rails-pure", :group => [:test, :cucumber]
+gem "ZenTest", :group => [:test, :cucumber]
 gem "database_cleaner", :group => [:test, :cucumber]
 gem "capybara", ">= 0.4.1", :group => [:test, :cucumber]
 gem "timecop", :group => [:test, :cucumber]
 gem "pickle", :group => [:test, :cucumber]
+gem "spork", ">= 0.9.0.rc", :group => [:test, :cucumber]
 
 # Test, Cucumber, and Development
 gem "thin", :group => [:test, :cucumber, :development]

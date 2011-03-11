@@ -5,7 +5,7 @@ Gem::Specification.new do |s|
   s.version           = %q{0.9.9.4}
   s.summary           = %q{Testing plugin for Refinery CMS}
   s.description       = %q{This plugin adds the ability to run cucumber and rspec against the RefineryCMS gem while inside a RefineryCMS project}
-  s.date              = %q{2011-03-05}
+  s.date              = %q{2011-03-10}
   s.email             = %q{info@refinerycms.com}
   s.homepage          = %q{http://refinerycms.com}
   s.rubyforge_project = %q{refinerycms}
@@ -28,6 +28,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'gherkin'
   s.add_dependency 'rack-test',         '~> 0.5.6'
   s.add_dependency 'json_pure'
+  s.add_dependency 'spork',             '>= 0.9.0.rc'
 
   # Factory Girl
   s.add_dependency 'factory_girl'

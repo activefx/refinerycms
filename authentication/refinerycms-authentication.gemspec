@@ -5,7 +5,7 @@ Gem::Specification.new do |s|
   s.version           = %q{0.9.9.4}
   s.summary           = %q{Authentication engine for Refinery CMS}
   s.description       = %q{The default authentication engine for Refinery CMS}
-  s.date              = %q{2011-03-06}
+  s.date              = %q{2011-03-10}
   s.email             = %q{info@refinerycms.com}
   s.homepage          = %q{http://refinerycms.com}
   s.rubyforge_project = %q{refinerycms}
@@ -141,7 +141,6 @@ Gem::Specification.new do |s|
     'db/seeds/first_admin.rb',
     'features',
     'features/administrator.feature',
-    'features/lost_password.feature',
     'features/manage_administrators.feature',
     'features/manage_users.feature',
     'features/step_definitions',

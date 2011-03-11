@@ -120,7 +120,9 @@ say <<-D
 
   Your application is almost ready to use:
 
-  1) Copy your newrelic.yml to your config directory (sign up and log into newrelic.com to download file, be sure to disable sql features)
+  1) Copy your newrelic.yml configuration file to your app's config
+     directory (sign up and log into newrelic.com to download file,
+     be sure to disable sql related configuration options)
   2) run "rake spec" and ensure all specs pass
   3) run "rake cucumber" and ensure all features pass
   4) run "rails s" to start your application

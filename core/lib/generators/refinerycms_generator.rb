@@ -59,6 +59,14 @@ class RefinerycmsGenerator < ::Refinery::Generators::EngineInstaller
       end
     end
 
+    # Ensure model classed for tests reload when using Spork
+    test_environment = Rails.root.join('config', 'environments', 'test.rb')
+    gsub_file test_environment, "config.cache_classes = true", "if ENV['CACHE_CLASS_FLAG'] == 'true'
+    config.cache_classes = true
+  else
+    config.cache_classes = false
+  end", :verbose => false
+
     # Stop pretending
     if Rails.root == Refinery.root
       say_status :'-- finished pretending --', nil, :yellow

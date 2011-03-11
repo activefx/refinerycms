@@ -5,7 +5,7 @@ Gem::Specification.new do |s|
   s.version           = %q{0.9.9.4}
   s.summary           = %q{Core engine for Refinery CMS}
   s.description       = %q{The core of Refinery CMS. This handles the common functionality and is required by most engines}
-  s.date              = %q{2011-03-05}
+  s.date              = %q{2011-03-10}
   s.email             = %q{info@refinerycms.com}
   s.homepage          = %q{http://refinerycms.com}
   s.rubyforge_project = %q{refinerycms}
@@ -140,6 +140,8 @@ Gem::Specification.new do |s|
     'lib/generators/templates/config/app/production.rb',
     'lib/generators/templates/config/app/test.rb',
     'lib/generators/templates/config/app.rb',
+    'lib/generators/templates/config/environments',
+    'lib/generators/templates/config/environments/cucumber.rb',
     'lib/generators/templates/config/i18n-js.yml',
     'lib/generators/templates/config/initializers',
     'lib/generators/templates/config/initializers/devise.rb',
@@ -228,8 +230,11 @@ Gem::Specification.new do |s|
     'public/images/refinery/icons/image_edit.png',
     'public/images/refinery/icons/img.png',
     'public/images/refinery/icons/information.png',
+    'public/images/refinery/icons/key.png',
+    'public/images/refinery/icons/key_add.png',
     'public/images/refinery/icons/layout_add.png',
     'public/images/refinery/icons/layout_edit.png',
+    'public/images/refinery/icons/lock.png',
     'public/images/refinery/icons/music.png',
     'public/images/refinery/icons/page_add.png',
     'public/images/refinery/icons/page_edit.png',
@@ -239,6 +244,7 @@ Gem::Specification.new do |s|
     'public/images/refinery/icons/pdf.png',
     'public/images/refinery/icons/ppt.png',
     'public/images/refinery/icons/star.png',
+    'public/images/refinery/icons/textfield_key.png',
     'public/images/refinery/icons/tick.png',
     'public/images/refinery/icons/up.gif',
     'public/images/refinery/icons/user_add.png',
