@@ -36,10 +36,10 @@ gem 'ruby-debug19', :require => 'ruby-debug'
 # REFINERY CMS ================================================================
 # Anything you put in here will be overridden when the app gets updated.
 
-# gem 'refinerycms', '~> 0.9.9.1'
+# gem 'refinerycms', '~> 0.9.9.8'
 
 group :development, :test do
-  gem 'refinerycms-testing',    '~> 0.9.9.1'
+  gem 'refinerycms-testing',    '~> 0.9.9.8'
   gem 'mongoid-rspec', :git => 'git://github.com/durran/mongoid-rspec.git'
 end
 
@@ -58,10 +58,8 @@ end
 # gem 'refinerycms-theming',      '~> 0.9.9'
 # gem 'refinerycms-search',       '~> 0.9.8'
 # gem 'refinerycms-blog',         '~> 1.1'
-# gem 'refinerycms-page-images,   '~> 1.0
+# gem 'refinerycms-page-images',  '~> 1.0'
 
 # Add i18n support (optional, you can remove this if you really want to).
-# gem 'refinerycms-i18n',         '~> 0.9.9.9'
-
-# END USER DEFINED
+# gem 'refinerycms-i18n',         '~> 0.9.9.13'
 

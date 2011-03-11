@@ -2,10 +2,10 @@
 
 Gem::Specification.new do |s|
   s.name              = %q{refinerycms-core}
-  s.version           = %q{0.9.9.4}
+  s.version           = %q{0.9.9.8}
   s.summary           = %q{Core engine for Refinery CMS}
   s.description       = %q{The core of Refinery CMS. This handles the common functionality and is required by most engines}
-  s.date              = %q{2011-02-28}
+  s.date              = %q{2011-03-10}
   s.email             = %q{info@refinerycms.com}
   s.homepage          = %q{http://refinerycms.com}
   s.rubyforge_project = %q{refinerycms}
@@ -14,15 +14,15 @@ Gem::Specification.new do |s|
   s.require_paths     = %w(lib)
   s.executables       = %w()
 
-  s.add_dependency 'refinerycms-base',            '~> 0.9.9.4'
-  s.add_dependency 'refinerycms-settings',        '~> 0.9.9.4'
-  s.add_dependency 'refinerycms-generators',      '~> 0.9.9.3'
+  s.add_dependency 'refinerycms-base',            '~> 0.9.9.8'
+  s.add_dependency 'refinerycms-settings',        '~> 0.9.9.8'
+  s.add_dependency 'refinerycms-generators',      '>= 0.9.9.3'
   s.add_dependency 'mongoid',                     '~> 2.0.0.rc.7'
   s.add_dependency 'mongoid_search',              '~> 0.1.2'
   s.add_dependency 'mongoid_slug',                '~> 0.6.3'
   s.add_dependency 'mongoid_nested_set',          '~> 0.1.2'
   s.add_dependency 'dragonfly',                   '~> 0.8.2'
-  s.add_dependency 'rails',                       '~> 3.0.3'
+  s.add_dependency 'rails',                       '~> 3.0.5'
   s.add_dependency 'rdoc',                        '>= 2.5.11' # helps fix ubuntu
   s.add_dependency 'truncate_html',               '~> 0.5'
   s.add_dependency 'will_paginate',               '~> 3.0.pre'
@@ -97,6 +97,7 @@ Gem::Specification.new do |s|
     'config/locales/pt-BR.yml',
     'config/locales/rs.yml',
     'config/locales/ru.yml',
+    'config/locales/sk.yml',
     'config/locales/sl.yml',
     'config/locales/sv.yml',
     'config/locales/vi.yml',

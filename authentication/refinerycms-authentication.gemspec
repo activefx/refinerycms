@@ -2,10 +2,10 @@
 
 Gem::Specification.new do |s|
   s.name              = %q{refinerycms-authentication}
-  s.version           = %q{0.9.9.4}
+  s.version           = %q{0.9.9.8}
   s.summary           = %q{Authentication engine for Refinery CMS}
   s.description       = %q{The default authentication engine for Refinery CMS}
-  s.date              = %q{2011-02-28}
+  s.date              = %q{2011-03-10}
   s.email             = %q{info@refinerycms.com}
   s.homepage          = %q{http://refinerycms.com}
   s.rubyforge_project = %q{refinerycms}
@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
   s.require_paths     = %w(lib)
   s.executables       = %w()
 
-  s.add_dependency 'refinerycms-core', '~> 0.9.9.4'
+  s.add_dependency 'refinerycms-core', '~> 0.9.9.8'
   s.add_dependency 'devise',           '~> 1.1.7'
 
   s.files             = [
@@ -37,7 +37,9 @@ Gem::Specification.new do |s|
     'app/views',
     'app/views/admin',
     'app/views/admin/users',
+    'app/views/admin/users/_actions.html.erb',
     'app/views/admin/users/_form.html.erb',
+    'app/views/admin/users/_records.html.erb',
     'app/views/admin/users/_user.html.erb',
     'app/views/admin/users/_users.html.erb',
     'app/views/admin/users/edit.html.erb',
@@ -74,6 +76,7 @@ Gem::Specification.new do |s|
     'config/locales/pt-BR.yml',
     'config/locales/rs.yml',
     'config/locales/ru.yml',
+    'config/locales/sk.yml',
     'config/locales/sl.yml',
     'config/locales/sv.yml',
     'config/locales/vi.yml',

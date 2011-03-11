@@ -2,6 +2,7 @@ es:
   plugins:
     refinery_users:
       title: Usuarios
+      description: Gestionar usuarios
   admin:
     users:
       delete: Borrar a este usuario para siempre
@@ -13,14 +14,14 @@ es:
         plugin_access: Gestionar plugins
         role_access: Gestionar roles
         enable_all: permitir todo
-      index:
+      actions:
         create_new_user: Crear nuevo usuario
       user:
         email_user: Enviar un email a este usuario
-        preview: (%{who}) creado %{created_at}
+        preview: '(%{who}) creado %{created_at}'
   sessions:
     new:
-      hello_please_sign_in: Hola! Por favor, identifícate.
+      hello_please_sign_in: 'Hola! Por favor, identifícate.'
       sign_in: Entrar
       forgot_password: He olvidado mi contraseña
   users:
@@ -29,7 +30,7 @@ es:
       fill_form: Rellena los detalles siguientes para poder comenzar.
       sign_up: Registrarme
     create:
-      welcome: Bienvenido a Refinery, %{who}
+      welcome: 'Bienvenido a Refinery, %{who}'
     forgot:
       email_address: Dirección e-mail
       enter_email_address: Indica el e-mail de tu cuenta.
@@ -48,15 +49,20 @@ es:
       subject: Enlace para cambiar tu contraseña
       reset_request_received_for: Petición de restablecimiento de contraseña recibido por %{username}
       visit_this_url: Ve a esta URL para establecer una contraseña nueva
-      remain_same_if_no_action: contraseña será la misma si no realizas esta acción
+      remain_same_if_no_action: la contraseña será la misma si no realizas esta acción
+  roles:
+    superuser: Superusuario
+    refinery: Refinery
   activerecord:
     models:
       user: usuario
     attributes:
       user:
         login: Usuario
+        username: Usuario
         email: E-mail
         password: Contraseña
+        password_confirmation: Confirmar contraseña
         remember_me: Recordarme
   errors:
       messages:
