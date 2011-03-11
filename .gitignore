@@ -5,10 +5,22 @@ db/*.sqlite3-journal
 *.log
 tmp/**/*
 
+# Databases
+config/database.yml
+config/mongoid.yml
+
+# Services & Configurations
+config/newrelic.yml
+config/amazon_s3.yml
+config/rackspace_cloudfiles.yml
+config/app.rb
+config/app/*
+
 # Documentation
 doc/api
 doc/app
 .yardoc
+core/doc/.yardoc/**/*
 .yardopts
 
 # Public Uploads
@@ -76,10 +88,8 @@ capybara-*html
 # REFINERY CMS DEVELOPMENT ====================================================
 # Always keep this section at the bottom.
 
-config/database.yml
-config/amazon_s3.yml
-config/rackspace_cloudfiles.yml
 your_*.*
 db/schema.rb
 
 # END REFINERY CMS DEVELOPMENT =================================================
+
