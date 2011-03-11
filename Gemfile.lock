@@ -110,6 +110,7 @@ PATH
   specs:
     refinerycms (0.9.9.4)
       bundler (~> 1.0.10)
+      rails (~> 3.0.0)
       refinerycms-authentication (~> 0.9.9.4)
       refinerycms-base (~> 0.9.9.4)
       refinerycms-core (~> 0.9.9.4)
@@ -118,6 +119,7 @@ PATH
       refinerycms-pages (~> 0.9.9.4)
       refinerycms-resources (~> 0.9.9.4)
       refinerycms-settings (~> 0.9.9.4)
+      thor
 
 PATH
   remote: authentication
@@ -209,6 +211,7 @@ PATH
       rack-test (~> 0.5.6)
       refinerycms-core (~> 0.9.9.4)
       rspec-rails (~> 2.5)
+      spork (>= 0.9.0.rc)
 
 GEM
   remote: http://rubygems.org/
@@ -245,11 +248,15 @@ GEM
     app (1.0.3)
     archive-tar-minitar (0.5.2)
     arel (2.0.9)
+    aruba (0.2.7)
+      background_process
+      cucumber (~> 0.10.0)
     autotest (4.4.6)
       ZenTest (>= 4.4.1)
     autotest-notification (2.3.1)
       autotest (~> 4.3)
     autotest-rails-pure (4.1.2)
+    background_process (1.2)
     bcrypt-ruby (2.1.4)
     bson (1.2.4)
     bson_ext (1.2.4)
@@ -268,7 +275,7 @@ GEM
     cucumber-rails (0.3.2)
       cucumber (>= 0.8.0)
     culerity (0.2.15)
-    database_cleaner (0.6.4)
+    database_cleaner (0.6.5)
     diff-lcs (1.1.2)
     dragonfly (0.8.2)
       rack
@@ -284,6 +291,7 @@ GEM
     filters_spam (0.3)
     gherkin (2.3.3)
       json (~> 1.4.6)
+    git (1.2.5)
     haml (3.0.25)
     haml-rails (0.3.4)
       actionpack (~> 3.0)
@@ -291,6 +299,10 @@ GEM
       haml (~> 3.0)
       railties (~> 3.0)
     i18n (0.5.0)
+    jeweler (1.5.2)
+      bundler (~> 1.0.0)
+      git (>= 1.2.5)
+      rake
     json (1.4.6)
     json_pure (1.5.1)
     launchy (0.4.0)
@@ -346,6 +358,7 @@ GEM
       rake (>= 0.8.7)
       thor (~> 0.14.4)
     rake (0.8.7)
+    rcov (0.9.9)
     rdoc (3.5.3)
     rest-client (1.6.1)
       mime-types (>= 1.16)
@@ -383,6 +396,7 @@ GEM
       json_pure
       rubyzip
     show_for (0.2.4)
+    spork (0.9.0.rc4)
     stringex (1.2.0)
     term-ansicolor (1.0.5)
     thor (0.14.6)
@@ -400,9 +414,13 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  aruba
   bson_ext (>= 1.2.1)
+  bundler (>= 1.0.0)
   capybara!
+  cucumber
   devise!
+  jeweler (>= 1.5.2)
   mongoid!
   mongoid-rspec!
   mongoid_nested_set!
@@ -410,7 +428,9 @@ DEPENDENCIES
   mongoid_slug
   mynyml-redgreen
   oa-oauth
+  oa-openid
   omniauth!
+  rcov
   refinerycms!
   refinerycms-authentication!
   refinerycms-base!
@@ -423,4 +443,5 @@ DEPENDENCIES
   refinerycms-resources!
   refinerycms-settings!
   refinerycms-testing!
+  rspec (>= 2.0.0)
   ruby-debug19

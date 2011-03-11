@@ -1,6 +1,6 @@
 # https://gist.github.com/853253
 
-Before('@omniauth_test') do
+Before('@omniauth') do
   OmniAuth.config.test_mode = true
 
   # Quickly add a new mock provider
@@ -87,7 +87,7 @@ Before('@omniauth_test') do
 #          })
 end
 
-After('@omniauth_test') do
+After('@omniauth') do
   OmniAuth.config.test_mode = false
 end
 # OmniAuth.config.mock_auth[:google_apps] = { }

@@ -3,23 +3,19 @@
 - content_for :body_content_left do
   = form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :put }) do |f|
     = devise_error_messages!
-    %p
+    .field
       = f.label :email
-      %br/
-      = f.email_field :email
-    %p
+      = f.text_field :email
+    .field
       = f.label :password
       %i (leave blank if you don't want to change it)
-      %br/
       = f.password_field :password
-    %p
+    .field
       = f.label :password_confirmation
-      %br/
       = f.password_field :password_confirmation
-    %p
+    .field
       = f.label :current_password
       %i (we need your current password to confirm your changes)
-      %br/
       = f.password_field :current_password
     %p= f.submit "Update"
   %h3 Cancel my account

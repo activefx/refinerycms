@@ -1,0 +1,2 @@
+run 'rm .gitignore'
+

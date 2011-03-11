@@ -15,6 +15,7 @@ module Refinery
       base.send :include, Refinery::Helpers::TagHelper
       base.send :include, Refinery::Helpers::TranslationHelper
       base.send :include, Refinery::Helpers::TitleHelper
+      base.send :include, Refinery::Helpers::AuthenticationHelper
     end
   end
 end

@@ -6,8 +6,9 @@ class UserToken
   field :uid, :type => String
   field :token, :type => String
   field :secret, :type => String
+  field :omniauth, :type => Hash
 
-  referenced_in :user
+  referenced_in :user, :inverse_of => :user_tokens
 
   index( [ [:provider, Mongo::ASCENDING],
            [:uid, Mongo::ASCENDING] ],

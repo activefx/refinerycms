@@ -20,9 +20,9 @@ module Refinery
             # To get specs from all Refinery engines, not just those in Rails.root/spec/
             ::RSpec::Core::RakeTask.module_eval do
               def pattern
-                [@pattern] | ::Refinery::Plugins.registered.pathnames.map{|p|
-                               p.join('spec', '**', '*_spec.rb').to_s
-                             }
+                [@pattern] | ::Refinery.engines.map do |engine|
+                  ::Refinery.roots(engine).join('spec', '**', '*_spec.rb').to_s
+                end
               end
             end if defined?(::RSpec::Core::RakeTask)
           end
@@ -42,3 +42,4 @@ module Refinery
 end
 
 ::Refinery.engines << 'testing'
+

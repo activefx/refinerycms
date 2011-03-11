@@ -33,6 +33,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'gherkin'
   s.add_dependency 'rack-test',         '~> 0.5.6'
   s.add_dependency 'json_pure'
+  s.add_dependency 'spork',             '>= 0.9.0.rc'
 
   # Factory Girl
   s.add_dependency 'factory_girl'

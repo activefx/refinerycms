@@ -6,8 +6,13 @@ class App < Configurable # :nodoc:
   config.action_mailer_default_host = "localhost:3000"
   config.google_analytics = "UA-xxxxxx-x"
 
-  config.facebook_app_id = 1234
-  config.facebook_app_secret = 5678
+  config.facebook_app_id = "xxxx"
+  config.facebook_app_secret = "xxxx"
+  config.facebook_api_key = "xxxx"
+
+  config.twitter_app_id = "xxxx"
+  config.twitter_app_secret = "xxxx"
+  config.twitter_api_key = "xxxx"
   # config.key = "value"
 end
 

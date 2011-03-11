@@ -40,20 +40,130 @@ describe User do
     Factory(:site_user).is_a?(User).should == true
   end
 
-  before(:all) do
+  before(:each) do
     Actor.delete_all
     Role.delete_all
+  end
+
+  context "Omniauth", :omniauth => true do
+
+    before(:each) do
+      @user = User.new
+      @omniauth = { 'uid' => '819797',
+                    'provider' => 'twitter',
+                    'user_info' => {
+                      'nickname' => 'episod',
+                      'name' => 'Taylor Singletary',
+                      'location' => 'San Francisco, CA',
+                      'image' => 'http://a0.twimg.com/profile_images/1258681373/hobolumbo.jpg',
+                      'description' => 'Reality Technician, Developer Advocate at Twitter, hobolumbo',
+                      'urls' => {
+                        'Website' => 'http://t.co/op3b03h',
+                        'Twitter' => 'http://twitter.com/episod'
+                      }
+                    },
+                    'credentials' => {
+                      'token' => '819797-Jxq8aYUDRmykzVKrgoLhXSq67TEa5ruc4GJC2rWimw',
+                      'secret' => 'J6zix3FfA9LofH0awS24M3HcBYXO5nI1iYe8EfBA'
+                    },
+                    'extra' => {
+                      'access_token' => 'oauth_token=819797-Jxq8aYUDRmykzVKrgoLhXSq67TEa5ruc4GJC2rWimw&oauth_token_secret=J6zix3FfA9LofH0awS24M3HcBYXO5nI1iYe8EfBA&user_id=819797&screen_name=episod'
+                    }
+                  }
+    end
+
+    context "build_omniauth_params" do
+
+      it "should include provider and uid" do
+        @user.build_omniauth_params(@omniauth).keys.should include(:provider)
+        @user.build_omniauth_params(@omniauth).keys.should include(:uid)
+      end
+
+      it "should include credentials" do
+        @user.build_omniauth_params(@omniauth).keys.should include(:token)
+        @user.build_omniauth_params(@omniauth).keys.should include(:secret)
+      end
+
+      it "should not include credential when missing" do
+        @omniauth.delete('credentials')
+        @user.build_omniauth_params(@omniauth).keys.should_not include(:token)
+      end
+
+      it "should include all omniauth parameters" do
+         @user.build_omniauth_params(@omniauth)[:omniauth].should == @omniauth
+      end
+
+    end
+
+    context "apply_user_info" do
+
+      it "should set the username if the user doesn't have one" do
+        @user.apply_user_info(@omniauth['user_info'])
+        @user.username.should == 'episod'
+      end
+
+      it "should not set the username to the email if the omniauth hash doesn't have a nickname" do
+        @omniauth['user_info'].delete('nickname')
+        @omniauth['user_info']['email'] = 'user@example.com'
+        @user.apply_user_info(@omniauth['user_info'])
+        @user.username.should == 'user@example.com'
+      end
+
+      it "should set the email if the user doesn't have one" do
+        @omniauth['user_info']['email'] = 'user@example.com'
+        @user.apply_user_info(@omniauth['user_info'])
+        @user.username.should == 'episod'
+      end
+
+      it "should not set the email and username if the omniauth hash doesn't include nickname or email" do
+        @omniauth['user_info'].delete('nickname')
+        @user.apply_user_info(@omniauth['user_info'])
+        @user.username.should be_blank
+        @user.email.should be_blank
+      end
+
+    end
+
+    context "apply_omniauth" do
+
+      it "should not build the user token if provider or uid is missing" do
+        @omniauth.delete('provider')
+        @user.apply_omniauth(@omniauth)
+        @user.user_tokens.first.should be_nil
+      end
+
+      it "should not save the user if the user is new" do
+        @user.apply_omniauth(@omniauth)
+        @user.should be_new_record
+      end
+
+      it "should build the user token" do
+        @user.apply_omniauth(@omniauth)
+        @token = @user.user_tokens.first
+        @token.provider.should == 'twitter'
+      end
+
+      it "should save the user token when saving the user" do
+        # set passwords so user is valid
+        @user = User.omniauth_initialization
+        # set the email so user is valid
+        @omniauth['user_info']['email'] = 'user@example.com'
+        @user.apply_omniauth(@omniauth)
+        @user.save
+        @token = UserToken.where(:provider => @omniauth['provider'], :uid => @omniauth['uid']).first
+        @user.should_not be_new_record
+        @token.should_not be_nil
+        @token.user.id.should == @user.id
+      end
+
+    end
+
   end
 
   # Tests to confirm working Mongoid references_and_referenced_in_many relationship,
   # some errors still occuring, for example with the destroy method ( user.roles.destroy(role) )
   # Some duplication with other tests, will remove once issues are worked out
   context "Roles Relationship", :roles => true do
-
-    before(:each) do
-      Actor.delete_all
-      Role.delete_all
-    end
 
     it "should start each example without any users" do
       User.count.should == 0

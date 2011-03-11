@@ -28,6 +28,15 @@ def login_and_remember_administrator
   click_button("submit_button")
 end
 
+Given /^I am a visitor$/ do
+  if page.has_content?("Log out")
+    click_link("Log out")
+  end
+  if page.has_content?("Sign Out")
+    click_link("Sign Out")
+  end
+end
+
 Given /^I am a logged in refinery administrator$/ do
   @administrator ||= Factory(:refinery_user)
   login_administrator

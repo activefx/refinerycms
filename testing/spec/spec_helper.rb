@@ -2,7 +2,16 @@ require 'rbconfig'
 def setup_environment
   # This file is copied to ~/spec when you run 'rails generate rspec'
   # from the project root directory.
+
+  # https://github.com/timcharper/spork/wiki/Spork.trap_method-Jujutsu
+  require "rails/mongoid"
+  Spork.trap_class_method(Rails::Mongoid, :load_models)
+
+  require "rails/application"
+  Spork.trap_method(Rails::Application, :reload_routes!)
+
   ENV["RAILS_ENV"] ||= 'test'
+  ENV["CACHE_CLASS_FLAG"] = 'false'
   require File.expand_path("../../config/environment", __FILE__)
   require 'rspec/rails'
   require 'database_cleaner'

@@ -1,5 +1,7 @@
 class User < Actor
 
+  field :created_by_omniauth, :type => Boolean, :default => false
+
   attr_accessible :email, :password, :password_confirmation,
                   :remember_me, :username, :plugins, :login
 
@@ -9,7 +11,7 @@ class User < Actor
          :recoverable, :rememberable, :trackable, :validatable,
          :lockable, :omniauthable
 
-  references_many :user_tokens
+  references_many :user_tokens, :autosave => true
 
   class << self
     # Find user by email or username.
@@ -51,49 +53,67 @@ class User < Actor
 #      end
 #    end
 
-    def self.new_with_session(params, session)
+    def new_with_session(params, session)
       super.tap do |user|
-        if data = session[:omniauth]
-          user.user_tokens.build(:provider => data['provider'], :uid => data['uid'])
+        if omniauth = session[:omniauth]
+          #user.user_tokens.build(:provider => omniauth['provider'], :uid => omniauth['uid'])
+          user.apply_omniauth(omniauth)
         end
       end
     end
 
-
-#    def create_from_hash!(hash)
-#      create(:name => hash['user_info']['name'])
-#    end
+    # Alternatively, you could overwrite Devise's password_required? method
+    def omniauth_initialization
+      password = Devise.friendly_token[0,20]
+      new :password => password,
+          :password_confirmation => password,
+          :created_by_omniauth => true
+    end
 
   end
 
-#          omniauth_params = {:provider => data['provider'], :uid => data['uid']}
-#          if credentials = data['credentials']
-#            omniauth_params.merge!(:token => credentials['token']) unless credentials['token'].blank?
-#            omniauth_params.merge!(:secret => credentials['secret']) unless credentials['secret'].blank?
-#          end
-#          token = self.user_tokens.build( omniauth_params )
-
+  def provider(name)
+    self.user_tokens.find_by_provider(name.to_s) rescue nil
+  end
 
   def apply_omniauth(omniauth)
+    return if omniauth['provider'].blank? || omniauth['uid'].blank?
     #add some info about the user
-    #self.name = omniauth['user_info']['name'] if name.blank?
-    #self.nickname = omniauth['user_info']['nickname'] if nickname.blank?
-    if omniauth['user_info'] && !omniauth['user_info']['email'].blank?
-      self.email = omniauth['user_info']['email'] if self.email.blank?
+    self.apply_user_info(omniauth['user_info'], omniauth['provider']) if omniauth['user_info']
+    # Build the user token
+    omniauth_params = self.build_omniauth_params(omniauth)
+    if token = self.user_tokens.where(:provider => omniauth['provider'], :uid => omniauth['uid']).first
+      token.update_attributes(omniauth_params)
+    else
+      user_tokens.build(omniauth_params)
     end
+    self.save unless self.new_record?
+  end
 
+  # Custom logic for adding user information from third party authentications
+  def apply_user_info(info, provider = nil)
+    if self.username.blank? && !info['nickname'].blank?
+      # set username to third party nickname if available
+      self.username = info['nickname'] if self.username.blank?
+    end
+    if self.email.blank? && !info['email'].blank?
+      self.email = info['email'] if self.email.blank?
+      # otherwise just set username to email address
+      self.username = self.email if self.username.blank?
+    end
+  end
+
+  def build_omniauth_params(omniauth)
     omniauth_params = {:provider => omniauth['provider'], :uid => omniauth['uid']}
     unless omniauth['credentials'].blank?
       credentials = omniauth['credentials']
       omniauth_params.merge!(:token => credentials['token']) unless credentials['token'].blank?
       omniauth_params.merge!(:secret => credentials['secret']) unless credentials['secret'].blank?
     end
-    user_tokens.build( omniauth_params )
-
-    #self.confirm!# unless user.email.blank?
+    # Store all of the data for debugging and development
+    omniauth_params.merge!(:omniauth => omniauth)
+    return omniauth_params
   end
-
-
 
 #  def apply_omniauth(omniauth)
 #    #add some info about the user
@@ -161,9 +181,7 @@ class User < Actor
 #    (valid? && active?) rescue false
 #  end
 
-  def provider(name = :facebook)
-    self.user_tokens.find_by_provider(name.to_s) rescue nil
-  end
+
 
 #  def facebook_client
 #    @fb_client ||= FBGraph::Client.new(

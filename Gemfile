@@ -32,6 +32,7 @@ gem 'mongoid_search', :git => 'git://github.com/activefx/mongoid_search_relevant
 gem 'devise', :git => 'git://github.com/plataformatec/devise.git'
 gem 'omniauth', :git => 'git://github.com/intridea/omniauth.git'
 gem 'oa-oauth', :require => 'omniauth/oauth'
+gem "oa-openid", :require => "omniauth/openid"
 
 # gem 'refinerycms', :path => '../refinerycms'
 gem 'refinerycms-authentication', :path => 'authentication'
@@ -43,6 +44,12 @@ gem 'refinerycms-pages', :path => 'pages'
 gem 'refinerycms-resources', :path => 'resources'
 gem 'refinerycms-settings', :path => 'settings'
 gem 'refinerycms-generators', :path => '../refinerycms-generators'
+
+group :development do
+  gem "bundler", ">= 1.0.0"
+  gem "jeweler", ">= 1.5.2"
+  gem "rcov", ">= 0"
+end
 
 group :development, :test do
   gem 'refinerycms-testing', :path => 'testing'

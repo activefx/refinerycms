@@ -4,7 +4,7 @@ Gem::Specification.new do |s|
   s.name              = %q{refinerycms}
   s.version           = %q{0.9.9.4}
   s.description       = %q{A Ruby on Rails CMS that supports Rails 3. It's easy to extend and sticks to 'the Rails way' where possible.}
-  s.date              = %q{2011-03-05}
+  s.date              = %q{2011-03-10}
   s.summary           = %q{A Ruby on Rails CMS that supports Rails 3}
   s.email             = %q{info@refinerycms.com}
   s.homepage          = %q{http://refinerycms.com}
@@ -12,10 +12,16 @@ Gem::Specification.new do |s|
   s.authors           = ['Resolve Digital', 'Philip Arndt', 'David Jones', 'Steven Heidel']
   s.license           = %q{MIT}
   s.require_paths     = %w(lib)
-  s.executables       = %w(refinerycms)
+  s.executables       = %w(refinerycms alpha)
 
   # Bundler
   s.add_dependency    'bundler',                    '~> 1.0.10'
+  s.add_dependency    'thor'
+  s.add_dependency    'rails',                      '~> 3.0.0'
+
+  s.add_development_dependency  'cucumber'
+  s.add_development_dependency  'aruba'
+  s.add_development_dependency  'rspec',            '>= 2.0.0'
 
   # Refinery CMS
   s.add_dependency    'refinerycms-authentication', '~> 0.9.9.4'
@@ -30,7 +36,6 @@ Gem::Specification.new do |s|
   s.files             = [
     '.gitignore',
     '.rspec',
-    '.yardopts',
     'Gemfile',
     'Gemfile',
     'Gemfile.lock',
@@ -43,6 +48,7 @@ Gem::Specification.new do |s|
     'autotest/autotest.rb',
     'autotest/discover.rb',
     'bin',
+    'bin/alpha',
     'bin/refinerycms',
     'changelog.md',
     'changelog.md',
@@ -94,6 +100,23 @@ Gem::Specification.new do |s|
     'index/test/RefinerySetting/97_99_116',
     'index/test/RefinerySetting/size',
     'lib',
+    'lib/alpha',
+    'lib/alpha/cli.rb',
+    'lib/alpha/templates',
+    'lib/alpha/templates/bootstrap.rb',
+    'lib/alpha/templates/evergreen.rb',
+    'lib/alpha/templates/finalize.rb',
+    'lib/alpha/templates/gemfile.rb',
+    'lib/alpha/templates/gemfile_setup.rb',
+    'lib/alpha/templates/gitignore.rb',
+    'lib/alpha/templates/haml.rb',
+    'lib/alpha/templates/mongoid.rb',
+    'lib/alpha/templates/newrelic.rb',
+    'lib/alpha/templates/rails_clean.rb',
+    'lib/alpha/templates/refinerycms.rb',
+    'lib/alpha/templates/sass.rb',
+    'lib/alpha/templates/testing.rb',
+    'lib/alpha/version.rb',
     'lib/refinery.rb',
     'lib/refinerycms.rb',
     'license.md',

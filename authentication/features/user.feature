@@ -9,6 +9,12 @@ Feature: User
     And A Refinery administrator exists
     And I have a page titled "Home" with a custom url "/"
 
+  Scenario: Home Page
+    When I go to the home page
+    And I am a visitor
+    Then I should see "Sign In"
+    And I should see "Register"
+
   Scenario: Login (successful login)
     Given I am on the login page
     And I have a site user named "user"
@@ -33,28 +39,29 @@ Feature: User
     Then I should be on the home page
     And I should not see "Sign Out"
 
-#  @users-password-forgot
-#  Scenario: Forgot Password page (no email entered)
-#    And I am on the forgot password page
-#    When I press "Reset password"
-#    Then I should see "You did not enter an email address."
+  @users-password-forgot
+  Scenario: Forgot Password page (no email entered)
+    And I am on the forgot password page
+    When I press "Send Instructions"
+    Then I should see "There was a problem sending your password reset instructions"
+    And I should see "Email can't be blank"
 
-#  @users-password-forgot
-#  Scenario: Forgot Password page (non existing email entered)
-#    Given I am on the forgot password page
-#    And I have a user with email "green@cukes.com"
-#    When I fill in "user_email" with "none@cukes.com"
-#    And I press "Reset password"
-#    Then I should see "Sorry, 'none@cukes.com' isn't associated with any accounts."
-#    And I should see "Are you sure you typed the correct email address?"
+  @users-password-forgot
+  Scenario: Forgot Password page (non existing email entered)
+    Given I am on the forgot password page
+    And I have a user with email "green@cukes.com"
+    When I fill in "user_email" with "none@cukes.com"
+    And I press "Send Instructions"
+    Then I should see "There was a problem sending your password reset instructions"
+    And I should see "Email not found"
 
-#  @users-password-forgot
-#  Scenario: Forgot Password page (existing email entered)
-#    Given I am on the forgot password page
-#    And I have a user with email "green@cukes.com"
-#    When I fill in "user_email" with "green@cukes.com"
-#    And I press "Reset password"
-#    Then I should see "An email has been sent to you with a link to reset your password."
+  @users-password-forgot
+  Scenario: Forgot Password page (existing email entered)
+    Given I am on the forgot password page
+    And I have a user with email "green@cukes.com"
+    When I fill in "user_email" with "green@cukes.com"
+    And I press "Send Instructions"
+    Then I should see "You will receive an email with instructions about how to reset your password in a few minutes"
 
 #  @users-password-reset
 #  Scenario: Reset password page (invalid reset_code)
@@ -176,4 +183,21 @@ Feature: User
 #    Then the account "mickey@monkees.com" should be "activated"
 #    Then I should be on the accept/decline invitation page
 #    And I should see "Join the Boys and Girls Club"
+
+#  # https://github.com/bmabey/email-spec
+#  # http://stackoverflow.com/questions/3467963/how-can-i-use-cucumber-to-test-devises-rememberable-functionality
+#  @allow-rescue
+#  Scenario: Create New Account (Everything cool)
+#    Given I am not authenticated
+#    When I go to register
+#    And I fill in "Name" with "bill"
+#    And I fill in "Email" with "bill@example.com"
+#    And I fill in "Password" with "please"
+#    And I fill in "Password Confirmation" with "please"
+#    And I press "Sign up"
+#    Then "bill@example.com" should receive an email
+#    And I open the email
+#    And I should see "Confirm my account" in the email body
+#    When I follow "Confirm my account" in the email
+#    Then I should see "Your account was successfully confirmed. You are now signed in."
 
