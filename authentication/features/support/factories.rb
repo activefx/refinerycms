@@ -3,8 +3,8 @@ require 'factory_girl'
 Factory.define :user do |u|
   u.sequence(:username) { |n| "person#{n}" }
   u.sequence(:email) { |n| "person#{n}@cucumber.com" }
-  u.password  "greenandjuicy"
-  u.password_confirmation "greenandjuicy"
+  u.password  "password"
+  u.password_confirmation "password"
 end
 
 Factory.define :site_user, :parent => :user do |u|
@@ -20,8 +20,8 @@ end
 Factory.define :administrator do |u|
   u.sequence(:username) { |n| "admin#{n}" }
   u.sequence(:email) { |n| "admin#{n}@cucumber.com" }
-  u.password  "greenandjuicy"
-  u.password_confirmation "greenandjuicy"
+  u.password  "password"
+  u.password_confirmation "password"
 end
 
 Factory.define :refinery_user, :parent => :administrator do |u|

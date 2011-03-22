@@ -12,7 +12,7 @@ Feature: Administrator
     Given I am on the administrative login page
     And I have a refinery administrator named "admin"
     And I fill in "administrator_login" with "admin"
-    And I fill in "administrator_password" with "greenandjuicy"
+    And I fill in "administrator_password" with "password"
     And I press "Sign in"
     Then I should see "Signed in successfully."
     And I should be on the admin root

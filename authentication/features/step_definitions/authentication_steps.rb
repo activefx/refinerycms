@@ -1,14 +1,14 @@
 def login_user
   visit new_user_session_path
   fill_in("user_login", :with => @user.email)
-  fill_in("user_password", :with => 'greenandjuicy')
+  fill_in("user_password", :with => 'password')
   click_button("user_submit")
 end
 
 def login_and_remember_user
   visit new_user_session_path
   fill_in("user_login", :with => @user.email)
-  fill_in("user_password", :with => 'greenandjuicy')
+  fill_in("user_password", :with => 'password')
   check("user_remember_me")
   click_button("user_submit")
 end
@@ -16,25 +16,29 @@ end
 def login_administrator
   visit new_administrator_session_path
   fill_in("administrator_login", :with => @administrator.email)
-  fill_in("administrator_password", :with => 'greenandjuicy')
+  fill_in("administrator_password", :with => 'password')
   click_button("submit_button")
 end
 
 def login_and_remember_administrator
   visit new_administrator_session_path
   fill_in("administrator_login", :with => @administrator.email)
-  fill_in("administrator_password", :with => 'greenandjuicy')
+  fill_in("administrator_password", :with => 'password')
   check("administrator_remember_me")
   click_button("submit_button")
 end
 
+Given /^I am not logged in$/ do
+  visit('/users/sign_out')
+  visit('/ctrlpnl/logout')
+end
+
 Given /^I am a visitor$/ do
-  if page.has_content?("Log out")
-    click_link("Log out")
-  end
-  if page.has_content?("Sign Out")
-    click_link("Sign Out")
-  end
+  Given %{I am not logged in}
+end
+
+Then /^I should be signed out$/ do
+  Given %{I am not logged in}
 end
 
 Given /^I am a logged in refinery administrator$/ do
@@ -50,6 +54,10 @@ end
 Given /^I am a logged in user$/ do
   @user ||= Factory(:site_user)
   login_user
+end
+
+Given /^I am a logged in refinery user$/ do
+  %{I am a logged in user}
 end
 
 Given /^I have a logged in and remembered user named "(.*)"$/ do |name|

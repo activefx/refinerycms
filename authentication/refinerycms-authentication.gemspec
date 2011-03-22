@@ -5,7 +5,7 @@ Gem::Specification.new do |s|
   s.version           = %q{0.9.9.8}
   s.summary           = %q{Authentication engine for Refinery CMS}
   s.description       = %q{The default authentication engine for Refinery CMS}
-  s.date              = %q{2011-03-10}
+  s.date              = %q{2011-03-22}
   s.email             = %q{info@refinerycms.com}
   s.homepage          = %q{http://refinerycms.com}
   s.rubyforge_project = %q{refinerycms}
@@ -145,6 +145,11 @@ Gem::Specification.new do |s|
     'db/seeds/first_admin.rb',
     'features',
     'features/administrator.feature',
+    'features/administrators',
+    'features/administrators/database_authenticatable.feature',
+    'features/administrators/lockable.feature',
+    'features/administrators/recoverable.feature',
+    'features/administrators/rememberable.feature',
     'features/manage_administrators.feature',
     'features/manage_users.feature',
     'features/omniauth.feature',
@@ -154,6 +159,14 @@ Gem::Specification.new do |s|
     'features/support/factories.rb',
     'features/support/paths.rb',
     'features/user.feature',
+    'features/users',
+    'features/users/confirmable.feature',
+    'features/users/database_authenticatable.feature',
+    'features/users/lockable.feature',
+    'features/users/omniauthable.feature',
+    'features/users/recoverable.feature',
+    'features/users/registerable.feature',
+    'features/users/rememberable.feature',
     'lib',
     'lib/authenticated_system.rb',
     'lib/gemspec.rb',

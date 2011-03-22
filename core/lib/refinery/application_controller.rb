@@ -21,14 +21,17 @@ module Refinery
                         :just_installed?,
                         :from_dialog?,
                         :admin?,
-                        :login?
+                        :login?,
+                        :in_beta?,
+                        :administrative_request?
 
         c.protect_from_forgery # See ActionController::RequestForgeryProtection
 
         c.send :include, Crud # basic create, read, update and delete methods
 
         c.send :before_filter, :find_pages_for_menu,
-                               :show_welcome_page?
+                               :show_welcome_page?,
+                               :show_beta_page?
 
         c.send :after_filter, :store_current_location!,
                               :if => Proc.new {|c| c.send(:refinery_user?) rescue false }
@@ -88,6 +91,14 @@ module Refinery
         (controller_name =~ /^(user|session)(|s)/ and not admin?) or just_installed?
       end
 
+      def in_beta?
+        RefinerySetting.find_or_set(:site_in_beta, false)
+      end
+
+      def administrative_request?
+        /administrator_/.match(controller_name) || /admin\//.match(controller_path)
+      end
+
     protected
 
       # get all the pages to be displayed in the site menu.
@@ -109,6 +120,12 @@ module Refinery
 
       def show_welcome_page?
         render :template => "/welcome", :layout => "login" if just_installed? and %w(administrator_registrations).exclude?(controller_name)
+      end
+
+      def show_beta_page?
+        if in_beta? && !administrative_request? && %w(beta_signups).exclude?(controller_name)
+          redirect_to beta_signups_path
+        end
       end
 
     private

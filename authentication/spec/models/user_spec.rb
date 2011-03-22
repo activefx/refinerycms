@@ -90,7 +90,7 @@ describe User do
       end
 
       it "should include all omniauth parameters" do
-         @user.build_omniauth_params(@omniauth)[:omniauth].should == @omniauth
+         @user.build_omniauth_params(@omniauth)[:omniauth].should == @omniauth['extra'].except('access_token')
       end
 
     end

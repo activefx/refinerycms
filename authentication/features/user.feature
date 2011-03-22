@@ -19,7 +19,7 @@ Feature: User
     Given I am on the login page
     And I have a site user named "user"
     And I fill in "user_login" with "user"
-    And I fill in "user_password" with "greenandjuicy"
+    And I fill in "user_password" with "password"
     And I press "Sign in"
     Then I should see "Signed in as user"
     And I should be on the user root

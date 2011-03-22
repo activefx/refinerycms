@@ -83,6 +83,7 @@ class User < Actor
     # Build the user token
     omniauth_params = self.build_omniauth_params(omniauth)
     if token = self.user_tokens.where(:provider => omniauth['provider'], :uid => omniauth['uid']).first
+      debugger
       token.update_attributes(omniauth_params)
     else
       user_tokens.build(omniauth_params)
@@ -104,14 +105,14 @@ class User < Actor
   end
 
   def build_omniauth_params(omniauth)
-    omniauth_params = {:provider => omniauth['provider'], :uid => omniauth['uid']}
+    omniauth_params = {:provider => omniauth['provider'].to_s, :uid => omniauth['uid']}
     unless omniauth['credentials'].blank?
       credentials = omniauth['credentials']
       omniauth_params.merge!(:token => credentials['token']) unless credentials['token'].blank?
       omniauth_params.merge!(:secret => credentials['secret']) unless credentials['secret'].blank?
     end
     # Store all of the data for debugging and development
-    omniauth_params.merge!(:omniauth => omniauth)
+    omniauth_params.merge!(:omniauth => omniauth['extra'].except('access_token'))
     return omniauth_params
   end
 

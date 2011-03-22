@@ -4,7 +4,7 @@ Gem::Specification.new do |s|
   s.name              = %q{refinerycms}
   s.version           = %q{0.9.9.8}
   s.description       = %q{A Ruby on Rails CMS that supports Rails 3. It's easy to extend and sticks to 'the Rails way' where possible.}
-  s.date              = %q{2011-03-10}
+  s.date              = %q{2011-03-22}
   s.summary           = %q{A Ruby on Rails CMS that supports Rails 3}
   s.email             = %q{info@refinerycms.com}
   s.homepage          = %q{http://refinerycms.com}
@@ -38,6 +38,7 @@ Gem::Specification.new do |s|
     '.rspec',
     'Gemfile',
     'Gemfile',
+    'Gemfile.lock',
     'Rakefile',
     'app',
     'app/views',
@@ -52,6 +53,10 @@ Gem::Specification.new do |s|
     'changelog.md',
     'changelog.md',
     'config',
+    'config/app',
+    'config/app/development.rb',
+    'config/app/production.rb',
+    'config/app/test.rb',
     'config/app.rb',
     'config/app.rb.sample',
     'config/cucumber.yml',
@@ -59,6 +64,7 @@ Gem::Specification.new do |s|
     'config/environments/development.rb',
     'config/environments/production.rb',
     'config/environments/test.rb',
+    'config/mongoid.yml',
     'config/mongoid.yml.sample',
     'config/routes.rb',
     'config/settings.rb',

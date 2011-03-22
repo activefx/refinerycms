@@ -84,6 +84,8 @@ en:
       invalid: Sorry, your login or password was incorrect.
     administrator_sessions:
       signed_in: Signed in successfully.
+      administrator:
+        signed_out: Signed out successfully.
     confirmable:
       confirmable_help: "The authentication system sends emails with confirmation instructions and verifies whether an account is already confirmed during sign in. This ensures that a valid email address is provided in order to sign up for an account. %{time_limit}"
       account_confirmed: Account confirmed

@@ -1,6 +1,6 @@
-#Refinery::Application.routes.draw do
+Refinery::Application.routes.draw do
 
-#  devise_for :users
+  get '/home', :to => 'pages#home', :as => :user_root
 
-#end
+end
 
