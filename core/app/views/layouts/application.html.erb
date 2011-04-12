@@ -11,6 +11,10 @@
         <%= render :partial => "/shared/header" -%>
       </header>
       <section id='page'>
+        <div id='flash_container'>
+          <%= render :partial => '/shared/no_script' %>
+          <%= render :partial => '/shared/message' %>
+        </div>
         <%= yield %>
       </section>
       <footer>

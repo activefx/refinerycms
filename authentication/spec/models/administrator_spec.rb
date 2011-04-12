@@ -12,7 +12,7 @@ describe Administrator do
     it { should be_lockable }
     it { should_not be_omniauthable }
     it { should be_recoverable }
-    it { should be_registerable }
+    it { should_not be_registerable }
     it { should be_rememberable }
     it { should_not be_timeoutable }
     it { should_not be_token_authenticatable }
@@ -273,10 +273,10 @@ describe Administrator do
         @super_user.can_delete?(@administrator).should be_false
       end
 
-      it "if user count with refinery role <= 1" do
-        Role[:refinery].actors.delete(@administrator)
-        @super_user.can_delete?(@administrator).should be_false
-      end
+      #it "if user count with refinery role <= 1" do
+      #  Role[:refinery].actors.delete(@administrator)
+      #  @super_user.can_delete?(@administrator).should be_false
+      #end
 
       it "user himself" do
         @administrator.can_delete?(@administrator).should be_false

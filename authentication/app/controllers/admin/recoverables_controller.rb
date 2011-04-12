@@ -5,11 +5,14 @@ module Admin
 
     def create
       @actor.send(:generate_reset_password_token!)
+      @actor.save
       redirect_to( send("admin_#{@actor.type_for_path}_path", @actor.slug),
                    :notice => t('devise.recoverable.successfully_generated_token') )
     end
 
     def update
+      @actor.send(:generate_reset_password_token!)
+      @actor.save
       @actor.send_reset_password_instructions
       redirect_to( send("admin_#{@actor.type_for_path}_path", @actor.slug),
                    :notice => t('devise.recoverable.successfully_resent_token',

@@ -49,13 +49,21 @@ def stub_facebook!
       "user_hash" => {
         "id" => '12345',
         "link" => 'http://facebook.com/josevalim',
-        "email" => 'user@example.com',
+        "email" => 'user456@example.com',
         "first_name" => 'Jose',
         "last_name" => 'Valim',
         "website" => 'http://blog.plataformatec.com.br'
       }
     }
   }
+end
+
+def stub_facebook_invalid_credentials!
+  OmniAuth.config.mock_auth[:facebook] = :invalid_credentials
+end
+
+def stub_facebook_access_denied!
+  OmniAuth.config.mock_auth[:facebook] = :access_denied
 end
 
 def stub_google_apps!

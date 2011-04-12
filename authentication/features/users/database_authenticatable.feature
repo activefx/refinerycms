@@ -11,7 +11,7 @@ Feature: Database Authenticatable (Sign In / Sign Out)
 
     Scenario: Home Page
       When I go to the home page
-      Given I am a visitor
+      Given No one is logged in
       Then I should see "Sign In"
       And I should see "Register"
 

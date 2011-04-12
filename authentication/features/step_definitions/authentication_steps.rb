@@ -28,7 +28,7 @@ def login_and_remember_administrator
   click_button("submit_button")
 end
 
-Given /^I am not logged in$/ do
+Given /^No one is logged in$/ do
   visit('/users/sign_out')
   visit('/ctrlpnl/logout')
 end
@@ -66,11 +66,11 @@ Given /^I have a logged in and remembered user named "(.*)"$/ do |name|
 end
 
 Given /^A Refinery administrator exists$/ do
-  @refinery_administrator ||= Factory(:refinery_user)
+  @administrator ||= Factory(:refinery_user)
 end
 
 Given /^A site user exists$/ do
-  @site_user ||= Factory(:site_user)
+  @user ||= Factory(:site_user)
 end
 
 
@@ -87,7 +87,9 @@ Given /^I have a locked site user named "(.*)"$/ do |name|
 end
 
 Given /^I have a forgetful site user named "(.*)"$/ do |name|
-  Factory(:site_user, :username => name).send(:generate_reset_password_token!)
+  a = Factory(:site_user, :username => name)
+  a.send(:generate_reset_password_token!)
+  a.save
 end
 
 Given /^I have an administrator named "(.*)"$/ do |name|
@@ -103,7 +105,9 @@ Given /^I have a locked refinery administrator named "(.*)"$/ do |name|
 end
 
 Given /^I have a forgetful refinery administrator named "(.*)"$/ do |name|
-  Factory(:refinery_user, :username => name).send(:generate_reset_password_token!)
+  a = Factory(:refinery_user, :username => name)
+  a.send(:generate_reset_password_token!)
+  a.save
 end
 
 Given /^I have no users$/ do
@@ -141,12 +145,62 @@ end
 
 Given /^I am (not )?requesting administrative password reset$/ do |action|
   @administrator = Factory(:refinery_user, :updated_at => 11.minutes.ago)
-  @administrator.send(:generate_reset_password_token!) if action.nil?
+  if action.nil?
+    @administrator.send(:generate_reset_password_token!)
+    @administrator.save
+  end
 end
 
 Given /^(User|Administrator) token authentication is enabled$/ do |model_name|
   model_name.constantize.class_eval do
     devise :token_authenticatable
   end
+end
+
+Given /^I login with (.+)$/ do |service|
+  send("stub_#{service}!")
+  visit "/users/auth/#{service}"
+end
+
+When /^I have a user "([^"]*)" with a "([^"]*)" token with a uid of "([^"]*)"$/ do |arg1, arg2, arg3|
+  @user ||= Factory(:site_user, :username => arg1)
+  @user.user_tokens.create(:provider => arg2, :uid => arg3)
+end
+
+When /^I am logged in with (.+)$/ do |service|
+  steps %Q{
+    When I have a user "some_user" with a "#{service}" token with a uid of "819797"
+    When I login with #{service}
+  }
+end
+
+Then /^"([^"]*)" should have been created by omniauth$/ do |arg1|
+  User.where(:email => arg1).first.created_by_omniauth.should == true
+end
+
+Then /^"([^"]*)" should not have been created by omniauth$/ do |arg1|
+  User.where(:email => arg1).first.created_by_omniauth.should == false
+end
+
+When /^I fail to login with facebook due to invalid credentials$/ do
+  stub_facebook_invalid_credentials!
+  visit "/users/auth/facebook"
+end
+
+When /^I fail to login with facebook due to access denied$/ do
+  stub_facebook_access_denied!
+  visit "/users/auth/facebook"
+end
+
+Then /^I should not be logged in$/ do
+  steps %Q{
+    Then I should not see "Sign Out"
+    And I should not see "Signed in as"
+  }
+end
+
+When /^I link my (.+) account/ do |service|
+  send("stub_#{service}!")
+  And %Q{I follow "Link Your #{service.titleize} Account"}
 end
 

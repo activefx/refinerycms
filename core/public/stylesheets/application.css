@@ -38,6 +38,9 @@ label[for] {
 #body_content_title {
   padding: 15px 0;
 }
+#flash_container {
+  margin: 10px 0;
+}
 #error_explanation {
   background: 7px 10px no-repeat url('/images/refinery/icons/cancel.png') #FFB1B1;
   padding: 0px 5px 5px 30px;
@@ -121,6 +124,9 @@ label, .label_with_help {
   border: 1px solid #7f9db9;
   padding: 0.4% 0.5%;
   line-height: 20px;
+}
+.field i {
+  display: block;
 }
  div.remember_me label {
   display: inline;

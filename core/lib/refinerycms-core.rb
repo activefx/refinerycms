@@ -83,11 +83,10 @@ module Refinery
         # was just installed, only check check if devise modules
         # include registerable, and only make administrators registerable
         # if there are none with the refinery role
-        if Role[:refinery].administrators.empty?
-          Administrator.class_eval do
-            devise :registerable
-          end
-        end
+        Administrator.class_eval do
+          devise :registerable
+        end if Role[:refinery].administrators.empty?
+
       end
 
       # Register the plugin

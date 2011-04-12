@@ -1,66 +1,66 @@
 module Users
   class OmniauthCallbacksController < Devise::OmniauthCallbacksController
 
+    # Ensure callback urls are created for providers
+    # defined on the User / omniauth class
     User.omniauth_providers.each do |provider|
       class_eval("def #{provider}; create; end")
     end
 
-    # https://github.com/holden/devise-omniauth-example/blob/master/app/controllers/users/omniauth_callbacks_controller.rb
-    # /users/auth/twitter/callback?oauth_token=R3MWDWxos24GFOcUDeeSkekVHYL56RVU83bVnv2PfYc&oauth_verifier=sHcYKkGHMvBgR9FO5mxneccFZnXfRIe3mBBTjTSbzs
-    def create
-      # Set a constant for the environment's omniauth data
-      omniauth = env["omniauth.auth"] # auth_hash
-      # If the user is already logged in...
-      if current_user
-        # Add third party authentication method to the user's account
-        current_user.user_tokens.find_or_create_by(:provider => omniauth['provider'], :uid => omniauth['uid'])
-        # Apply data from the third party authentication provider into the user's account
-        user.apply_omniauth(omniauth)
-        flash[:notice] = "Successfully enabled #{omniauth['provider']} authentication."
-        redirect_to edit_user_registration_path
-      # If the user isn't logged in...
-      else
-        # Check to see if the omniauth data belongs to a user account
-        user_token = UserToken.find_by_provider_and_uid(omniauth['provider'], omniauth['uid'])
-        # If a user has used this third party authentication method before...
-        if user_token
-          # User successfully signed in via third party authentication
-          user_token.user.apply_omniauth(omniauth)
-          flash[:notice] = I18n.t "devise.omniauth_callbacks.success", :kind => omniauth['provider']
-          sign_in_and_redirect(:user, user_token.user)
-        # User has never signed in with this third party authentication
-        else
-          # Extract email address regardless of position in the omniauth data hash
-          unless omniauth.recursive_find_by_key("email").blank?
-            # User already exists in the system but hasn't used this third party authentication before
-            user = User.find_or_initialize_by(:email => omniauth.recursive_find_by_key("email"))
-          else
-            # User is completely new
-            user = User.omniauth_initialization
-          end
-          # Apply data from the third party authentication provider into the user's account
-          user.apply_omniauth(omniauth)
-          # Save user if valid
-          if user.save
-            # Automatically confirm user if user confirmed their email with the
-            # third party authentication provider
-            user.confirm! if User.confirmable? && !user.email.blank?
-            flash[:notice] = I18n.t "devise.omniauth_callbacks.success", :kind => omniauth['provider']
-            sign_in_and_redirect(:user, user)
-          # Prompt for additional information is user is invalid
-          else
-            session[:omniauth] = omniauth.except('extra')
-            user.created_by_omniauth = false
-            redirect_to new_user_registration_url
-          end
+    protected
+
+      def create
+        # Set a constant for the environment's omniauth data
+        omniauth = env["omniauth.auth"] # auth_hash
+        if current_user # If the user is already logged in...
+          find_or_create_user_token_for_current_user(omniauth)
+        else # If a user isn't logged in...
+          apply_omniauth_to_new_or_existing_user(omniauth)
         end
       end
 
-    end
+      def find_or_create_user_token_for_current_user(omniauth)
+        # Apply data from the third party authentication provider into the user's account,
+        # including adding or updating the user token
+        current_user.apply_omniauth(omniauth)
+        current_user.save
+        flash[:notice] = "Successfully enabled #{omniauth['provider']} authentication."
+        redirect_to edit_user_registration_path
+      end
 
-    protected
+      def apply_omniauth_to_new_or_existing_user(omniauth)
+        # Check to see if the omniauth data belongs to a user account
+        user_token = UserToken.find_by_provider_and_uid(omniauth['provider'], omniauth['uid'])
+        if user_token # If a user has used this third party authentication method before...
+          sign_in_from_user_token(user_token, omniauth)
+        else # User has never signed in with this third party authentication
+          register_new_user_from_omniauth(omniauth)
+        end
+      end
 
-  # redirect_to request.env['omniauth.origin'] || '/default'
+      def sign_in_from_user_token(user_token, omniauth)
+        user = user_token.user
+        user.apply_omniauth(omniauth)
+        user.save
+        flash[:notice] = I18n.t "devise.omniauth_callbacks.success", :kind => omniauth['provider']
+        sign_in_and_redirect(:user, user)
+      end
+
+      def register_new_user_from_omniauth(omniauth)
+        user = User.omniauth_find_or_initialize(omniauth)
+        if user.save # Save user if valid
+          # Automatically confirm user if user confirmed their email with the
+          # third party authentication provider
+          user.skip_confirmation!
+          flash[:notice] = I18n.t "devise.omniauth_callbacks.success", :kind => omniauth['provider']
+          sign_in_and_redirect(:user, user)
+        else # Prompt for additional information if user is invalid
+          session[:omniauth] = omniauth.except('extra')
+          redirect_to new_user_registration_url, :alert => "Please complete your registration."
+        end
+      end
+
+      # redirect_to request.env['omniauth.origin'] || '/default'
 
   end
 end

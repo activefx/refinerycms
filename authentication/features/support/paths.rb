@@ -16,6 +16,9 @@ module NavigationHelpers
         when /the reset password page/
           edit_user_password_path(:reset_password_token => @user.reset_password_token)
 
+        when /the edit registration page/
+          edit_user_registration_path
+
         when /the account details for "(.*)"$/
           admin_user_path($1)
 
@@ -33,6 +36,9 @@ module NavigationHelpers
 
         when /the administrative reset password page/
           edit_administrator_password_path(:reset_password_token => @administrator.reset_password_token)
+
+        when /the administrator root/
+          administrator_root_path
 
         else
           nil

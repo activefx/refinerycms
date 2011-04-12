@@ -122,6 +122,7 @@ module Refinery
         render :template => "/welcome", :layout => "login" if just_installed? and %w(administrator_registrations).exclude?(controller_name)
       end
 
+      # TODO: Add check for beta engine
       def show_beta_page?
         if in_beta? && !administrative_request? && %w(beta_signups).exclude?(controller_name)
           redirect_to beta_signups_path

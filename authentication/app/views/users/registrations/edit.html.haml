@@ -23,7 +23,22 @@
     Unhappy? #{link_to "Cancel my account", registration_path(resource_name), :confirm => "Are you sure?", :method => :delete}.
   = link_to "Back", :back
 
-//- content_for :body_content_right do
+- content_for :body_content_right do
+  %h3 Connect Your Account
+  %h4 Current Services Linked to Your Account
+  %ul#linked_services
+    - if resource.user_tokens.count == 0
+      %li You haven't linked any services
+    - else
+      - resource.user_tokens.each do |service|
+        %li
+          = "#{service.provider.to_s.titleize}"
+          = link_to "(remove)", users_authentication_path(service.id), :confirm => "Are you sure?", :method => :delete
+  %h4 Add Additional Services to Your Account
+  %ul#available_services
+    - resource.available_third_party_authentications.each do |service|
+      %li= link_to "Link Your #{service.to_s.titleize} Account", "/users/auth/#{service}"
+
 
 = render :partial => "/shared/content_page"
 

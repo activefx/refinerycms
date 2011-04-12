@@ -64,6 +64,7 @@ Feature: Administrator
   @administrators-password-reset
   Scenario: Reset password page (invalid password)
     Given I am requesting administrative password reset
+    Then Display the page
     When I go to the administrative reset password page
     And I fill in "Password" with "cukes"
     And I fill in "Password confirmation" with "cukes"
@@ -78,6 +79,6 @@ Feature: Administrator
     And I fill in "Password" with "icuked"
     And I fill in "Password confirmation" with "icuked"
     And I press "Reset password"
-    Then I should be on the admin root
-    And I should see "Password reset successfully for"
+    #Then I should be on the administrator root
+    Then I should see "Password reset successfully for"
 

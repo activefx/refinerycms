@@ -21,6 +21,10 @@ class UserToken
     where(:provider => provider, :uid => uid).first
   end
 
+  def self.find_by_provider(provider)
+    desc(:updated_at).where(:provider => provider).first
+  end
+
 #  def self.find_from_hash(hash)
 #    find_by_provider_and_uid(hash['provider'], hash['uid'])
 #  end

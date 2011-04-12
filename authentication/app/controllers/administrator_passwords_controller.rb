@@ -28,6 +28,7 @@ class AdministratorPasswordsController < ::Devise::PasswordsController
 
       # Call devise reset function.
       administrator.send(:generate_reset_password_token!)
+      administrator.save
       AdministratorMailer.reset_notification(administrator, request).deliver
       redirect_to new_administrator_session_path, :notice => t('email_reset_sent', :scope => 'administrators.forgot') and return
     else
