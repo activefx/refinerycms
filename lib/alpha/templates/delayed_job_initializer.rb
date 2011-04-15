@@ -1,4 +1,4 @@
-initializer('delayed_job') do
+initializer('delayed_job.rb') do
 <<-'FILE'
 Delayed::Worker.backend = :mongoid
 Delayed::Worker.destroy_failed_jobs = false

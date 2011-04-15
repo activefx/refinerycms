@@ -1,4 +1,5 @@
-#copied?
+#Copies to new apps
+
 require 'rbconfig'
 def setup_environment
   # This file is copied to ~/spec when you run 'rails generate rspec'
@@ -11,15 +12,23 @@ def setup_environment
   require "rails/application"
   Spork.trap_method(Rails::Application, :reload_routes!)
 
+  require 'factory_girl_rails'
+  Spork.trap_class_method(Factory, :find_definitions)
+
   ENV["RAILS_ENV"] ||= 'test'
   ENV["CACHE_CLASS_FLAG"] = 'false'
+
   require File.expand_path("../../config/environment", __FILE__)
   require 'rspec/rails'
+  require 'vcr'
   require 'database_cleaner'
 
-  # Requires supporting files with custom matchers and macros, etc,
-  # in ./support/ and its subdirectories.
-  Dir[File.expand_path('../support/**/*.rb', __FILE__)].each {|f| require f}
+  VCR.config do |c|
+    c.ignore_localhost = true
+    c.cassette_library_dir = 'spec/cassettes'
+    c.stub_with :webmock #:typhoeus, :fakeweb, or :webmock
+    c.default_cassette_options = { :record => :new_episodes }
+  end
 
   RSpec.configure do |config|
     # == Mock Framework
@@ -29,11 +38,13 @@ def setup_environment
     # config.mock_with :mocha
     # config.mock_with :flexmock
     # config.mock_with :rr
-    config.mock_with :rspec
+    # config.mock_with :rspec
+    config.mock_with :mocha
     config.include Devise::TestHelpers, :type => :controller
     config.include Mongoid::Matchers
+    config.extend VCR::RSpec::Macros
 
-    config.fixture_path = ::Rails.root.join('spec', 'fixtures').to_s
+    # config.fixture_path = ::Rails.root.join('spec', 'fixtures').to_s
 
     DatabaseCleaner.orm = "mongoid"
     DatabaseCleaner.strategy = :truncation
@@ -55,26 +66,32 @@ def setup_environment
     # instead of true.
     config.use_transactional_fixtures = false
 
+    ActiveSupport::Dependencies.clear
   end
 end
 
 def each_run
+  Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each {|f| require f}
 end
 
 require 'rubygems'
 # If spork is available in the Gemfile it'll be used but we don't force it.
-unless (begin; require 'spork'; rescue LoadError; nil end).nil?
+unless RbConfig::CONFIG["host_os"] =~ %r!(msdos|mswin|djgpp|mingw)! or (begin; require 'spork'; rescue LoadError; nil end).nil?
+  require 'spork'
+  #require File.expand_path("../spork-ruby-debug", __FILE__)
 
   Spork.prefork do
     # Loading more in this block will cause your tests to run faster. However,
     # if you change any configuration or code from libraries loaded here, you'll
     # need to restart spork for it take effect.
     setup_environment
+
   end
 
   Spork.each_run do
     # This code will be run each time you run your specs.
     each_run
+
   end
 
   # --- Instructions ---

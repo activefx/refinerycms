@@ -1,8 +1,8 @@
 
 
-create_file 'config/initializers/generators.rb.backup' do
+create_file 'config/initializers/generators.rb' do
 <<-FILE
-#{@app_name}::Application.config.generators do |g|
+#{@app_name.camelcase}::Application.config.generators do |g|
   #g.scaffold :scaffold_controller => :responders_controller
   g.orm :mongoid
   g.template_engine :haml
