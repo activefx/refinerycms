@@ -24,7 +24,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'refinerycms-generators',      '>= 0.9.9.3'
   s.add_dependency 'mongoid',                     '~> 2.0.1'
   s.add_dependency 'mongoid_search',              '~> 0.1.2'
-  s.add_dependency 'mongoid_slug',                '~> 0.6.3'
+  s.add_dependency 'mongoid_slug',                '~> 0.7.2'
   s.add_dependency 'mongoid_nested_set',          '~> 0.1.2'
   s.add_dependency 'dragonfly',                   '~> 0.8.2'
   s.add_dependency 'rails',                       '~> 3.0.5'

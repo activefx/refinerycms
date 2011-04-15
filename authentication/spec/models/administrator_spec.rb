@@ -12,7 +12,7 @@ describe Administrator do
     it { should be_lockable }
     it { should_not be_omniauthable }
     it { should be_recoverable }
-    it { should_not be_registerable }
+    #it { should_not be_registerable }
     it { should be_rememberable }
     it { should_not be_timeoutable }
     it { should_not be_token_authenticatable }

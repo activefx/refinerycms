@@ -1,3 +1,4 @@
+#copied?
 require 'rbconfig'
 def setup_environment
   # This file is copied to ~/spec when you run 'rails generate rspec'

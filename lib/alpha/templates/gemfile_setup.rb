@@ -1,6 +1,6 @@
 run 'rm Gemfile'
 create_file 'Gemfile', "source 'http://rubygems.org'\n"
-gem "rails", "3.0.5"
+gem "rails", "3.0.7.rc2"
 
 # Database
 gem 'mongoid', :git => 'git://github.com/mongoid/mongoid.git'

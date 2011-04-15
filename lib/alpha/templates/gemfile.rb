@@ -44,6 +44,7 @@ gem 'capistrano'
 
 # Other
 gem "hpricot"
+gem "capybara", ">= 0.4.1"
 
 # Development Only
 gem "rails3-generators", :group => :development
@@ -56,7 +57,7 @@ gem "mocha", :group => :test
 gem 'refinerycms-testing', :path => '../refinerycms/testing', :group => [:development, :test]
 gem "rspec-rails", ">= 2.5.0", :group => [:development, :test]
 gem 'mynyml-redgreen', :require => 'redgreen', :group => [:development, :test]
-gem 'mongoid-rspec', :git => 'git://github.com/durran/mongoid-rspec.git', :group => [:development, :test]
+gem 'mongoid-rspec', :git => 'git://github.com/evansagge/mongoid-rspec.git', :group => [:development, :test]
 gem "evergreen", :require => "evergreen/rails", :group => [:development, :test]
 # To use debugger
 # gem 'ruby-debug'
@@ -78,7 +79,10 @@ gem "database_cleaner", :group => [:test, :cucumber]
 gem "capybara", ">= 0.4.1", :group => [:test, :cucumber]
 gem "timecop", :group => [:test, :cucumber]
 gem "pickle", :group => [:test, :cucumber]
-gem "spork", ">= 0.9.0.rc", :group => [:test, :cucumber]
+gem "spork", ">= 0.9.0.rc4", :group => [:test, :cucumber]
+gem "vcr", :group => [:test, :cucumber]
+gem "fakeweb", :group => [:test, :cucumber]
+gem "webmock", :git => 'git://github.com/vivienschilis/webmock.git', :group => [:test, :cucumber]
 
 # Test, Cucumber, and Development
 gem "thin", :group => [:test, :cucumber, :development]

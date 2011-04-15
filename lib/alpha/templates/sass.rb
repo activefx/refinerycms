@@ -84,7 +84,7 @@ label[for] {
 
 #message, .flash {
   padding: 8px 8px 8px 30px;
-  margin-bottom: 15px;
+  margin: 15px 0;
   position: relative;
 }
 
@@ -156,6 +156,10 @@ label, .label_with_help {
   border: 1px solid #7f9db9;
   padding: 0.4% 0.5%;
   line-height: 20px;
+}
+
+.field i {
+  display: block;
 }
 
  div.remember_me label {

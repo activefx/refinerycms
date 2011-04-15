@@ -46,7 +46,7 @@ Gem::Specification.new do |s|
   # Bundler
   s.add_dependency    'bundler',                    '~> 1.0.10'
   s.add_dependency    'thor'
-  s.add_dependency    'rails',                      '~> 3.0.0'
+  s.add_dependency    'rails',                      '~> 3.0.7.rc2'
 
   s.add_development_dependency  'cucumber'
   s.add_development_dependency  'aruba'

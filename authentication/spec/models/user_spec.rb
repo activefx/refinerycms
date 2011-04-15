@@ -89,10 +89,6 @@ describe User do
         @user.build_omniauth_params(@omniauth).keys.should_not include(:token)
       end
 
-      it "should include all omniauth parameters" do
-         @user.build_omniauth_params(@omniauth)[:omniauth].should == @omniauth['extra'].except('access_token')
-      end
-
     end
 
     context "apply_user_info" do
@@ -145,7 +141,8 @@ describe User do
 
       it "should save the user token when saving the user" do
         # set passwords so user is valid
-        @user = User.omniauth_initialization
+        @user = User.new
+        @user.apply_omniauth_initialization
         # set the email so user is valid
         @omniauth['user_info']['email'] = 'user@example.com'
         @user.apply_omniauth(@omniauth)

@@ -30,6 +30,12 @@ apply File.expand_path("../mongoid.rb", __FILE__)
 # Finish Setting Up Gemfile
 apply File.expand_path("../gemfile.rb", __FILE__)
 
+# Add Initializers
+apply File.expand_path("../datetime_initializer.rb", __FILE__)
+apply File.expand_path("../generators_initializer.rb", __FILE__)
+apply File.expand_path("../hoptoad_initializer.rb", __FILE__)
+apply File.expand_path("../delayed_job_initializer.rb", __FILE__)
+
 # Setup RefineryCMS
 apply File.expand_path("../refinerycms.rb", __FILE__)
 

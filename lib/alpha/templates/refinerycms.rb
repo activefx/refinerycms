@@ -1,4 +1,11 @@
 run "rm public/javascripts/application.js"
 run "rails generate refinerycms"
 run "rails generate refinerycms_testing"
+route "get '/home', :to => 'pages#home', :as => :user_root"
+run "rake refinery:override view=pages/show"
+run "rake refinery:override view=pages/home"
+run "rake refinery:override view=shared/_content_page"
+run "rake refinery:override view=shared/_header"
+run "rake refinery:override view=shared/_footer"
+run "rake refinery:override view=layouts/application"
 
