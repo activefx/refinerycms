@@ -3,6 +3,42 @@ require 'globalize3'
 class Page < ActiveRecord::Base
 
   translates :title, :meta_keywords, :meta_description, :browser_title, :custom_title if self.respond_to?(:translates)
+
+  attr_accessible :id, :deletable, :link_url, :menu_match, :meta_keywords,
+                  :skip_to_first_child, :position, :show_in_menu, :draft,
+                  :parts_attributes, :browser_title, :meta_description,
+                  :custom_title_type, :parent_id, :custom_title,
+                  :created_at, :updated_at, :page_id
+
+  # Set up support for meta tags through translations.
+  if defined?(::Page::Translation)
+    attr_accessible :title
+    # set allowed attributes for mass assignment
+    ::Page::Translation.module_eval do
+      attr_accessible :browser_title, :meta_description, :meta_keywords,
+                      :locale
+    end
+    if ::Page::Translation.table_exists?
+      def translation
+        if @translation.nil? or @translation.try(:locale) != ::Globalize.locale
+          @translation = translations.with_locale(::Globalize.locale).first
+          @translation ||= translations.build(:locale => ::Globalize.locale)
+        end
+
+        @translation
+      end
+
+    # Instruct the Translation model to have meta tags.
+    ::Page::Translation.send :is_seo_meta
+
+      # Delegate all SeoMeta attributes to the active translation.
+      fields = ::SeoMeta.attributes.keys.map{|a| [a, :"#{a}="]}.flatten
+      fields << {:to => :translation}
+      delegate *fields
+      after_save proc {|m| m.translation.save}
+    end
+  end
+
   attr_accessor :locale # to hold temporarily
   validates :title, :presence => true
 
@@ -12,13 +48,15 @@ class Page < ActiveRecord::Base
   has_friendly_id :title, :use_slug => true,
                   :default_locale => (::Refinery::I18n.default_frontend_locale rescue :en),
                   :reserved_words => %w(index new session login logout users refinery admin images wymiframe),
-                  :approximate_ascii => RefinerySetting.find_or_set(:approximate_ascii, false, :scoping => "pages")
+                  :approximate_ascii => RefinerySetting.find_or_set(:approximate_ascii, false, :scoping => "pages"),
+                  :strip_non_ascii => RefinerySetting.find_or_set(:strip_non_ascii, false, :scoping => "pages")
 
   has_many :parts,
            :class_name => "PagePart",
            :order => "position ASC",
            :inverse_of => :page,
-           :dependent => :destroy
+           :dependent => :destroy,
+           :include => :translations
 
   accepts_nested_attributes_for :parts, :allow_destroy => true
 
@@ -27,19 +65,28 @@ class Page < ActiveRecord::Base
                               :custom_title, :browser_title, :all_page_part_content]
 
   before_destroy :deletable?
-  after_save :reposition_parts!
-  after_save :invalidate_child_cached_url
+  after_save :reposition_parts!, :invalidate_child_cached_url, :expire_page_caching
+  after_destroy :expire_page_caching
+
+  # Wrap up the logic of finding the pages based on the translations table.
+  scope :with_globalize, lambda {|t|
+    if defined?(::Page::Translation)
+      t = {:locale => Globalize.locale}.merge(t || {})
+      where(:id => ::Page::Translation.where(t).select('page_id AS id'))
+    else
+      where(t)
+    end
+  }
 
   scope :live, where(:draft => false)
+  scope :by_title, lambda {|t| with_globalize(:title => t)}
 
-  # shows all pages with :show_in_menu set to true, but it also
+  # Shows all pages with :show_in_menu set to true, but it also
   # rejects any page that has not been translated to the current locale.
+  # This works using a query against the translated content first and then
+  # using all of the page_ids we further filter against this model's table.
   scope :in_menu, lambda {
-    pages = Arel::Table.new(Page.table_name)
-    translations = Arel::Table.new(Page.translations_table_name)
-
-    includes(:translations).where(:show_in_menu => true).where(
-      translations[:locale].eq(Globalize.locale)).where(pages[:id].eq(translations[:page_id]))
+    where(:show_in_menu => true).with_globalize({})
   }
 
   # when a dialog pops up to link to a page, how many pages per page should there be
@@ -126,6 +173,8 @@ class Page < ActiveRecord::Base
   end
 
   def link_url_localised?
+    return link_url unless defined?(::Refinery::I18n)
+
     current_url = link_url
 
     if current_url =~ %r{^/} && ::Refinery::I18n.current_frontend_locale != ::Refinery::I18n.default_frontend_locale
@@ -231,6 +280,14 @@ class Page < ActiveRecord::Base
     def use_marketable_urls?
       RefinerySetting.find_or_set(:use_marketable_urls, true, :scoping => 'pages')
     end
+
+    def expire_page_caching
+      begin
+        Rails.cache.delete_matched(/.*pages.*/)
+      rescue NotImplementedError
+        warn "**** [REFINERY] The cache store you are using is not compatible with Rails.cache#delete_matched so please disable caching to ensure proper operation. ***"
+      end
+    end
   end
 
   # Accessor method to get a page part from a page.
@@ -256,7 +313,12 @@ class Page < ActiveRecord::Base
 
   # In the admin area we use a slightly different title to inform the which pages are draft or hidden pages
   def title_with_meta
-    title = [self.title.to_s]
+    title = if self.title.nil?
+      [::Page::Translation.where(:page_id => self.id, :locale => Globalize.locale).first.try(:title).to_s]
+    else
+      [self.title.to_s]
+    end
+
     title << "<em>(#{::I18n.t('hidden', :scope => 'admin.pages.page')})</em>" unless show_in_menu?
     title << "<em>(#{::I18n.t('draft', :scope => 'admin.pages.page')})</em>" if draft?
 
@@ -282,7 +344,7 @@ class Page < ActiveRecord::Base
     sluggified
   end
 
-  private
+private
 
   def invalidate_child_cached_url
     return true unless self.class.use_marketable_urls?
@@ -291,5 +353,9 @@ class Page < ActiveRecord::Base
       Rails.cache.delete(child.url_cache_key)
       Rails.cache.delete(child.path_cache_key)
     end
+  end
+
+  def expire_page_caching
+    self.class.expire_page_caching
   end
 end

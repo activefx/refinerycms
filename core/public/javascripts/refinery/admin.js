@@ -265,7 +265,7 @@ init_submit_continue = function(){
   if ((continue_editing_button = $('#continue_editing')).length > 0 && continue_editing_button.attr('rel') != 'no-prompt') {
     $('#editor_switch a').click(function(e) {
       if ($('form[data-changes-made]').length > 0) {
-        if (!confirm("Any changes you've made will be lost. Are you sure you want to continue without saving?")) {
+        if (!confirm(I18n.t('js.admin.confirm_changes'))) {
           e.preventDefault();
         }
       }
@@ -725,7 +725,6 @@ var page_options = {
               page_options.tabs.find('> ul li a').corner('top 5px');
 
               $('#new_page_part_dialog').dialog('close');
-              $('#new_page_part_dialog').remove();
             }
           );
         }else{
@@ -1132,5 +1131,5 @@ parseURL = function(url)
 };
 
 iframed = function() {
-  return (parent && parent.document.location.href != document.location.href && $.isFunction(parent.$));
+  return (parent && parent.document && parent.document.location.href != document.location.href && $.isFunction(parent.$));
 };

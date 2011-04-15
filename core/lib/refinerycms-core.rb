@@ -9,6 +9,8 @@ module Refinery
   autoload :Application, File.expand_path('../refinery/application', __FILE__)
   autoload :ApplicationController, File.expand_path('../refinery/application_controller', __FILE__)
   autoload :ApplicationHelper, File.expand_path('../refinery/application_helper', __FILE__)
+  autoload :Configuration, File.expand_path('../refinery/configuration', __FILE__)
+  autoload :Engine, File.expand_path('../refinery/engine', __FILE__)
   autoload :Plugin,  File.expand_path('../refinery/plugin', __FILE__)
   autoload :Plugins, File.expand_path('../refinery/plugins', __FILE__)
 end
@@ -22,6 +24,12 @@ require 'rails/generators'
 require 'rails/generators/migration'
 
 module Refinery
+
+  class << self
+    def config
+      @@config ||= ::Refinery::Configuration.new
+    end
+  end
 
   module Core
     class << self
@@ -43,6 +51,10 @@ module Refinery
       end
     end
 
+    ::Rails::Engine.module_eval do
+      include ::Refinery::Engine
+    end
+
     class Engine < ::Rails::Engine
 
       config.autoload_paths += %W( #{config.root}/lib )
@@ -60,17 +72,23 @@ module Refinery
         end
 
         # TODO: Is there a better way to cache assets in engines?
-        ::ActionView::Helpers::AssetTagHelper.module_eval do
+        # Also handles a change in Rails 3.1 with AssetIncludeTag being invented.
+        tag_helper_class = if defined?(::ActionView::Helpers::AssetTagHelper::AssetIncludeTag)
+          ::ActionView::Helpers::AssetTagHelper::AssetIncludeTag
+        else
+          ::ActionView::Helpers::AssetTagHelper
+        end
+        tag_helper_class.module_eval do
           def asset_file_path(path)
-            unless File.exist?(return_path = File.join(config.assets_dir, path.split('?').first))
-              ::Refinery::Plugins.registered.collect{|p| p.pathname}.compact.each do |pathname|
-                if File.exist?(plugin_asset_path = File.join(pathname.to_s, 'public', path.split('?').first))
-                  return_path = plugin_asset_path.to_s
+            unless (return_path = Pathname.new(File.join(config.assets_dir, path.split('?').first))).exist?
+              this_asset_filename = path.split('?').first.to_s.gsub(/^\//, '')
+              ::Refinery::Plugins.registered.pathnames.each do |pathname|
+                if (pathname_asset_path = pathname.join('public', this_asset_filename)).exist?
+                  return_path = pathname_asset_path
                 end
               end
             end
-
-            return_path
+            return_path.to_s
           end
         end
       end

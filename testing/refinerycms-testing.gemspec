@@ -2,10 +2,10 @@
 
 Gem::Specification.new do |s|
   s.name              = %q{refinerycms-testing}
-  s.version           = %q{0.9.9.8}
+  s.version           = %q{0.9.9.17}
   s.summary           = %q{Testing plugin for Refinery CMS}
   s.description       = %q{This plugin adds the ability to run cucumber and rspec against the RefineryCMS gem while inside a RefineryCMS project}
-  s.date              = %q{2011-03-11}
+  s.date              = %q{2011-04-15}
   s.email             = %q{info@refinerycms.com}
   s.homepage          = %q{http://refinerycms.com}
   s.rubyforge_project = %q{refinerycms}
@@ -14,14 +14,14 @@ Gem::Specification.new do |s|
   s.require_paths     = %w(lib)
   s.executables       = %w()
 
-  s.add_dependency 'refinerycms-core', '~> 0.9.9.8'
+  s.add_dependency 'refinerycms-core', '= 0.9.9.17'
   # RSpec
   s.add_dependency 'rspec-rails',       '~> 2.5'
 
   # Cucumber
   s.add_dependency 'capybara',          '>= 0.4.1.1'
   s.add_dependency 'database_cleaner'
-  s.add_dependency 'cucumber-rails'
+  s.add_dependency 'cucumber-rails',    '>= 0.4'
   s.add_dependency 'cucumber'
   s.add_dependency 'launchy'
   s.add_dependency 'gherkin'
@@ -40,6 +40,8 @@ Gem::Specification.new do |s|
     '.rspec',
     'config',
     'config/cucumber.yml',
+    'config/initializers',
+    'config/initializers/accessible_attributes.rb',
     'features',
     'features/step_definitions',
     'features/step_definitions/web_steps.rb',
@@ -52,6 +54,10 @@ Gem::Specification.new do |s|
     'lib/gemspec.rb',
     'lib/generators',
     'lib/generators/refinerycms_testing_generator.rb',
+    'lib/generators/templates',
+    'lib/generators/templates/features',
+    'lib/generators/templates/features/support',
+    'lib/generators/templates/features/support/paths.rb',
     'lib/refinerycms-testing.rb',
     'lib/tasks',
     'lib/tasks/cucumber.rake',

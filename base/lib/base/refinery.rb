@@ -7,7 +7,7 @@ module Refinery
   autoload :Version, File.expand_path('../../refinery/version', __FILE__)
 
   class << self
-    attr_accessor :base_cache_key, :gems, :rescue_not_found, :roots, :s3_backend
+    attr_accessor :base_cache_key, :gems, :rescue_not_found, :root, :roots, :s3_backend
 
     def base_cache_key
       @base_cache_key ||= :refinery
@@ -21,9 +21,13 @@ module Refinery
       !!@rescue_not_found
     end
 
+    def root
+      @root ||= Pathname.new(File.expand_path('../../../../../', __FILE__))
+    end
+
     def roots(engine_name = nil)
       if engine_name.nil?
-        @roots ||= self.engines.map {|engine| "Refinery::#{engine.camelize}".constantize.root }
+        @roots ||= self.engines.map {|engine| "Refinery::#{engine.camelize}".constantize.root }.uniq
       else
         unless (engine_name = self.engines.detect{|engine| engine.to_s == engine_name.to_s}).nil?
           "Refinery::#{engine_name.camelize}".constantize.root
