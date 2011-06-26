@@ -3,7 +3,7 @@ module Refinery
     module ImageHelper
 
       # replace all system images with a thumbnail version of them (handy for all images inside a page part)
-      # for example, <%= content_fu(@page[:body], '96x96#c') %> converts all /system/images to a 96x96 cropped thumbnail
+      # for example, <%= content_fu(@page.content_for(:body), '96x96#c') %> converts all /system/images to a 96x96 cropped thumbnail
       def content_fu(content, thumbnail)
         content.gsub(%r{<img.+?src=['"](/system/images/.+?)/.+?/>}) do |image_match|
            begin
@@ -32,7 +32,7 @@ module Refinery
           unless geometry.nil? or !(split_geometry = geometry.to_s.split('#')).many? or !(split_geometry = split_geometry.first.split('x')).many?
             image_width, image_height = split_geometry
           else
-            image_with = nil
+            image_width = nil
             image_height = nil
           end
 

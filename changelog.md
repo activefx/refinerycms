@@ -1,3 +1,86 @@
+## 1.1.0 [unreleased]
+
+* Finally removed `Page#[]` in favour of `Page#content_for` so instead of `@page[:body]` it's `@page.content_for(:body)`. [Philip Arndt](https://github.com/parndt)
+* Migrated to [Kaminari](https://github.com/amatsuda/kaminari) for pagination. [Uģis Ozols](https://github.com/ugisozols)
+* Moved everything under Refinery namespace. [wakeless](https://github.com/wakeless)
+* Renamed `RefinerySetting` to `Refinery::Setting`. [Philip Arndt](https://github.com/parndt)
+* Added `--trace` option to bin/refinerycms. [Steven Heidel](http://github.com/stevenheidel)
+* Moved `/shared/*` to `/refinery/*` instead, including `/shared/admin/*` to `/refinery/admin/*` as it makes more sense. [Philip Arndt](https://github.com/parndt)
+* [See full list](https://github.com/resolve/refinerycms/compare/1.0.0...1.1.0)
+
+## 1.0.3 [23 June 2011]
+
+* Fixes corruption in the 1.0.2 gem. [Philip Arndt](https://github.com/parndt)
+* [See full list](https://github.com/resolve/refinerycms/compare/1.0.2...1.0.3)
+
+## 1.0.2 [23 June 2011]
+
+* Ensure that `refinerycms-testing` is not enabled by default when installing an application. [Philip Arndt](https://github.com/parndt)
+* [See full list](https://github.com/resolve/refinerycms/compare/1.0.1...1.0.2)
+
+## 1.0.1 [21 June 2011]
+
+* Added `-t` / `--testing` option to `bin/refinerycms` which adds `refinerycms-testing` support by default when installing. [Philip Arndt](https://github.com/parndt)
+* Set rails dependency to `~> 3.0.9`. [Philip Arndt](https://github.com/parndt)
+* Re-enabled the magic `s3_backend` setting controlled by `ENV` variables. [Philip Arndt](https://github.com/parndt)
+* `bin/refinerycms` installer now generates rails using `bundle exec` so that you can have multiple Rails versions installed and they won't clash. [Philip Arndt](https://github.com/parndt)
+* Fixed problems with `rcov` and `simplecov` in Ruby 1.9.2. [Joe Sak](https://github.com/joemsak)
+* Make the catch-all pages route for marketable URLs be controlled by the configuration switch. [Kyle Wilkinson](https://github.com/wikyd)
+* [See full list](https://github.com/resolve/refinerycms/compare/1.0.0...1.0.1)
+
+## 1.0.0 [28 May 2011]
+
+* New `::Refinery::Menu` API implemented which speeds up menu generation by many times. [Philip Arndt](https://github.com/parndt)
+* Removed caching from menu because it's so much faster now. Probably in future it will be added to `::Refinery::Menu` itself in a transparent manner. [Philip Arndt](https://github.com/parndt)
+* Deprecated `Page#[]` in favour of `Page#content_for` e.g. instead of `@page[:body]` use `@page.content_for(:body)`. [Philip Arndt](https://github.com/parndt)
+* Noisily deprecated many other features that still function in 1.0.0 but won't be present in 1.1.0. [Philip Arndt](https://github.com/parndt)
+* A hidden page can no longer mark the ancestor pages as selected in the menu. [Philip Arndt](https://github.com/parndt)
+* Rcov added to `refinerycms-testing` gem. [Rodrigo Dominguez](https://github.com/rorra)
+* [See full list](https://github.com/resolve/refinerycms/compare/0.9.9.22...1.0.0)
+
+## 0.9.9.22 [22 May 2011]
+
+* Fixed issue introduced with `rake 0.9.0`. [Philip Arndt](https://github.com/parndt)
+* Improved menu performance again including update to `awesome_nested_set 2.0`. [Philip Arndt](https://github.com/parndt) and [Mark Haylock](https://github.com/mhaylock)
+* Supporting the new Google Analytics 'site speed' feature. [David Jones](https://github.com/djones)
+* Implemented `:translator` role which allows a particular user access only to translate pages. [Philip Arndt](https://github.com/parndt)
+* Added support for `Dragonfly 0.9.0` which uses the 'fog' gem. [Jesper Hvirring Henriksen](https://github.com/hvirring)
+* Updated all `refinery/admin.js` functions to make use of 'initialised'. [Mark Haylock](https://github.com/mhaylock)
+* Using SEO form from `seo_meta` inside pages' advanced options rather than having it duplicated in the RefineryCMS codebase too. [Uģis Ozols](https://github.com/ugisozols)
+* [See full list](https://github.com/resolve/refinerycms/compare/0.9.9.21...0.9.9.22)
+
+## 0.9.9.21 [03 May 2011]
+
+* Fixed issue with MySQL2 gem complaining about us being on Rails 3 by specifying `'~> 0.2.7'` in the Gemfile of a generated application. [Philip Arndt](https://github.com/parndt)
+* `/registrations` is now `/users`. [Philip Arndt](https://github.com/parndt)
+* Added Finnish translation. [Veeti Paananen](https://github.com/veeti)
+* Allowed `data` and `data-` attributes in WYMeditor tags using HTML view. [Philip Arndt](https://github.com/parndt)
+* [See full list](https://github.com/resolve/refinerycms/compare/0.9.9.20...0.9.9.21)
+
+## 0.9.9.20 [28 April 2011]
+
+* Improved performance of the menu rendering. [Philip Arndt](https://github.com/parndt)
+* Fixed UI to allow for how different languages display on the login screen. [Marian André](https://github.com/bitflut)
+* Vastly improved specs & spec coverage. [Uģis Ozols](https://github.com/ugisozols)
+* Upgraded to `jQuery 1.5.2` and `Dragonfly 0.8.4`. [Philip Arndt](https://github.com/parndt)
+* [See full list](https://github.com/resolve/refinerycms/compare/0.9.9.19...0.9.9.20)
+
+## 0.9.9.19 [22 April 2011]
+
+* Removed `rdoc` dependency. [Philip Arndt](https://github.com/parndt)
+* Migrate to stable Rails 3.0.7. [Josef Šimánek](https://github.com/simi)
+* Use `let()` in rspec specs. [Uģis Ozols](https://github.com/ugisozols)
+* [See full list](https://github.com/resolve/refinerycms/compare/0.9.9.18...0.9.9.19)
+
+## 0.9.9.18 [16 April 2011]
+
+* Fixed a backward incompatibility. [Josef Šimánek](https://github.com/simi)
+* Reduced calls to `SHOW TABLES` by updating `friendly_id_globalize3`. [Philip Arndt](https://github.com/parndt)
+* Switched `/shared/_menu.html.erb` and `/shared/_menu_branch.html.erb` away from `render :partial` with `:collection`, speeding up menu 12~15%. [Philip Arndt](https://github.com/parndt)
+* Fixed Refinery.root, Fixed generator templates, Added refinerycms-i18n generator to refinerycms generator if i18n is included. [Mark Haylock](https://github.com/mhaylock)
+* Bumped Rails dependency to `~> 3.0.7.rc2`. [Philip Arndt](https://github.com/parndt)
+* [See full list](https://github.com/resolve/refinerycms/compare/0.9.9.17...0.9.9.18)
+
 ## 0.9.9.17 [15 April 2011]
 
 * Mass assignment protection implemented. [Andreas König](https://github.com/koa)
@@ -192,7 +275,7 @@
 
 ## 0.9.8.8 [16 December 2010]
 
-* Prevented RefinerySetting from accessing its database table before it is created. [Philip Arndt](https://github.com/parndt)
+* Prevented ::Refinery::Setting from accessing its database table before it is created. [Philip Arndt](https://github.com/parndt)
 * Added more options to `bin/refinerycms` like ability to specify database username and password. [Philip Arndt](https://github.com/parndt)
 * [See full list](https://github.com/resolve/refinerycms/compare/0.9.8.7...0.9.8.8)
 
@@ -354,7 +437,7 @@
 * Documentation improved [David Jones](https://github.com/djones), [Philip Arndt](https://github.com/parndt) and [Steven Heidel](https://github.com/stevenheidel)
 * Installed spork for use with systems that support forking for performance improvements. Doesn't run on Windows. [Philip Arndt](https://github.com/parndt) and [James Fiderlick](https://github.com/jamesfid)
 * Improvements and new translations for Norsk Bokmål localisation. [Ken Paulsen](https://github.com/ken-guru)
-* Ensured that RefinerySetting restrictions work properly using a before_save handler. [Joe Sak](https://github.com/joemsak)
+* Ensured that ::Refinery::Setting restrictions work properly using a before_save handler. [Joe Sak](https://github.com/joemsak)
 * Updated jquery-html5-placeholder-shim to latest version. [Amanda Wagener](https://github.com/awagener)
 * [See full list](https://github.com/resolve/refinerycms/compare/0.9.7.7...0.9.7.8)
 
@@ -430,7 +513,7 @@
 * Marketable URLs, such as "/contact". [Joshua Davey](https://github.com/jgdavey) and [Joe Sak](https://github.com/joemsak).
 * Switched to bundler and rack. [Alex Coles](https://github.com/myabc) and [Philip Arndt](https://github.com/parndt)
 * Added options to Refinery Settings :restricted, :scoping, :callback_proc_as_string. [Steven Heidel](https://github.com/stevenheidel) and [Philip Arndt](https://github.com/parndt)
-* Added caching abilities to frontend and to RefinerySetting to drastically speed up the application under certain conditions. [Philip Arndt](https://github.com/parndt)
+* Added caching abilities to frontend and to ::Refinery::Setting to drastically speed up the application under certain conditions. [Philip Arndt](https://github.com/parndt)
 * Added spam filtering to contact form. [David Jones](https://github.com/djones)
 * Full Refinery UI redesign. [Resolve Digital](https://github.com/resolve)
 * User Role support. [Amanda Wagener](https://github.com/awagener) and [Philip Arndt](https://github.com/parndt)

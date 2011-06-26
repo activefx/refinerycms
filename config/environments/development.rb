@@ -1,4 +1,4 @@
-RefineryApp::Application.configure do
+::RefineryApp::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb
 
   # In the development environment your application's code is reloaded on
@@ -11,7 +11,6 @@ RefineryApp::Application.configure do
 
   # Show full error reports and disable caching
   config.consider_all_requests_local       = true
-  config.action_view.debug_rjs             = true
   config.action_controller.perform_caching = false
 
   # Don't care if the mailer can't send
@@ -25,3 +24,7 @@ RefineryApp::Application.configure do
 end
 
 Refinery.rescue_not_found = false
+
+# When true will use Amazon's Simple Storage Service on your production machine
+# instead of the default file system for resources and images
+Refinery.s3_backend = !(ENV['S3_KEY'].nil? || ENV['S3_SECRET'].nil?)

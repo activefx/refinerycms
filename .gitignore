@@ -23,6 +23,7 @@ doc/app
 .yardoc
 core/doc/.yardoc/**/*
 .yardopts
+coverage
 
 # Public Uploads
 public/system/*
@@ -89,6 +90,8 @@ capybara-*html
 # REFINERY CMS DEVELOPMENT ====================================================
 # Always keep this section at the bottom.
 
+config/database.yml
+config/rackspace_cloudfiles.yml
 your_*.*
 db/schema.rb
 

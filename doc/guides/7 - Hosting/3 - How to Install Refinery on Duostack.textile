@@ -6,7 +6,7 @@ h2. How to Install Refinery on Duostack
 
 endprologue.
 
-WARNING. This guide is based on Refinery 0.9.9. The automated Duostack installation shown here will not work in earlier versions of Refinery.
+WARNING. This guide is based on Refinery CMS 1.0.0. The automated Duostack installation shown here will not work in earlier versions of Refinery.
 
 h3. Starting Out
 
@@ -50,7 +50,7 @@ h3. Adding Amazon S3 Support
 If you want to use Refinery's image and resource support you'll need to setup storage too. Create a bucket called "my_app_production" and uncomment this line in your Gemfile (this might already be done for you):
 
 <ruby>
-gem 'aws-s3'
+gem 'fog'
 </ruby>
 
 Next tell Duostack about your new S3 bucket.
@@ -60,6 +60,7 @@ duostack env add S3_KEY=123key S3_SECRET=456secret S3_BUCKET=my_app_production
 duostack restart
 </shell>
 
+If you have created your bucket in a region other than 'us-east-1' you need to add S3_REGION=s3region also.
 That's it! Duostack will restart your site and it should be live with S3 support.
 
 h3. Troubleshooting

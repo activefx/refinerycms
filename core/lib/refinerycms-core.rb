@@ -1,8 +1,6 @@
 require 'acts_as_indexed'
-require 'awesome_nested_set'
-require 'friendly_id'
 require 'truncate_html'
-require 'will_paginate'
+require 'kaminari'
 
 module Refinery
   autoload :Activity, File.expand_path('../refinery/activity', __FILE__)
@@ -11,6 +9,8 @@ module Refinery
   autoload :ApplicationHelper, File.expand_path('../refinery/application_helper', __FILE__)
   autoload :Configuration, File.expand_path('../refinery/configuration', __FILE__)
   autoload :Engine, File.expand_path('../refinery/engine', __FILE__)
+  autoload :Menu, File.expand_path('../refinery/menu', __FILE__)
+  autoload :MenuItem, File.expand_path('../refinery/menu_item', __FILE__)
   autoload :Plugin,  File.expand_path('../refinery/plugin', __FILE__)
   autoload :Plugins, File.expand_path('../refinery/plugins', __FILE__)
 end
@@ -36,6 +36,10 @@ module Refinery
       def attach_to_application!
         ::Rails::Application.subclasses.each do |subclass|
           begin
+            # Fix Rake 0.9.0 issue
+            subclass.send :include, ::Rake::DSL if defined?(::Rake::DSL)
+
+            # Include our logic inside your logic
             subclass.send :include, ::Refinery::Application
           rescue
             $stdout.puts "Refinery CMS couldn't attach to #{subclass.name}."
@@ -56,6 +60,7 @@ module Refinery
     end
 
     class Engine < ::Rails::Engine
+      isolate_namespace ::Refinery
 
       config.autoload_paths += %W( #{config.root}/lib )
 
@@ -73,6 +78,8 @@ module Refinery
 
         # TODO: Is there a better way to cache assets in engines?
         # Also handles a change in Rails 3.1 with AssetIncludeTag being invented.
+        # TODO: can we remove this?
+=begin
         tag_helper_class = if defined?(::ActionView::Helpers::AssetTagHelper::AssetIncludeTag)
           ::ActionView::Helpers::AssetTagHelper::AssetIncludeTag
         else
@@ -91,13 +98,15 @@ module Refinery
             return_path.to_s
           end
         end
+=end
       end
 
       # Register the plugin
       config.after_initialize do
         ::Refinery::Plugin.register do |plugin|
-          plugin.name ="refinery_core"
-          plugin.class_name ="RefineryEngine"
+          plugin.pathname = root
+          plugin.name = 'refinery_core'
+          plugin.class_name = 'RefineryEngine'
           plugin.version = ::Refinery.version
           plugin.hide_from_menu = true
           plugin.always_allow_access = true
@@ -106,17 +115,13 @@ module Refinery
 
         # Register the dialogs plugin
         ::Refinery::Plugin.register do |plugin|
-          plugin.name = "refinery_dialogs"
+          plugin.pathname = root
+          plugin.name = 'refinery_dialogs'
           plugin.version = ::Refinery.version
           plugin.hide_from_menu = true
           plugin.always_allow_access = true
           plugin.menu_match = /(refinery|admin)\/(refinery_)?dialogs/
         end
-      end
-
-      # Run other initializer code that used to be in config/initializers/
-      initializer "serve static assets" do |app|
-        app.middleware.insert_after ::ActionDispatch::Static, ::ActionDispatch::Static, "#{root}/public"
       end
 
       initializer 'add catch all routes' do |app|
@@ -125,47 +130,19 @@ module Refinery
 
       initializer 'add presenters' do |app|
         app.config.autoload_paths += [
-          Rails.root.join("app", "presenters"),
-          Rails.root.join("vendor", "**", "**", "app", "presenters"),
-          Refinery.roots.map{|r| r.join("**", "app", "presenters")}
+          Rails.root.join('app', 'presenters'),
+          Rails.root.join('vendor', '**', '**', 'app', 'presenters'),
+          Refinery.roots.map{|r| r.join('**', 'app', 'presenters')}
         ].flatten
       end
 
-      initializer "configure acts_as_indexed" do |app|
+      initializer 'configure acts_as_indexed' do |app|
         ActsAsIndexed.configure do |config|
           config.index_file = Rails.root.join('tmp', 'index')
           config.index_file_depth = 3
           config.min_word_size = 3
         end
       end
-
-      initializer "fix rack <= 1.2.1" do |app|
-        ::Rack::Utils.module_eval do
-          def escape(s)
-            regexp = case
-              when RUBY_VERSION >= "1.9" && s.encoding === Encoding.find('UTF-8')
-                /([^ a-zA-Z0-9_.-]+)/u
-              else
-                /([^ a-zA-Z0-9_.-]+)/n
-              end
-            s.to_s.gsub(regexp) {
-              '%'+$1.unpack('H2'*bytesize($1)).join('%').upcase
-            }.tr(' ', '+')
-          end
-        end if ::Rack.version <= "1.2.1"
-      end
-
-      initializer 'set will_paginate link labels' do |app|
-        WillPaginate::ViewHelpers.pagination_options[:previous_label] = "&laquo;".html_safe
-        WillPaginate::ViewHelpers.pagination_options[:next_label] = "&raquo;".html_safe
-      end
-
-      initializer 'ensure devise is initialised' do |app|
-        unless Rails.root.join('config', 'initializers', 'devise.rb').file?
-          load Refinery.roots('core').join(*%w(lib generators templates config initializers devise.rb))
-        end
-      end
-
     end
   end
 

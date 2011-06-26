@@ -7,10 +7,11 @@ Feature: Manage Files
   Background:
     Given I am a logged in refinery user
     And I have no files
+    When I go to the list of files
 
   @files-valid @valid
   Scenario: Create Valid File
-    When I go to the list of files
+    When I follow "Files"
     And I follow "Upload new file"
     And I attach the file at "refinery_is_awesome.txt"
     And I press "Save"

@@ -3,6 +3,7 @@
 begin
   require 'rubygems'
   require 'bundler'
+  ENV["BUNDLE_GEMFILE"] = File.expand_path('../../Gemfile', __FILE__)
 rescue LoadError
   puts "\n=== ACTION REQUIRED ===\n\n"
   puts "Could not load the bundler gem. This is a required dependency of Refinery CMS."
@@ -39,7 +40,9 @@ module Refinery
         :duostack => false,
         :force => false,
         :gems => [],
-        :heroku => false
+        :heroku => false,
+        :testing => false,
+        :trace => false
       }
 
       @optparse = OptionParser.new do |opts|
@@ -55,7 +58,7 @@ module Refinery
           puts "To update your application:"
           puts "- Change the version of the 'refinerycms' gem in your Gemfile."
           puts "- Run bundle install"
-          puts "- Run rails generate refinerycms --update"
+          puts "- Run bundle exec rails generate refinerycms --update"
           puts "\n"
           exit(1)
         end
@@ -102,6 +105,14 @@ module Refinery
           @options[:confirm] = true
         end
 
+        opts.on("--trace", "Investigate any problems with the installer") do
+          @options[:trace] = true
+        end
+
+        opts.on('-t', '--testing', "Automatically set up the project with refinerycms-testing support.") do
+          @options[:testing] = true
+        end
+
         opts.separator ""
         opts.separator "Common options:"
 
@@ -127,29 +138,8 @@ module Refinery
       # Bundle the application which activates Refinery CMS
       bundle!
 
-      unless @options[:database][:skip]
-        # Ensure the database exists so that queries like .table_exists? don't fail.
-        puts "\nCreating a new database.."
-        # Warn about incorrect username or password.
-        unless @options[:database][:adapter] == 'sqlite3'
-          if @options[:database][:ident]
-            note = "NOTE: If ident authentication fails then the installer will stall or fail here.\n\n"
-          else
-            note = "NOTE: if your database username is not '#{@options[:database][:username]}'"
-            note << " or your password is not '#{@options[:database][:password]}' then the installer will stall here.\n\n"
-          end
-          puts note
-        end
-        run_command("rake -f \"#{@app_path.join('Rakefile')}\" db:create", {
-          :fail => "Unable to create the application's database"
-        })
-
-        # Run the newly activated Refinery CMS generator.
-        run_command("rails generate refinerycms", {
-          :cd => true,
-          :fail => "Could not run the refinerycms generator successfully."
-        })
-      end
+      # Run any database migrations
+      migrate! unless @options[:database][:skip]
 
       # Output helpful messages to user
       output!
@@ -185,7 +175,7 @@ module Refinery
         puts "\nPlease generate your new project from outside the Refinery directory and any Rails directory."
         puts "\n"
         exit(1)
-      elsif %w(refinery test testing).include?(@input.first)
+      elsif %w(refinery refinerycms test testing rails).include?(@input.first.downcase)
         puts "\nYou can't use '#{@input.first}' as a name for your project, this is a reserved word that will cause conflicts."
         puts "Please choose another name for your new project."
         puts "\n"
@@ -222,14 +212,18 @@ module Refinery
     end
 
     def generate!
+      # First, ensure dependencies are satisfied
+      run_command('bundle install', {:cd => false, :bundler => false})
+
       # Generate a rails application
       rails_command = "rails new \"#{@app_path}\""
       rails_command << " --database #{@options[:database][:adapter]}"
       rails_command << " --force" if @options[:force]
-      rails_command << " --skip-test-unit --skip-prototype"
+      rails_command << " --skip-test-unit"
+      rails_command << " --skip-bundle" # Rails automatically installs the bundle, but so do we!
       rails_command << " -m http://jruby.org" if defined? JRUBY_VERSION
 
-      rails_output = run_command(rails_command, {:cd => false})
+      rails_output = run_command(rails_command, {:cd => false, :bundler => true})
 
       # Detect non-success or a blank rails output or starting with "Can't initialize" or "Error"
       if !$?.success? or rails_output.to_s.length == 0 or rails_output =~ /^(Can't\ initialize|Error)/
@@ -239,6 +233,9 @@ module Refinery
         if defined? JRUBY_VERSION
           find_and_replace(@app_path.join('Gemfile'), /['|"]sqlite3['|"]/, "'activerecord-jdbcsqlite3-adapter'")
         end
+
+        # Remove rails from the Gemfile so that Refinery can manage it
+        find_and_replace('Gemfile', %r{^gem 'rails'}, "# gem 'rails'")
 
         # Override username and password
         if @options[:database][:ident]
@@ -252,6 +249,9 @@ module Refinery
         puts "\n---------"
         puts "Refinery successfully installed in '#{@app_path}'!\n\n"
       end
+    ensure
+      # Now switch to the app's Gemfile.
+      ENV["BUNDLE_GEMFILE"] = @app_path.join('Gemfile').to_s
     end
 
     def bundle!
@@ -259,11 +259,14 @@ module Refinery
       refinery_gemfile_contents = Refinery.root.join('Gemfile').read
       refinery_gems = refinery_gemfile_contents.match(/# REFINERY CMS =+.*# END REFINERY CMS =+/m)[0]
       refinery_gems.gsub!("# gem 'refinerycms'", "gem 'refinerycms'") # Enable refinerycms
-      refinery_gems.gsub!("gem 'refinerycms-testing'", "# gem 'refinerycms-testing'") # Disable testing
+      if @options[:testing] # Enable testing
+        refinery_gems.gsub!("# gem 'refinerycms-testing'", "gem 'refinerycms-testing'")
+      end
 
       app_gemfile = @app_path.join('Gemfile')
       refinery_user_defined_gems = refinery_gemfile_contents.match(/# USER DEFINED(.*)# END USER DEFINED/m)
       refinery_user_defined_gems = refinery_user_defined_gems[1] unless refinery_user_defined_gems.nil?
+
       app_gemfile.open('a') do |f|
         f.write "\n#{refinery_gems}\n"
         @options[:gems] = ([refinery_user_defined_gems] | [@options[:gems]]).flatten.compact
@@ -271,29 +274,68 @@ module Refinery
         f.write "\n# USER DEFINED\n#{@options[:gems].join("\n")}\n# END USER DEFINED" if @options[:gems].any?
       end
 
-
       # Specify the correct version of the Refinery CMS gem (may be git source).
-      src = Refinery.version !~ /\.pre$/ ? "'= #{Refinery.version}'" : ":git => 'git://github.com/resolve/refinerycms'"
+      src = Refinery.version !~ /\.pre$/ ? "'~> #{Refinery.version}'" : ":git => 'git://github.com/resolve/refinerycms'"
       find_and_replace('Gemfile', %r{gem 'refinerycms',.*}, "gem 'refinerycms',              #{src}")
 
-      # Add in AWS-S3 for Heroku
-      find_and_replace('Gemfile', "# gem 'aws-s3', :require => 'aws/s3'",
-                        "gem 'aws-s3', :require => 'aws/s3'") if @options[:heroku]
+      # Add in fog gem for Heroku
+      find_and_replace('Gemfile', "# gem 'fog'", "gem 'fog'") if @options[:heroku]
 
       # Automate
-      # TODO: Check exit codes to see whether or not these worked
       puts "Installing gem requirements using bundler..\n"
 
       # Install!
       run_command("bundle install", {:fail => "Unable to install necessary gems"})
     end
 
-    def output!
-      unless @options[:database][:skip]
-        puts "\n\nSetting up your development database..\n"
-        run_command("rake -f \"#{@app_path.join('Rakefile')}\" db:migrate")
+    def migrate!
+      unless @options[:database][:adapter] == 'sqlite3'
+        # Ensure the database exists so that queries like .table_exists? don't fail.
+        puts "\nCreating a new database.."
+
+        # Warn about incorrect username or password.
+        if @options[:database][:ident]
+          note = "NOTE: If ident authentication fails then the installer will stall or fail here.\n\n"
+        else
+          note = "NOTE: if your database username is not '#{@options[:database][:username]}'"
+          note << " or your password is not '#{@options[:database][:password]}' then the installer will stall here.\n\n"
+        end
+        puts note
+
+        run_command("rake -f \"#{@app_path.join('Rakefile')}\" db:create #{' --trace' if @options[:trace]}", {
+          :fail => "Unable to create the application's database",
+          :bundler => true
+        })
       end
 
+      generators!
+
+      puts "\n\nSetting up your development database..\n"
+      run_command("rake -f \"#{@app_path.join('Rakefile')}\" db:migrate #{' --trace' if @options[:trace]}", {
+        :bundler => true
+      })
+    end
+
+    def generators!
+      # Run the newly activated Refinery CMS generator.
+      puts "\n\nPreparing your application using the refinerycms generator..\n"
+      run_command("rails generate refinerycms", {
+        :cd => true,
+        :fail => "Could not run the refinerycms generator successfully.",
+        :bundler => true
+      })
+
+      if @options[:testing]
+        puts "\n\nAdding testing support files using the refinerycms_testing generator..\n"
+        run_command("rails generate refinerycms_testing", {
+          :cd => true,
+          :fail => "Could not run the refinerycms_testing generator successfully.",
+          :bundler => true
+        })
+      end
+    end
+
+    def deploy!
       # Deploy to Heroku
       hosting = nil
       hosting = "Heroku" if @options[:heroku]
@@ -309,7 +351,7 @@ module Refinery
         run_command("git push #{hosting.downcase} master", :ruby => false)
 
         puts "\n\nSetting up the #{hosting} database..\n"
-        run_command("#{hosting.downcase} rake db:setup")
+        run_command("#{hosting.downcase} rake db:migrate")
 
         if @options[:heroku]
           puts "\n\nRestarting servers...\n"
@@ -317,16 +359,18 @@ module Refinery
         end
       end
       # End automation
+    end
 
+    def output!
       # Construct helpful output messages
       note = ["\n=== ACTION REQUIRED ==="]
       if @options[:database][:skip]
         note << "Because you elected to skip database creation and migration in the installer"
         note << "you will need to run the following tasks manually to maintain correct operation:"
         note << "\ncd #{@app_path}"
-        note << "rake db:create"
-        note << "rails generate refinerycms"
-        note << "rake db:migrate"
+        note << "bundle exec rake db:create"
+        note << "bundle exec rails generate refinerycms"
+        note << "bundle exec rake db:migrate"
         note << "\n---------\n"
       end
       note << "Now you can launch your webserver using:"
@@ -337,7 +381,7 @@ module Refinery
 
       if @options[:heroku]
         note << "\nIf you want files and images to work on heroku, you will need setup S3:"
-        note << "heroku config:add S3_BUCKET=XXXXXXXXX S3_KEY=XXXXXXXXX S3_SECRET=XXXXXXXXXX"
+        note << "heroku config:add S3_BUCKET=XXXXXXXXX S3_KEY=XXXXXXXXX S3_SECRET=XXXXXXXXXX S3_REGION=XXXXXXXXXX"
       end
 
       note << "\nThanks for installing Refinery, enjoy creating your new application!"
@@ -347,11 +391,11 @@ module Refinery
       puts note.join("\n")
     end
 
-    private :validate!, :generate!, :bundle!, :output!
+    private :bundle!, :deploy!, :generate!, :generators!, :migrate!, :output!, :validate!
 
     def run_command(command, options = {})
       require 'rbconfig'
-      options = {:cd => true, :puts => true, :fail => nil, :ruby => true}.merge(options)
+      options = {:cd => true, :puts => true, :fail => nil, :ruby => true, :bundler => false}.merge(options)
       to_run = %w()
       to_run << "cd \"#{@app_path}\" &&" if options[:cd]
 
@@ -359,13 +403,16 @@ module Refinery
       # e.g. when shelling to git
       if options[:ruby]
         exe = File.join(RbConfig::CONFIG['bindir'], RbConfig::CONFIG['RUBY_INSTALL_NAME'])
-        to_run << "#{exe} -S "
+        to_run << "\"#{exe}\" -S "
       end
+
+      to_run << "bundle exec" if options[:bundler]
 
       to_run << command
 
-      if Refinery::WINDOWS
-        to_run = %w(cmd /c) | to_run.map{|c| c.gsub(/\//m, '\\')}
+      if ::Refinery::WINDOWS
+        to_run = ['"'] + to_run + ['"']
+        to_run = %w(cmd /c) + to_run.map{|c| c.gsub(/\//m, '\\')}
       end
 
       to_run = to_run.join(' ')
@@ -404,4 +451,4 @@ module Refinery
   end
 end
 
-Refinery::AppGenerator.new(ARGV).run! if $0 =~ %r{refinerycms$}
+::Refinery::AppGenerator.new(ARGV).run! if $0 =~ %r{refinerycms$}

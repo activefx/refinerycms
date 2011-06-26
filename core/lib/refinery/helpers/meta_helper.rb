@@ -8,7 +8,7 @@ module Refinery
         [
           (yield_title if yield_title.present?),
           @meta.browser_title.present? ? @meta.browser_title : @meta.path,
-          RefinerySetting.find_or_set(:site_name, "Company Name")
+          ::Refinery::Setting.find_or_set(:site_name, "Company Name")
         ].compact.join(" - ")
       end
 
@@ -17,7 +17,7 @@ module Refinery
       def page_title(options = {})
         object = options.fetch(:object, @meta)
         options.delete(:object)
-        options = RefinerySetting.find_or_set(:page_title, {
+        options = ::Refinery::Setting.find_or_set(:page_title, {
           :chain_page_title => false,
           :ancestors => {
             :separator => " | ",
@@ -40,14 +40,24 @@ module Refinery
               when "text"
                 obj.custom_title
               when "image"
-                image_fu(obj.custom_title_image, nil, {:alt => obj.title}) rescue obj.title
+                if obj.respond_to?(:custom_title_image) && obj.custom_title_image.present?
+                  image_fu(obj.custom_title_image, nil, {:alt => obj.title})
+                else
+                  obj.title
+                end
               else
                 obj.title
               end
           else
             obj.title
           end
-          title << link_to_if(options[:link], obj_title, obj.url)
+
+          # Only link when the object responds to a url method.
+          if options[:link] && obj.respond_to?(:url)
+            title << link_to(obj_title, obj.url)
+          else
+            title << obj_title
+          end
         end
 
         final_title = title.pop

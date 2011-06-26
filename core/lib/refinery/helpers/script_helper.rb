@@ -9,8 +9,8 @@ module Refinery
       def jquery_include_tags(options={})
         # Merge in options
         options = {
-          :caching => (Rails.root.writable? and RefinerySetting.find_or_set(:use_resource_caching, true)),
-          :google => RefinerySetting.find_or_set(:use_google_ajax_libraries, false),
+          :caching => (Rails.root.writable? and ::Refinery::Setting.find_or_set(:use_resource_caching, true)),
+          :google => ::Refinery::Setting.find_or_set(:use_google_ajax_libraries, false),
           :jquery_ui => true
         }.merge(options)
 
@@ -25,7 +25,7 @@ module Refinery
         else
           "#{javascript_include_tag("http://www.google.com/jsapi").gsub(".js", "")}
           <script>
-            google.load('jquery', '1.5.0');
+            google.load('jquery', '1.5.2');
             #{"google.load('jqueryui', '1.8.9');" if options[:jquery_ui]}
           </script>".html_safe
         end
