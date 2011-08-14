@@ -2,10 +2,8 @@ require 'spec_helper'
 
 module Refinery
   describe Image do
-    let(:image) do
-      ::Refinery::Image.create!(:id => 1,
-                    :image => File.new(File.expand_path('../../../uploads/beach.jpeg', __FILE__)))
-    end
+
+    let(:image) { Factory(:image) }
 
     context "with valid attributes" do
       it "should create successfully" do
@@ -31,6 +29,11 @@ module Refinery
       end
 
       it "should use right geometry when given a thumbnail name" do
+        ::Refinery::Setting.find_or_set(:user_image_sizes, {
+          :small => '110x110>',
+          :medium => '225x255>',
+          :large => '450x450>'
+        }, :destroyable => false)
         name, geometry = ::Refinery::Image.user_image_sizes.first
         image.thumbnail(name).url.should == image.thumbnail(geometry).url
       end
@@ -70,5 +73,47 @@ module Refinery
       end
     end
 
+    # The sample image has dimensions 500x375
+    describe '#thumbnail_dimensions returns correctly with' do
+      it 'nil' do
+        image.thumbnail_dimensions(nil).should == { :width => 500, :height => 375 }
+      end
+
+      it '200x200#ne' do
+        image.thumbnail_dimensions('200x200#ne').should == { :width => 200, :height => 200 }
+      end
+
+      it '100x150#c' do
+        image.thumbnail_dimensions('100x150#c').should == { :width => 100, :height => 150 }
+      end
+
+      it '250x250>' do
+        image.thumbnail_dimensions('250x250>').should == { :width => 250, :height => 188 }
+      end
+
+      it '600x375>' do
+        image.thumbnail_dimensions('600x375>').should == { :width => 500, :height => 375 }
+      end
+
+      it '100x475>' do
+        image.thumbnail_dimensions('100x475>').should == { :width => 100, :height => 75 }
+      end
+
+      it '100x150' do
+        image.thumbnail_dimensions('100x150').should == { :width => 100, :height => 75 }
+      end
+
+      it '200x150' do
+        image.thumbnail_dimensions('200x150').should == { :width => 200, :height => 150 }
+      end
+
+      it '300x150' do
+        image.thumbnail_dimensions('300x150').should == { :width => 200, :height => 150 }
+      end
+
+      it '5x5' do
+        image.thumbnail_dimensions('5x5').should == { :width => 5, :height => 4 }
+      end
+    end
   end
 end

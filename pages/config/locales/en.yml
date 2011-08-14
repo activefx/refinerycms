@@ -34,6 +34,7 @@ en:
       pages:
         delete: Remove this page forever
         edit: Edit this page
+        new: Add a new child page
         reserved_system_word: "Sorry, but that title is a reserved system word."
         page:
           view_live_html: View this page live <br/><em>(opens in a new window)</em>
@@ -81,7 +82,7 @@ en:
         translator_access: You do not have the required permission to modify pages in this language.
   activerecord:
     models:
-      page: page
+      refinery/page: page
     attributes:
-      page:
+      refinery/page:
         title: Title

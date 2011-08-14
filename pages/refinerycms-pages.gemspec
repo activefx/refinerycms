@@ -3,10 +3,10 @@
 
 Gem::Specification.new do |s|
   s.name              = %q{refinerycms-pages}
-  s.version           = %q{1.1.0}
+  s.version           = %q{2.0.0}
   s.summary           = %q{Pages engine for Refinery CMS}
   s.description       = %q{The default content engine of Refinery CMS. This engine handles the administration and display of user-editable pages.}
-  s.date              = %q{2011-06-23}
+  s.date              = %q{2011-08-13}
   s.email             = %q{info@refinerycms.com}
   s.homepage          = %q{http://refinerycms.com}
   s.rubyforge_project = %q{refinerycms}
@@ -65,6 +65,7 @@ Gem::Specification.new do |s|
     'app/views/refinery/pages/show.html.erb',
     'config',
     'config/locales',
+    'config/locales/bg.yml',
     'config/locales/cs.yml',
     'config/locales/da.yml',
     'config/locales/de.yml',
@@ -100,23 +101,15 @@ Gem::Specification.new do |s|
     'db/migrate/20110307025652_translate_custom_title_on_pages.rb',
     'db/migrate/20110314213540_remove_translated_fields_from_pages.rb',
     'db/migrate/20110329080451_create_seo_meta.rb',
-    'db/migrate/20110606151235_add_template_columns.rb',
+    'db/migrate/20110606151235_create_add_template_columns.rb',
     'db/seeds',
     'db/seeds/pages.rb',
-    'features',
-    'features/manage_pages.feature',
-    'features/step_definitions',
-    'features/step_definitions/page_steps.rb',
-    'features/support',
-    'features/support/paths.rb',
-    'features/translate_pages.feature',
-    'features/visit_pages.feature',
     'lib',
     'lib/gemspec.rb',
     'lib/generators',
-    'lib/generators/refinerycms_pages_generator.rb',
+    'lib/generators/pages_generator.rb',
     'lib/pages',
-    'lib/pages/marketable_routes.rb',
+    'lib/pages/marketable_urls.rb',
     'lib/pages/tabs.rb',
     'lib/refinery',
     'lib/refinery/pages',
@@ -129,10 +122,14 @@ Gem::Specification.new do |s|
     'spec',
     'spec/models',
     'spec/models/refinery',
-    'spec/models/refinery/page_spec.rb'
+    'spec/models/refinery/page_spec.rb',
+    'spec/requests',
+    'spec/requests/manage_pages_spec.rb',
+    'spec/requests/page_frontend_spec.rb',
+    'spec/requests/translate_pages_spec.rb'
   ]
 
-  s.add_dependency 'refinerycms-core',            '= 1.1.0'
+  s.add_dependency 'refinerycms-core',            '= 2.0.0'
   s.add_dependency 'friendly_id_globalize3',      '~> 3.2.1'
   s.add_dependency 'globalize3',                  '~> 0.1'
   s.add_dependency 'awesome_nested_set',          '~> 2.0'

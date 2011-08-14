@@ -1,17 +1,40 @@
 require 'rbconfig'
 require 'factory_girl'
-require File.expand_path('../support/refinery/controller_macros', __FILE__)
+require 'database_cleaner'
+
+if RUBY_VERSION > "1.9"
+  require "simplecov"
+end
+
+def setup_simplecov
+  SimpleCov.start do
+    Dir[File.expand_path('../../**/*.gemspec')].map{|g| g.split('/')[-2]}.each do |dir|
+      add_group dir.capitalize, "#{dir}/"
+    end
+    %w(testing config spec vendor).each do |filter|
+      add_filter "/#{filter}/"
+    end
+  end
+end
 
 def setup_environment
   # This file is copied to ~/spec when you run 'rails generate rspec'
   # from the project root directory.
   ENV["RAILS_ENV"] ||= 'test'
+
+  # simplecov should be loaded _before_ models, controllers, etc are loaded.
+  setup_simplecov unless ENV["SKIP_COV"] || !defined?(SimpleCov)
+
   require File.expand_path("../../config/environment", __FILE__)
   require 'rspec/rails'
 
   # Requires supporting files with custom matchers and macros, etc,
-  # in ./support/ and its subdirectories.
-  Dir[File.expand_path('../support/**/*.rb', __FILE__)].each {|f| require f}
+  # in ./support/ and its subdirectories including factories.
+  ([Rails.root] | ::Refinery::Plugins.registered.pathnames).map{|p|
+    Dir[p.join('spec', 'support', '**', '*.rb').to_s]
+  }.flatten.sort.each do |support_file|
+    require support_file if File.exist?(support_file)
+  end
 
   RSpec.configure do |config|
     # == Mock Framework
@@ -23,16 +46,18 @@ def setup_environment
     # config.mock_with :rr
     config.mock_with :rspec
 
-    config.fixture_path = ::Rails.root.join('spec', 'fixtures').to_s
+    DatabaseCleaner.strategy = :truncation
 
-    # If you're not using ActiveRecord, or you'd prefer not to run each of your
-    # examples within a transaction, comment the following line or assign false
-    # instead of true.
-    config.use_transactional_fixtures = true
-    config.use_instantiated_fixtures  = false
+    config.before(:each) do
+      DatabaseCleaner.start
+    end
 
-    config.include ::Devise::TestHelpers, :type => :controller
-    config.extend ::Refinery::ControllerMacros, :type => :controller
+    config.after(:each) do
+      DatabaseCleaner.clean
+    end
+
+    # set javascript driver for capybara
+    Capybara.javascript_driver = :webkit
   end
 end
 

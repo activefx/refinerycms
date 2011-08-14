@@ -24,9 +24,13 @@ module Refinery
       if @page.try(:live?) || (refinery_user? && current_refinery_user.authorized_plugins.include?("refinery_pages"))
         # if the admin wants this to be a "placeholder" page which goes to its first child, go to that instead.
         if @page.skip_to_first_child && (first_live_child = @page.children.order('lft ASC').live.first).present?
-          redirect_to first_live_child.url and return
+          redirect_to main_app.url_for(first_live_child.url) and return
         elsif @page.link_url.present?
           redirect_to @page.link_url and return
+        end
+        # 301 redirect if there is a newer slug
+        unless "#{params[:path]}/#{params[:id]}".split('/').last == @page.slug.name 
+          redirect_to main_app.url_for(@page.url), :status => 301 and return
         end
       else
         error_404

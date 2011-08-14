@@ -3,9 +3,9 @@
 
 Gem::Specification.new do |s|
   s.name              = %q{refinerycms}
-  s.version           = %q{1.1.0}
+  s.version           = %q{2.0.0}
   s.description       = %q{A Ruby on Rails CMS that supports Rails 3. It's easy to extend and sticks to 'the Rails way' where possible.}
-  s.date              = %q{2011-06-23}
+  s.date              = %q{2011-08-13}
   s.summary           = %q{A Ruby on Rails CMS that supports Rails 3}
   s.email             = %q{info@refinerycms.com}
   s.homepage          = %q{http://refinerycms.com}
@@ -19,14 +19,14 @@ Gem::Specification.new do |s|
   s.add_dependency    'bundler',                    '~> 1.0'
 
   # Refinery CMS
-  s.add_dependency    'refinerycms-authentication', '= 1.1.0'
-  s.add_dependency    'refinerycms-base',           '= 1.1.0'
-  s.add_dependency    'refinerycms-core',           '= 1.1.0'
-  s.add_dependency    'refinerycms-dashboard',      '= 1.1.0'
-  s.add_dependency    'refinerycms-images',         '= 1.1.0'
-  s.add_dependency    'refinerycms-pages',          '= 1.1.0'
-  s.add_dependency    'refinerycms-resources',      '= 1.1.0'
-  s.add_dependency    'refinerycms-settings',       '= 1.1.0'
+  s.add_dependency    'refinerycms-authentication', '= 2.0.0'
+  s.add_dependency    'refinerycms-base',           '= 2.0.0'
+  s.add_dependency    'refinerycms-core',           '= 2.0.0'
+  s.add_dependency    'refinerycms-dashboard',      '= 2.0.0'
+  s.add_dependency    'refinerycms-images',         '= 2.0.0'
+  s.add_dependency    'refinerycms-pages',          '= 2.0.0'
+  s.add_dependency    'refinerycms-resources',      '= 2.0.0'
+  s.add_dependency    'refinerycms-settings',       '= 2.0.0'
 
   s.files             = [
     '.gitignore',
@@ -41,6 +41,8 @@ Gem::Specification.new do |s|
     'app/views/refinery',
     'app/views/refinery/sitemap',
     'app/views/refinery/sitemap/index.xml.builder',
+    'app/views/sitemap',
+    'app/views/sitemap/index.xml.builder',
     'autotest',
     'autotest/autotest.rb',
     'autotest/discover.rb',
@@ -49,7 +51,6 @@ Gem::Specification.new do |s|
     'changelog.md',
     'changelog.md',
     'config',
-    'config/cucumber.yml',
     'config/database.yml.mysql',
     'config/database.yml.postgresql',
     'config/database.yml.sqlite3',
@@ -59,10 +60,8 @@ Gem::Specification.new do |s|
     'config/environments/test.rb',
     'config/routes.rb',
     'config.ru',
-    'features',
-    'features/support',
-    'features/support/paths.rb',
     'lib',
+    'lib/load_path_analyzer.rb',
     'lib/refinery.rb',
     'lib/refinerycms',
     'lib/refinerycms/all.rb',
@@ -74,12 +73,6 @@ Gem::Specification.new do |s|
     'public/javascripts/translations.js',
     'readme.md',
     'readme.md',
-    'refinerycms.gemspec',
-    'spec',
-    'spec/rcov.opts',
-    'spec/spec_helper.rb',
-    'spec/support',
-    'spec/support/refinery',
-    'spec/support/refinery/controller_macros.rb'
+    'refinerycms.gemspec'
   ]
 end

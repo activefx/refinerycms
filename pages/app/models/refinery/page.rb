@@ -22,15 +22,6 @@ module Refinery
         self.translation_class.send :attr_accessible, :browser_title, :meta_description, :meta_keywords, :locale
 
         if self.translation_class.table_exists?
-          def translation
-            if @translation.nil? or @translation.try(:locale) != ::Globalize.locale
-              @translation = translations.with_locale(::Globalize.locale).first
-              @translation ||= translations.build(:locale => ::Globalize.locale)
-            end
-
-            @translation
-          end
-
           # Instruct the Translation model to have meta tags.
           self.translation_class.send :is_seo_meta
 
@@ -99,14 +90,6 @@ module Refinery
     before_destroy :deletable?
     after_save :reposition_parts!, :invalidate_cached_urls, :expire_page_caching
     after_destroy :expire_page_caching
-    # FIXME: after creating page it's returning nil when asked for title until it gets reloaded.
-    # This is just a temporary fix!
-    # page = ::Refinery::Page.create :title => "Refinery CMS"
-    # page.title => nil
-    # page.valid? => false
-    # page.reload.title => "Refinery CMS"
-    # page.valid? => true
-    after_save { reload }
 
     scope :live, where(:draft => false)
     scope :by_title, proc {|t| with_globalize(:title => t)}
@@ -182,7 +165,7 @@ module Refinery
     def url
       if link_url.present?
         link_url_localised?
-      elsif self.class.use_marketable_urls?
+      elsif ::Refinery::Pages.use_marketable_urls?
         with_locale_param url_marketable
       elsif to_param.present?
         with_locale_param url_normal
@@ -305,16 +288,14 @@ module Refinery
         dialog ? PAGES_PER_DIALOG : PAGES_PER_ADMIN_INDEX
       end
 
-      def use_marketable_urls?
-        ::Refinery::Setting.find_or_set(:use_marketable_urls, true, :scoping => 'pages')
-      end
-
       def expire_page_caching
         begin
           Rails.cache.delete_matched(/.*pages.*/)
         rescue NotImplementedError
           Rails.cache.clear
           warn "**** [REFINERY] The cache store you are using is not compatible with Rails.cache#delete_matched - clearing entire cache instead ***"
+        ensure
+          return true # so that other callbacks process.
         end
       end
     end
@@ -337,24 +318,10 @@ module Refinery
       part.try(:body)
     end
 
-    def [](part_title)
-      # Allow for calling attributes with [] shorthand (eg page[:parent_id])
-      return super if self.respond_to?(part_title.to_s.to_sym) or self.attributes.has_key?(part_title.to_s)
-
-      Refinery.deprecate({
-        :what => "page[#{part_title.inspect}]",
-        :when => '1.1',
-        :replacement => "page.content_for(#{part_title.inspect})",
-        :caller => caller
-      })
-
-      content_for(part_title)
-    end
-
     # In the admin area we use a slightly different title to inform the which pages are draft or hidden pages
     def title_with_meta
       title = if self.title.nil?
-        [self.class.with_globalize(:page_id => self.id, :locale => Globalize.locale).first.try(:title).to_s]
+        [self.class.with_globalize(:id => self.id, :locale => Globalize.locale).first.try(:title).to_s]
       else
         [self.title.to_s]
       end
@@ -378,7 +345,7 @@ module Refinery
     def normalize_friendly_id(slug_string)
       slug_string.gsub!('_', '-')
       sluggified = super
-      if self.class.use_marketable_urls? && self.class.friendly_id_config.reserved_words.include?(sluggified)
+      if ::Refinery::Pages.use_marketable_urls? && self.class.friendly_id_config.reserved_words.include?(sluggified)
         sluggified << "-page"
       end
       sluggified
@@ -387,7 +354,7 @@ module Refinery
   private
 
     def invalidate_cached_urls
-      return true unless self.class.use_marketable_urls?
+      return true unless ::Refinery::Pages.use_marketable_urls?
 
       [self, children].flatten.each do |page|
         Rails.cache.delete(page.url_cache_key)

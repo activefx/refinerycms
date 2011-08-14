@@ -3,10 +3,10 @@
 
 Gem::Specification.new do |s|
   s.name              = %q{refinerycms-resources}
-  s.version           = %q{1.1.0}
+  s.version           = %q{2.0.0}
   s.summary           = %q{Resources engine for Refinery CMS}
   s.description       = %q{Handles all file upload and processing functionality in Refinery CMS.}
-  s.date              = %q{2011-06-23}
+  s.date              = %q{2011-08-12}
   s.email             = %q{info@refinerycms.com}
   s.homepage          = %q{http://refinerycms.com}
   s.rubyforge_project = %q{refinerycms}
@@ -40,6 +40,7 @@ Gem::Specification.new do |s|
     'app/views/refinery/admin/resources/new.html.erb',
     'config',
     'config/locales',
+    'config/locales/bg.yml',
     'config/locales/cs.yml',
     'config/locales/da.yml',
     'config/locales/de.yml',
@@ -70,19 +71,10 @@ Gem::Specification.new do |s|
     'db',
     'db/migrate',
     'db/migrate/20100913234709_create_refinerycms_resources_schema.rb',
-    'features',
-    'features/manage_files.feature',
-    'features/step_definitions',
-    'features/step_definitions/file_steps.rb',
-    'features/support',
-    'features/support/paths.rb',
-    'features/uploads',
-    'features/uploads/beach.jpeg',
-    'features/uploads/refinery_is_awesome.txt',
     'lib',
     'lib/gemspec.rb',
     'lib/generators',
-    'lib/generators/refinerycms_resources_generator.rb',
+    'lib/generators/resources_generator.rb',
     'lib/refinery',
     'lib/refinery/resources',
     'lib/refinery/resources/dragonfly.rb',
@@ -93,11 +85,11 @@ Gem::Specification.new do |s|
     'spec/models',
     'spec/models/refinery',
     'spec/models/refinery/resource_spec.rb',
-    'spec/uploads',
-    'spec/uploads/refinery_is_awesome.txt'
+    'spec/requests',
+    'spec/requests/manage_resources_spec.rb'
   ]
 
-  s.add_dependency 'refinerycms-core', '= 1.1.0'
+  s.add_dependency 'refinerycms-core', '= 2.0.0'
   s.add_dependency 'dragonfly',        '~> 0.9.0'
   s.add_dependency 'rack-cache',       '>= 0.5.3'
 end

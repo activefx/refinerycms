@@ -1781,7 +1781,13 @@ WYMeditor.INIT_DIALOG = function(wym, selected, isIframe) {
   // focus first textarea or input type text element
   dialog.find('input[type=text], textarea').first().focus();
 
+  // init close_dialog when user clicks on cancel button
   doc.find('body').addClass('wym_iframe_body').find('#cancel_button').add(dialog.find('.close_dialog')).click(function(e){
+    wym.close_dialog(e, true);
+  });
+
+  // init close_dialog when user clicks on small x icon at the top of dialog
+  $('.ui-dialog-titlebar .ui-dialog-titlebar-close').click(function(e){
     wym.close_dialog(e, true);
   });
 
@@ -2289,7 +2295,7 @@ WYMeditor.XhtmlValidator = {
         "2":"href",
         "3":"hreflang",
         "4":"name",
-        "rel":/^(alternate|designates|stylesheet|start|next|prev|contents|index|glossary|copyright|chapter|section|subsection|appendix|help|bookmark| |shortcut|icon|moodalbox)+$/,
+        "rel":/^(alternate|designates|stylesheet|start|next|nofollow|prev|contents|index|glossary|copyright|chapter|section|subsection|appendix|help|bookmark| |shortcut|icon|moodalbox)+$/,
         "rev":/^(alternate|designates|stylesheet|start|next|prev|contents|index|glossary|copyright|chapter|section|subsection|appendix|help|bookmark| |shortcut|icon|moodalbox)+$/,
         "shape":/^(rect|rectangle|circ|circle|poly|polygon)$/,
         "5":"type",
@@ -2511,7 +2517,7 @@ WYMeditor.XhtmlValidator = {
         "media":/^(all|braille|print|projection|screen|speech|,|;| )+$/i,
         //next comment line required by Opera!
         /*"rel":/^(alternate|appendix|bookmark|chapter|contents|copyright|glossary|help|home|index|next|prev|section|start|stylesheet|subsection| |shortcut|icon)+$/i,*/
-        "rel":/^(alternate|appendix|bookmark|chapter|contents|copyright|glossary|help|home|index|next|prev|section|start|stylesheet|subsection| |shortcut|icon)+$/i,
+        "rel":/^(alternate|appendix|bookmark|chapter|contents|copyright|glossary|help|home|index|next|nofollow|prev|section|start|stylesheet|subsection| |shortcut|icon)+$/i,
         "rev":/^(alternate|appendix|bookmark|chapter|contents|copyright|glossary|help|home|index|next|prev|section|start|stylesheet|subsection| |shortcut|icon)+$/i,
         "3":"type"
       },

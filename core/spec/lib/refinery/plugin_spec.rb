@@ -6,6 +6,7 @@ module Refinery
       isolate_namespace ::Refinery
       ::Refinery::Plugin.register do |plugin|
         plugin.name = 'refinery_rspec'
+        plugin.hide_from_menu = true
       end
     end
   end
@@ -16,13 +17,12 @@ module Refinery
 
     let(:plugin) { ::Refinery::Plugins.registered.detect { |plugin| plugin.name == 'refinery_rspec' } }
 
-    def setup_i18n
-      ::I18n.backend = ::I18n::Backend::Simple.new
+    before do
       ::I18n.backend.store_translations :en, :refinery => {
         :plugins => {
           :refinery_rspec => {
-            :title => 'RefineryCMS RSpec',
-            :description => 'RSpec tests for plugin.rb'
+            :title => "RefineryCMS RSpec",
+            :description => "RSpec tests for plugin.rb"
           }
         }
       }
@@ -41,16 +41,12 @@ module Refinery
     end
 
     describe '#title' do
-      before { setup_i18n }
-
       it 'returns plugin title defined by I18n' do
         plugin.title.should == 'RefineryCMS RSpec'
       end
     end
 
     describe '#description' do
-      before { setup_i18n }
-
       it 'returns plugin description defined by I18n' do
         plugin.description.should == 'RSpec tests for plugin.rb'
       end
@@ -111,7 +107,7 @@ module Refinery
 
     describe '#menu_match' do
       it 'returns regexp based on plugin name' do
-        plugin.menu_match.should == /(admin|refinery)\/refinery_rspec$/
+        plugin.menu_match.should == /refinery\/refinery_rspec$/
       end
     end
 
