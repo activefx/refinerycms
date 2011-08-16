@@ -30,6 +30,7 @@ gem 'awesome_nested_set', :git => 'git://github.com/collectiveidea/awesome_neste
 # REFINERY CMS DEVELOPMENT ====================================================
 
 gem 'arel', '2.1.4' # 2.1.5 was broken. see https://github.com/rails/arel/issues/72
+gem 'therubyracer'
 
 group :development, :test do
   gem 'refinerycms-testing',    '~> 2.0.0'
@@ -42,7 +43,7 @@ group :development, :test do
   gem 'guard-rspec', :git => "git://github.com/guard/guard-rspec.git", :branch => "23476db8d97ceae44f5d6efb51411e717645e76d"
 
   require 'rbconfig'
-  
+
   platforms :mswin, :mingw do
     gem 'win32console'
     gem 'rb-fchange', '~> 0.0.5'
@@ -52,7 +53,7 @@ group :development, :test do
   platforms :ruby do
     gem 'spork', '0.9.0.rc9'
     gem 'guard-spork'
-    
+
     unless ENV['TRAVIS']
       if Config::CONFIG['target_os'] =~ /darwin/i
         gem 'rb-fsevent', '>= 0.3.9'
@@ -115,3 +116,4 @@ gem 'jquery-rails'
 # Add i18n support (optional, you can remove this if you really want to).
 gem 'refinerycms-i18n',           '~> 2.0.0', :git => 'git://github.com/parndt/refinerycms-i18n'
 # END USER DEFINED
+
