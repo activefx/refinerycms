@@ -1,9 +1,11 @@
-require 'tmpdir'
-
 module Refinery
   module Application
+
     class << self
-      def refine!
+
+      def refinery!
+        ::Refinery.config.before_inclusion_procs.each(&:call)
+
         ::ApplicationHelper.send :include, ::Refinery::ApplicationHelper
 
         [::ApplicationController, ::Admin::BaseController].each do |c|
@@ -12,6 +14,8 @@ module Refinery
         end
 
         ::Admin::BaseController.send :include, ::Refinery::Admin::BaseController
+
+        ::Refinery.config.after_inclusion_procs.each(&:call)
       end
 
       def included(base)
@@ -25,24 +29,17 @@ module Refinery
         base.config.action_view.javascript_expansions[:defaults] = %w()
 
         # Configure the default encoding used in templates for Ruby 1.9.
-        base.config.encoding = "utf-8"
+        base.config.encoding = 'utf-8'
 
         # Configure sensitive parameters which will be filtered from the log file.
         base.config.filter_parameters += [:password, :password_confirmation]
 
         # Specify a cache store to use
-        base.config.cache_store = :file_store, File.join(Dir.tmpdir, base.name.to_s.gsub(':', File::SEPARATOR))
+        base.config.cache_store = :memory_store
 
         # Include the refinery controllers and helpers dynamically
         base.config.to_prepare do
-          ::Refinery::Application.refine!
-        end
-
-        # load in any settings that the developer wants after the initialization.
-        base.config.after_initialize do
-          if (settings = Rails.root.join('config', 'settings.rb')).exist?
-            require settings.to_s
-          end
+          ::Refinery::Application.refinery!
         end
       end
     end

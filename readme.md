@@ -12,10 +12,10 @@ Refinery also supports Rails 2.x using the [Rails 2.x stable branch](http://gith
 ## How to
 
 * __[Install Refinery CMS](http://refinerycms.com/download)__
-* [Update Refinery CMS to the latest version](http://refinerycms.com/guides/how-to-update-refinery-to-the-latest-version)
+* [Update Refinery CMS to the latest stable version](http://refinerycms.com/guides/how-to-update-refinery-to-the-latest-stable-version)
 * [Install Refinery CMS on Heroku](http://refinerycms.com/guides/how-to-install-refinery-on-heroku)
 * [Run the Refinery CMS test suite](http://refinerycms.com/guides/how-to-test-refinery)
-* __[Contribute to Refinery CMS](http://refinerycms.com/guides/how-to-contribute-to-refinery)__
+* __[Contribute to Refinery CMS](http://refinerycms.com/guides/how-to-contribute-to-refinery-development)__
 * __[Donate to the Refinery CMS core team](http://pledgie.com/campaigns/8431)__
 
 ## Getting Started
@@ -46,7 +46,7 @@ Wanna see Refinery for yourself? [Try the demo](http://demo.refinerycms.com/refi
 * [Getting Started](http://refinerycms.com/guides/getting-started-with-refinery)
 * [Guides](http://refinerycms.com/guides)
 * [Google Group Discussion](http://group.refinerycms.org)
-* [IRC Channel](irc://irc.freenode.net/refinerycms)
+* [IRC Channel](http://refinerycms.com/guides/how-to-get-help-with-refinery#irc-channel)
 * [GitHub repository](http://github.com/resolve/refinerycms)
 * [Developer/API documentation](http://api.refinerycms.org)
 * [Twitter Account](http://twitter.com/refinerycms)
@@ -85,7 +85,7 @@ Wanna see Refinery for yourself? [Try the demo](http://demo.refinerycms.com/refi
 
 * Manage who can access Refinery.
 * Control which engines each user has access to.
-* Uses the popular [authlogic](http://github.com/binarylogic/authlogic).
+* Uses the popular [devise](http://github.com/plataformatec/devise).
 
 ### ...Want more? [Extend with Engines](http://github.com/resolve/refinerycms/blob/master/doc/engines.md#readme)
 
@@ -109,7 +109,7 @@ to get help on how to use that. Or read the full documentation on [writing engin
 
 ## License
 
-Refinery is released under the [MIT license](http://github.com/resolve/refinerycms/blob/master/license.md#readme) and is copyright (c) 2005-2010 [Resolve Digital](http://www.resolvedigital.com)
+Refinery is released under the [MIT license](http://github.com/resolve/refinerycms/blob/master/license.md#readme) and is copyright (c) 2005-2011 [Resolve Digital](http://www.resolvedigital.com)
 
 ### Credits
 

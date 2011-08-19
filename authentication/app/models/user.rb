@@ -83,6 +83,11 @@ class User
   index :unlock_token,          :unique => true if User.lockable?
 
   class << self
+    # Configure authentication_keys here instead of devise.rb initialzer so we don't overwrite standard devise models
+    def authentication_keys
+      [:login]
+    end
+
     # Find user by email or username.
     # https://github.com/plataformatec/devise/wiki/How-To:-Allow-users-to-sign_in-using-their-username-or-email-address
     def find_for_database_authentication(conditions)
@@ -132,14 +137,10 @@ class User
   end
 
   def can_delete?(user_to_delete = self)
-    #debugger
     user_to_delete.persisted? and
-    #debugger
+    id != user_to_delete.id and
     !user_to_delete.has_role?(:superuser) and
-    #debugger
-    Role[:refinery].users.count > 1 and
-    #debugger
-    id != user_to_delete.id
+    Role[:refinery].users.count > 1
   end
 
   # Temporary workaround for problems with Mongoid's many to many destroy method

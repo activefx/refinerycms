@@ -82,7 +82,12 @@ class RefinerySetting
   def set_restricted_callback
     self.restricted = false if self.restricted.nil?
   end
+
   protected :set_restricted_callback
+
+  attr_accessible :name, :value, :destroyable,
+                  :scoping, :restricted, :callback_proc_as_string,
+                  :form_value_type
 
   def rewrite_cache_callback
     self.class.rewrite_cache
@@ -199,24 +204,14 @@ class RefinerySetting
       # Return the value
       setting.value
     end
-
-    # DEPRECATED for removal at >= 0.9.9
-    def []=(name, value)
-      warning = ["\n*** DEPRECATION WARNING ***"]
-      warning << "You should not use this anymore: RefinerySetting[#{name.inspect}] = #{value.inspect}."
-      warning << "\nInstead, you should use RefinerySetting.set(#{name.inspect}, #{value.inspect})"
-      warning << ""
-      warning << "Called from: #{caller.first.inspect}\n\n"
-      $stdout.puts warning.join("\n")
-
-      set(name, value)
-    end
   end
 
   # prettier version of the name.
   # site_name becomes Site Name
   def title
-    name.titleize
+    result = name.to_s.titleize
+    result += ' (' + scoping.titleize + ')' if scoping.is_a?(String)
+    result
   end
 
   # form_value is so that on the web interface we can display a sane value.

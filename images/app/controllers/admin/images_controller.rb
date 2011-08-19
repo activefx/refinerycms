@@ -13,14 +13,14 @@ module Admin
     def new
       @image = Image.new if @image.nil?
 
-      @url_override = admin_images_url(:dialog => from_dialog?)
+      @url_override = admin_images_path(:dialog => from_dialog?)
     end
 
     # This renders the image insert dialog
     def insert
       self.new if @image.nil?
 
-      @url_override = admin_images_url(:dialog => from_dialog?, :insert => true)
+      @url_override = admin_images_path(request.query_parameters.merge(:insert => true))
 
       if params[:conditions].present?
         extra_condition = params[:conditions].split(',')
@@ -66,11 +66,15 @@ module Admin
           render :action => 'new'
         end
       else
+        # if all uploaded images are ok redirect page back to dialog, else show current page with error
         if @images.all?{|i| i.valid?}
           @image_id = @image.id if @image.persisted?
           @image = nil
+
+          redirect_to request.query_parameters.merge(:action => 'insert')
+        else
+          self.insert
         end
-        self.insert
       end
     end
 

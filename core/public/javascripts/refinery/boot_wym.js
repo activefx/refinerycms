@@ -41,9 +41,9 @@ var wymeditor_boot_options = $.extend({
   , langPath: "/javascripts/wymeditor/lang/"
   , iframeBasePath: '/'
   , classesItems: [
-    {name: 'text-align', rules:['left', 'center', 'right', 'justify'], join: '-'}
-    , {name: 'image-align', rules:['left', 'right'], join: '-'}
-    , {name: 'font-size', rules:['small', 'normal', 'large'], join: '-'}
+    {name: 'text-align', rules:[{name: 'left', title: '{Left}'}, {name: 'center', title: '{Center}'}, {name: 'right', title: '{Right}'}, {name: 'justify', title: '{Justify}'}], join: '-', title: '{Text_Align}'}
+    , {name: 'image-align', rules:[{name: 'left', title: '{Left}'}, {name: 'right', title: '{Right}'}], join: '-', title: '{Image_Align}'}
+    , {name: 'font-size', rules:[{name: 'small', title: '{Small}'}, {name: 'normal', title: '{Normal}'}, {name: 'large', title: '{Large}'}], join: '-', title: '{Font_Size}'}
   ]
 
   , containersItems: [
@@ -263,8 +263,7 @@ WYMeditor.editor.prototype.loadIframe = function(iframe) {
 };
 
 WYMeditor.init = function() {
-  wymeditor_inputs = $('.wymeditor');
-  wymeditor_inputs = wymeditor_inputs.filter(function(index) {
+  wymeditor_inputs = $('.wymeditor').filter(function(index) {
     for (i=0; i < WYMeditor.INSTANCES.length; i++) {
       if (WYMeditor.INSTANCES[i]._element.attr('id') == $(this).attr('id')) {
         return false;
@@ -275,7 +274,7 @@ WYMeditor.init = function() {
   });
 
   wymeditor_inputs.each(function(input) {
-    if ((containing_field = $(this).parents('.field')).length > 0 && containing_field.get(0).style.height === '') {
+    if ((containing_field = $(this).parents('.field')).length > 0 && containing_field.get(0).style.height.replace('auto', '') === '') {
       containing_field.addClass('hide-overflow')
                       .css('height', $(this).outerHeight() - containing_field.offset().top + $(this).offset().top + 45);
     }

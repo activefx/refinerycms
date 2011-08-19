@@ -9,6 +9,8 @@ class UserPlugin
 
   default_scope asc(:position)
 
+  attr_accessible :user_id, :name, :position
+
   index :name
   index(
     [

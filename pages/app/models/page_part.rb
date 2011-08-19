@@ -17,6 +17,9 @@ class PagePart
   #validates :title, :presence => true
   validates_presence_of :title
 
+  attr_accessible :title, :content, :position, :body, :created_at,
+                  :updated_at, :page_id
+
   alias_attribute :content, :body
 
   #translates :body if respond_to?(:translates)
@@ -36,6 +39,12 @@ class PagePart
   def self.column_names
     fields
   end
+
+#  if defined?(::PagePart::Translation)
+#    ::PagePart::Translation.module_eval do
+#      attr_accessible :locale
+#    end
+#  end
 
 protected
   def normalise_text_fields

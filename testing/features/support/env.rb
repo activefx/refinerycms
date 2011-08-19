@@ -9,15 +9,15 @@ require 'refinerycms-base'
 def setup_environment
   ENV["RAILS_ENV"] ||= "test"
   ENV['CUCUMBER_FORMAT'] = "pretty"
+  ENV["RAILS_ROOT"] ||= Rails.root.to_s
 
   if Refinery::WINDOWS
     puts "Win32 users may experience cucumber/formatter/unicode errors.  Requirement ommited, see: /features/support/env.rb to re-add."
   else
     require 'cucumber/formatter/unicode' # Remove this line if you don't want Cucumber Unicode support
   end
-  require 'cucumber/rails/world'
-  #require 'cucumber/rails/active_record'
-  require 'cucumber/web/tableish'
+
+  require 'cucumber/rails'
 
   require 'capybara/rails'
   require 'capybara/cucumber'
@@ -71,7 +71,6 @@ def each_run
     DatabaseCleaner.strategy = :truncation
     DatabaseCleaner.clean
   end
-
 
   require 'fileutils'
   require 'rails/generators'
