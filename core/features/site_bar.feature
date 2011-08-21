@@ -10,6 +10,7 @@ Feature: Site Bar
     And A Refinery administrator exists
     And I am not logged in as an administrator
 
+  @site_bar_frontend
   Scenario: Not logged in
     When I go to the home page
     Then I should not see "Log out"

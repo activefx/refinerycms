@@ -14,7 +14,9 @@
           <%= RefinerySetting.find_or_set(:site_name, 'Company Name') %>
         </span>
 
-        <%= link_to t('.log_out'), destroy_administrator_session_path, :id => 'logout' %>
+        <%# link_to t('.log_out'), destroy_administrator_session_path, :id => 'logout' %>
+        <%= link_to t('.log_out', site_bar_translate_locale_args),
+                    destroy_administrator_session_path, :id => 'logout' %>
       </div>
     </div>
   </div>

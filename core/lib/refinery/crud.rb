@@ -2,20 +2,25 @@
 # Simply override any methods in your action controller you want to be customised
 # Don't forget to add:
 #   resources :plural_model_name_here
+# or for scoped:
+#   scope(:as => 'module_module', :module => 'module_name') do
+#      resources :plural_model_name_here
+#    end
 # to your routes.rb file.
 # Full documentation about CRUD and resources go here:
-# -> http://caboo.se/doc/classes/ActionController/Resources.html#M003716
+# -> http://api.rubyonrails.org/classes/ActionDispatch/Routing/Mapper/Resources.html#method-i-resources
 # Example (add to your controller):
-# crudify :foo, {:title_attribute => 'name'}
+# crudify :foo, {:title_attribute => 'name'} for CRUD on Foo model
+# crudify 'foo/bar', :{title_attribute => 'name'} for CRUD on Foo::Bar model
 
 module Refinery
   module Crud
 
     def self.default_options(model_name)
-      singular_name = model_name.to_s
-      class_name = singular_name.camelize
-      plural_name = singular_name.pluralize
+      class_name = model_name.to_s.include?("/") ? "::#{model_name.to_s.camelize}" : model_name.to_s.camelize
       this_class = class_name.constantize.base_class
+      singular_name = model_name.to_s.underscore.gsub("/","_")
+      plural_name = singular_name.pluralize
 
       {
         :conditions => '',
@@ -23,12 +28,15 @@ module Refinery
         :order => ('position ASC' if this_class.table_exists? and this_class.column_names.include?('position')),
         :paging => true,
         :per_page => false,
-        :redirect_to_url => "admin_#{plural_name}_url",
+        :redirect_to_url => "admin_#{model_name.to_s.gsub('/', '_').pluralize}_url",
         :searchable => true,
         :search_conditions => '',
         :sortable => true,
         :title_attribute => "title",
-        :xhr_paging => false
+        :xhr_paging => false,
+        :class_name => class_name,
+        :singular_name => singular_name,
+        :plural_name => plural_name
       }
     end
 
@@ -41,10 +49,9 @@ module Refinery
 
       def crudify(model_name, options = {})
         options = ::Refinery::Crud.default_options(model_name).merge(options)
-
-        singular_name = model_name.to_s
-        class_name = singular_name.camelize
-        plural_name = singular_name.pluralize
+        class_name = options[:class_name]
+        singular_name = options[:singular_name]
+        plural_name = options[:plural_name]
 
         module_eval %(
           prepend_before_filter :find_#{singular_name},
@@ -58,7 +65,6 @@ module Refinery
             # if the position field exists, set this object as last object, given the conditions of this class.
             if #{class_name}.column_names.include?("position")
               params[:#{singular_name}].merge!({
-                #:position => ((#{class_name}.max(:position, :conditions => #{options[:conditions].inspect})||-1) + 1)
                 :position => ((#{class_name}.find(:all, :conditions => #{options[:conditions].inspect}).max(:position)||-1) + 1)
               })
             end
@@ -144,15 +150,13 @@ module Refinery
 
           # Finds one single result based on the id params.
           def find_#{singular_name}
-#            @#{singular_name} = #{class_name}.find(params[:id],
-#                                                   :include => #{options[:include].map(&:to_sym).inspect})
+             # @#{singular_name} = #{class_name}.find(params[:id], :include => #{options[:include].map(&:to_sym).inspect})
              @#{singular_name} = #{class_name}.find(params[:id])
           end
 
           # Find the collection of @#{plural_name} based on the conditions specified into crudify
           # It will be ordered based on the conditions specified into crudify
           # And eager loading is applied as specified into crudify.
-
           def find_all_#{plural_name}(conditions = #{options[:conditions].inspect})
             conditions = (conditions.blank? || conditions.empty?) ? nil : conditions
 
@@ -193,16 +197,11 @@ module Refinery
 
           # Returns a weighted set of results based on the query specified by the user.
           def search_all_#{plural_name}
-            # First find normal results.
-            # find_all_#{plural_name}(#{options[:search_conditions].inspect})
             conditions = #{options[:search_conditions].inspect}
             conditions = conditions.empty? ? nil : conditions
             order = "#{options[:order]}"
-            # Now get weighted results by running the query against the results already found.
             @#{plural_name} = #{class_name}.search(params[:search]).where(conditions)
-            unless order.empty?
-              @#{plural_name} = @#{plural_name}.order_by([order.scan(/\w+/).map{|i| i.downcase.to_sym}])
-            end
+            @#{plural_name} = @#{plural_name}.order_by([order.scan(/\w+/).map{|i| i.downcase.to_sym}]) unless order.empty?
           end
 
           # Ensure all methods are protected so that they should only be called
@@ -267,12 +266,12 @@ module Refinery
               # The list doesn't come to us in the correct order. Frustration.
               0.upto((newlist ||= params[:ul]).length - 1) do |index|
                 hash = newlist[index.to_s]
-                moved_item_id = hash['id'].split(/#{singular_name}\\_?/).last
-                @current_#{singular_name} = #{class_name}.find(moved_item_id)
+                moved_item_id = hash['id'].split(/#{singular_name}\\_?/)
+                @current_#{singular_name} = #{class_name}.where(:id => moved_item_id).first
 
                 if @current_#{singular_name}.respond_to?(:move_to_root)
                   if previous.present?
-                    @current_#{singular_name}.move_to_right_of(#{class_name}.find(previous).id)
+                    @current_#{singular_name}.move_to_right_of(#{class_name}.where(:id => previous).first)
                   else
                     @current_#{singular_name}.move_to_root
                   end
@@ -291,13 +290,12 @@ module Refinery
               render :nothing => true
             end
 
-            def update_child_positions(node, current_page)
-
+            def update_child_positions(node, #{singular_name})
               0.upto(node['children'].length - 1) do |child_index|
                 child = node['children'][child_index.to_s]
-                child_id = child['id'].split(/#{singular_name}\_?/).last
-                child_#{singular_name} = #{class_name}.find(child_id)
-                child_#{singular_name}.move_to_child_of(current_page.id)
+                child_id = child['id'].split(/#{singular_name}\_?/)
+                child_#{singular_name} = #{class_name}.where(:id => child_id).first
+                child_#{singular_name}.move_to_child_of(#{singular_name})
 
                 if child['children'].present?
                   update_child_positions(child, child_#{singular_name})

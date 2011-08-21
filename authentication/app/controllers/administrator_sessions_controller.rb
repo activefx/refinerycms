@@ -5,7 +5,7 @@ class AdministratorSessionsController < ::Devise::SessionsController
 
   def create
     super
-  rescue BCrypt::Errors::InvalidSalt
+  rescue BCrypt::Errors::InvalidSalt, ::BCrypt::Errors::InvalidHash
     flash[:error] = t('password_encryption', :scope => 'administrators.forgot')
     redirect_to new_administrator_password_path
   end

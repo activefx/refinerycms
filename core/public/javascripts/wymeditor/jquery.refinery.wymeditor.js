@@ -211,7 +211,11 @@ $.extend(WYMeditor, {
     BLOCKS : new Array("address", "blockquote", "div", "dl",
      "fieldset", "form", "h1", "h2", "h3", "h4", "h5", "h6", "hr",
      "noscript", "ol", "p", "pre", "table", "ul", "dd", "dt",
-     "li", "tbody", "td", "tfoot", "th", "thead", "tr"),
+     "li", "tbody", "td", "tfoot", "th", "thead", "tr", "meter",
+     "section", "article", "aside", "details", "header", "footer",
+     "nav", "dialog", "figure", "figcaption", "address", "hgroup",
+     "mark", "time", "canvas", "audio", "video", "source", "output",
+     "progress", "ruby", "rt", "rp", "summary", "command"),
 
     KEY : {
       BACKSPACE: 8,
@@ -751,8 +755,8 @@ WYMeditor.editor.prototype.init = function() {
             var wym = this;
             $.each(oClass.rules, function(index, rule) {
               sClass = wym._options.classesItemHtml;
-              sClass = h.replaceAll(sClass, WYMeditor.CLASS_NAME, oClass.name + (oClass.join || "") + rule);
-              sClass = h.replaceAll(sClass, WYMeditor.CLASS_TITLE, rule.title || titleize(rule));
+              sClass = h.replaceAll(sClass, WYMeditor.CLASS_NAME, oClass.name + (oClass.join || "") + (rule.name || rule));
+              sClass = h.replaceAll(sClass, WYMeditor.CLASS_TITLE, rule.title || titleize(rule.name || rule));
               sRules += sClass;
             });
 
@@ -848,15 +852,17 @@ WYMeditor.editor.prototype.bindEvents = function() {
     if (oClass == null) {
       $.each(aClasses, function(index, classRule){
         if (oClass == null && classRule.rules && classRule.rules.length > 0){
-          if ((indexOf = $.inArray(sName.replace(classRule.name + (classRule.join || ""), ""), classRule.rules)) > -1) {
-            $.each(classRule.rules, function(i, rule) {
-              if (i != indexOf) {
-                replacers.push(classRule.name + (classRule.join || "") + rule);
-              }
-            });
+          var ruleName = sName.replace(classRule.name + (classRule.join || ""), "");
+          var indexOf = null;
+          $.each(classRule.rules, function(i, rule) {
+            if (ruleName == (rule.name || rule)) {
+              indexOf = i;
+            } else {
+              replacers.push(classRule.name + (classRule.join || "") + (rule.name || rule));
+            }
+          });
 
-            oClass = {expr: (classRule.rules[indexOf].expr || null)};
-          }
+          if (indexOf != null) oClass = {expr: (classRule.rules[indexOf].expr || null)};
         }
       });
     }
@@ -1331,6 +1337,29 @@ WYMeditor.editor.prototype.dialog = function( dialogType ) {
 
               end_node = selection.focusNode;
               end = selection.focusOffset;
+            }
+
+            // for https://github.com/resolve/refinerycms/issues/581
+            if (typeof (start_node.insertData) === 'undefined') {
+                var j = start_node.childNodes.length - 1,
+                    tmp_start_node = start_node;
+
+                // @todo what then if function insertData is not found?
+                while (typeof(end_node.insertData) !== 'function' || !j) {
+                    start_node = tmp_start_node.childNodes[j--];
+                }
+
+                start = 0;
+            }
+
+            if (typeof (end_node.insertData) === 'undefined') {
+                var i = end_node.childNodes.length - 1,
+                    tmp_end_node = end_node;
+                while (typeof(end_node.insertData) !== 'function' || !i) {
+                    end_node = tmp_end_node.childNodes[i--];
+                }
+
+                end = end_node.length;
             }
 
             // because .insertData only inserts text, we have to insert some 'meaningful' *text* only interpolation tags (no html).
@@ -2135,7 +2164,9 @@ WYMeditor.XhtmlValidator = {
       "style",
       "title",
       "accesskey",
-      "tabindex"
+      "tabindex",
+      "data",
+      "^data-.*"
       ]
     },
     "language":
@@ -2447,7 +2478,7 @@ WYMeditor.XhtmlValidator = {
         "readonly":/^(readonly)$/,
         "size":/^(\d)+$/,
         "3":"src",
-        "type":/^(button|checkbox|file|hidden|image|password|radio|reset|submit|text)$/,
+        "type":/^(button|checkbox|file|hidden|image|password|radio|reset|submit|text|tel|search|url|email|datetime|date|month|week|time|datetime-local|number|range|color)$/,
         "4":"value"
       },
       "inside":"form"
@@ -2731,28 +2762,68 @@ WYMeditor.XhtmlValidator = {
     },
     "38":"tt",
     "39":"ul",
-    "40":"var"
+    "40":"var",
+    "41":"section",
+    "42":"article",
+    "43":"aside",
+    "44":"details",
+    "45":"header",
+    "46":"footer",
+    "47":"nav",
+    "48":"dialog",
+    "49":"figure",
+    "50":"figcaption",
+    "51":"address",
+    "52":"hgroup",
+    "53":"mark",
+    "54":"time",
+    "55":"canvas",
+    "56":"audio",
+    "57":"video",
+    "58":"source",
+    "59":"output",
+    "60":"progress",
+    "61":"ruby",
+    "62":"rt",
+    "63":"rp",
+    "64":"summary",
+    "65":"command"
   },
 
-  // Temporary skiped attributes
-  skiped_attributes : [],
-  skiped_attribute_values : [],
+  // Temporary skipped attributes
+  skipped_attributes : [],
+  skipped_attribute_values : [],
 
   getValidTagAttributes: function(tag, attributes)
   {
     var valid_attributes = {};
     var possible_attributes = this.getPossibleTagAttributes(tag);
+    var regexp_attributes = [];
+    $.each((possible_attributes || []), function(i, val) {
+      if (val.indexOf("*") > -1) {
+        regexp_attributes.push(new RegExp(val));
+      }
+    });
+    var h = WYMeditor.Helper;
     for(var attribute in attributes) {
       var value = attributes[attribute];
-      var h = WYMeditor.Helper;
-      if(!h.contains(this.skiped_attributes, attribute) && !h.contains(this.skiped_attribute_values, value)){
-        if (typeof value != 'function' && h.contains(possible_attributes, attribute)) {
-          if (this.doesAttributeNeedsValidation(tag, attribute)) {
-            if(this.validateAttribute(tag, attribute, value)){
+      if(!h.contains(this.skipped_attributes, attribute) && !h.contains(this.skipped_attribute_values, value)){
+        if (typeof value != 'function') {
+          if (h.contains(possible_attributes, attribute)) {
+            if (this.doesAttributeNeedsValidation(tag, attribute)) {
+              if(this.validateAttribute(tag, attribute, value)){
+                valid_attributes[attribute] = value;
+              }
+            }else{
               valid_attributes[attribute] = value;
             }
-          }else{
-            valid_attributes[attribute] = value;
+          }
+          else {
+            $.each(regexp_attributes, function(i, val) {
+              if (attribute.match(val)) {
+                valid_attributes[attribute] = value;
+              }
+            });
           }
         }
       }
@@ -3688,7 +3759,8 @@ WYMeditor.XhtmlSaxListener = function()
   this._open_tags = {};
   this.validator = WYMeditor.XhtmlValidator;
   this._tag_stack = [];
-  this.avoided_tags = [];
+
+  this.avoided_tags = ['area'];
 
   this.entities = {
     '&nbsp;':'&#160;','&iexcl;':'&#161;','&cent;':'&#162;',
@@ -3784,10 +3856,15 @@ WYMeditor.XhtmlSaxListener = function()
     "object", "ol", "optgroup", "option", "p", "pre", "q",
     "samp", "script", "select", "small", "span", "strong", "style",
     "sub", "sup", "table", "tbody", "td", "textarea", "tfoot", "th",
-    "thead", "title", "tr", "tt", "ul", "var", "extends"];
+    "thead", "title", "tr", "tt", "ul", "var", "extends", "meter",
+    "section", "article", "aside", "details", "header", "footer",
+    "nav", "dialog", "figure", "figcaption", "address", "hgroup",
+    "mark", "time", "canvas", "audio", "video", "source", "output",
+    "progress", "ruby", "rt", "rp", "summary", "command"];
 
 
-    this.inline_tags = ["br", "embed", "hr", "img", "input", "param"];
+    // Defines self-closing tags.
+    this.inline_tags = ["br", "embed", "hr", "img", "input", "param", "source", "wbr"];
 
     return this;
 };
@@ -3901,7 +3978,9 @@ WYMeditor.XhtmlSaxListener.prototype.inlineTag = function(tag, attributes)
 
 WYMeditor.XhtmlSaxListener.prototype.openUnknownTag = function(tag, attributes)
 {
-  //this.output += this.helper.tag(tag, attributes, true);
+  if(tag === 'area') {
+    this.output += this.helper.tag(tag, attributes, true);
+  }
 };
 
 WYMeditor.XhtmlSaxListener.prototype.closeBlockTag = function(tag)
@@ -3922,16 +4001,16 @@ WYMeditor.XhtmlSaxListener.prototype.closeUnopenedTag = function(tag)
 WYMeditor.XhtmlSaxListener.prototype.avoidStylingTagsAndAttributes = function()
 {
   this.avoided_tags = ['div','span'];
-  this.validator.skiped_attributes = ['style'];
-  this.validator.skiped_attribute_values = ['MsoNormal','main1']; // MS Word attributes for class
+  this.validator.skipped_attributes = ['style'];
+  this.validator.skipped_attribute_values = ['MsoNormal','main1']; // MS Word attributes for class
   this._avoiding_tags_implicitly = true;
 };
 
 WYMeditor.XhtmlSaxListener.prototype.allowStylingTagsAndAttributes = function()
 {
   this.avoided_tags = [];
-  this.validator.skiped_attributes = [];
-  this.validator.skiped_attribute_values = [];
+  this.validator.skipped_attributes = [];
+  this.validator.skipped_attribute_values = [];
   this._avoiding_tags_implicitly = false;
 };
 

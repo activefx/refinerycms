@@ -42,7 +42,7 @@ class Actor
   references_and_referenced_in_many :roles
 
   # has_many :plugins, :class_name => "UserPlugin", :order => "position ASC", :dependent => :destroy
-  references_many :plugins, :class_name => "ActorPlugin", :dependent => :destroy, :index => true, :inverse_of => :actor
+  references_many :plugins, :class_name => "ActorPlugin", :dependent => :destroy, :inverse_of => :actor
 
   #has_friendly_id :username, :use_slug => true
   slug :username, :index => true
@@ -172,6 +172,10 @@ class Actor
     plugins.collect { |p| p.name } | Refinery::Plugins.always_allowed.names
   end
 
+  # user_to_delete.persisted? and
+  # id != user_to_delete.id and
+  # !user_to_delete.has_role?(:superuser) and
+  # Role[:refinery].users.count > 1
   def can_delete?(user_to_delete = self)
     self.is_a?(Administrator) and
     user_to_delete.persisted? and

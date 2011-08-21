@@ -35,6 +35,7 @@
 
 
 
+
   # Override Devise's default after login redirection route.  This will pushed a logged in user to the dashboard.
   get 'refinery', :to => 'admin/dashboard#index', :as => :refinery_root
   get 'refinery', :to => 'admin/dashboard#index', :as => :administrator_root

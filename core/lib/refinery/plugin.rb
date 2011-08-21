@@ -3,10 +3,14 @@ module Refinery
 
   class Plugin
 
-    def self.register(&block)
-      plugin = self.new
+    attr_accessor :name, :class_name, :controller, :directory, :url,
+                  :version, :dashboard, :always_allow_access,
+                  :menu_match, :hide_from_menu,
+                  :pathname, :plugin_activity
+    attr_reader   :description
 
-      yield plugin
+    def self.register(&block)
+      yield(plugin = self.new)
 
       raise "A plugin MUST have a name!: #{plugin.inspect}" if plugin.name.blank?
 
@@ -24,12 +28,6 @@ module Refinery
       RUBY
       Object.const_set(plugin.class_name.to_sym, klass)
     end
-
-    attr_accessor :name, :class_name, :controller, :directory, :url,
-                  :version, :dashboard, :always_allow_access,
-                  :menu_match, :hide_from_menu,
-                  :pathname, :plugin_activity
-    attr_reader   :description
 
     # Returns the class name of the plugin
     def class_name
@@ -76,16 +74,19 @@ module Refinery
       @menu_match ||= /(admin|refinery)\/#{self.name}$/
     end
 
+    def pathname=(value)
+      value = Pathname.new(value) if value.is_a? String
+      @pathname = value
+    end
+
     # Returns a hash that can be used to create a url that points to the administration part of the plugin.
     def url
-      return @url if defined?(@url)
-
-      if self.controller.present?
-        @url = {:controller => "/admin/#{self.controller}"}
+      @url ||= if self.controller.present?
+        {:controller => "/admin/#{self.controller}"}
       elsif self.directory.present?
-        @url = {:controller => "/admin/#{self.directory.split('/').pop}"}
+        {:controller => "/admin/#{self.directory.split('/').pop}"}
       else
-        @url = {:controller => "/admin/#{self.name}"}
+        {:controller => "/admin/#{self.name}"}
       end
     end
 
@@ -97,10 +98,10 @@ module Refinery
     end
 
     def initialize
-      # save the pathname to where this plugin is using its lib directory which is standard now.
+      # provide a default pathname to where this plugin is using its lib directory.
       depth = RUBY_VERSION >= "1.9.2" ? 4 : 3
-      self.pathname = Pathname.new(caller(depth).first.match("(.*)#{File::SEPARATOR}lib")[1])
-      Refinery::Plugins.registered << self # add me to the collection of registered plugins
+      self.pathname ||= Pathname.new(caller(depth).first.match("(.*)#{File::SEPARATOR}lib")[1])
+      ::Refinery::Plugins.registered << self # add me to the collection of registered plugins
     end
   end
 end

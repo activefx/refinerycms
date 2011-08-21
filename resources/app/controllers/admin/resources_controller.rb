@@ -10,7 +10,7 @@ module Admin
     def new
       @resource = Resource.new if @resource.nil?
 
-      @url_override = admin_resources_url(:dialog => from_dialog?)
+      @url_override = admin_resources_path(:dialog => from_dialog?)
     end
 
     def create
@@ -33,16 +33,18 @@ module Admin
         if @resources.all?(&:valid?)
           @resource_id = @resources.detect(&:persisted?).id
           @resource = nil
-        end
 
-        insert
+          redirect_to request.query_parameters.merge(:action => 'insert')
+        else
+          self.insert
+        end
       end
     end
 
     def insert
       self.new if @resource.nil?
 
-      @url_override = admin_resources_url(:dialog => from_dialog?, :insert => true)
+      @url_override = admin_resources_path(request.query_parameters.merge(:insert => true))
 
       if params[:conditions].present?
         extra_condition = params[:conditions].split(',')

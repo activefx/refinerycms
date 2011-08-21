@@ -5,9 +5,11 @@ class ActorPlugin
   field :name, :type => String
   field :position, :type => Integer
 
-  referenced_in :actor, :inverse_of => :plugins
+  belongs_to :actor, :inverse_of => :plugins, :index => true
 
   default_scope asc(:position)
+
+  attr_accessible :user_id, :name, :position
 
   index :name
   index(

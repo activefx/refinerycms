@@ -52,8 +52,15 @@ class RefinerycmsGenerator < ::Refinery::Generators::EngineInstaller
 
       gsub_file env, "serve_static_assets = false", "serve_static_assets = true # Refinery CMS requires this to be true", :verbose => false
 
-      unless Rails.root.join(env).read =~ %r{Refinery.rescue_not_found}
-        append_file env, "Refinery.rescue_not_found = #{env.split('/').last.split('.rb').first == 'production'}"
+      unless (env_file_contents = Rails.root.join(env).read) =~ %r{Refinery.rescue_not_found}
+        append_file env, "Refinery.rescue_not_found = #{env.split('/').last.split('.rb').first == 'production'}\n"
+      end
+
+      unless env_file_contents =~ %r{Refinery.s3_backend}
+        s3_backend_string = ["# When true will use Amazon's Simple Storage Service on your production machine"]
+        s3_backend_string << "# instead of the default file system for resources and images"
+        s3_backend_string << "Refinery.s3_backend = !(ENV['S3_KEY'].nil? || ENV['S3_SECRET'].nil?)\n"
+        append_file env, s3_backend_string.join("\n")
       end
     end
 
@@ -92,6 +99,7 @@ class RefinerycmsGenerator < ::Refinery::Generators::EngineInstaller
 
 
     # Append seeds.
+    create_file "db/seeds.rb" unless Rails.root.join('db', 'seeds.rb').file?
     append_file 'db/seeds.rb', :verbose => true do
       self.class.source_root.join('db', 'seeds.rb').read
     end
@@ -114,6 +122,12 @@ class RefinerycmsGenerator < ::Refinery::Generators::EngineInstaller
       f.directory? or f.to_s =~ /\/db\//
     }.sort.each do |path|
       copy_file path, path.to_s.gsub(self.class.source_root.to_s, Rails.root.to_s)
+    end
+
+    # Ensure i18n exists and is up to date.
+    if ::Refinery.i18n_enabled?
+      require 'generators/refinerycms_i18n_generator'
+      ::RefinerycmsI18n.new.generate
     end
   end
 

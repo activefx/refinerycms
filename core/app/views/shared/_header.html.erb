@@ -10,9 +10,8 @@
     <%= render :partial => "/shared/visitor" %>
   <% end %>
 </div>
-<%= render :partial => "/shared/menu",
-            :locals => {
-              :dom_id => 'menu',
-              :css => 'menu'
-            } -%>
+<%= render(:partial => "/shared/menu", :locals => {
+             :dom_id => 'menu',
+             :css => 'menu'
+           }) %>
 

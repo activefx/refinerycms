@@ -15,6 +15,11 @@ class User < Actor
 
   class << self
 
+    # Configure authentication_keys here instead of devise.rb initialzer so we don't overwrite standard devise models
+    def authentication_keys
+      [:login]
+    end
+
     # Find user by email or username.
     # https://github.com/plataformatec/devise/wiki/How-To:-Allow-users-to-sign_in-using-their-username-or-email-address
     def find_for_database_authentication(conditions)

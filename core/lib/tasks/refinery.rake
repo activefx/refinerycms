@@ -132,9 +132,6 @@ namespace :refinery do
   desc "Un-crudify a method on a controller that uses crudify"
   task :uncrudify => :environment do
     if (model_name = ENV["model"]).present? and (action = ENV["action"]).present?
-      singular_name = model_name.to_s
-      class_name = singular_name.camelize
-      plural_name = singular_name.pluralize
 
       crud_lines = Refinery.roots('core').join('lib', 'refinery', 'crud.rb').read
       if (matches = crud_lines.scan(/(\ +)(def #{action}.+?protected)/m).first).present? and
@@ -146,9 +143,9 @@ namespace :refinery do
         crud_method.gsub!('#{options[:redirect_to_url]}', default_crud_options[:redirect_to_url])
         crud_method.gsub!('#{options[:conditions].inspect}', default_crud_options[:conditions].inspect)
         crud_method.gsub!('#{options[:title_attribute]}', default_crud_options[:title_attribute])
-        crud_method.gsub!('#{singular_name}', singular_name)
-        crud_method.gsub!('#{class_name}', class_name)
-        crud_method.gsub!('#{plural_name}', plural_name)
+        crud_method.gsub!('#{singular_name}', default_crud_options[:singular_name])
+        crud_method.gsub!('#{class_name}', default_crud_options[:class_name])
+        crud_method.gsub!('#{plural_name}', default_crud_options[:plural_name])
         crud_method.gsub!('\\#{', '#{')
 
         puts crud_method
@@ -187,5 +184,17 @@ task :whitespace do
     sh %{find . -name '*.*rb' -exec sed -i '' 's/\t/  /g' {} \\; -exec sed -i '' 's/ *$//g' {} \\; }
   else
     puts "This doesn't work on systems other than OSX or Linux. Please use a custom whitespace tool for your platform '#{Config::CONFIG["host_os"]}'."
+  end
+end
+
+desc "Recalculate $LOAD_PATH frequencies."
+task :recalculate_loaded_features_frequency => :environment do
+  require 'load_path_analyzer'
+
+  frequencies     = LoadPathAnalyzer.new($LOAD_PATH, $LOADED_FEATURES).frequencies
+  ideal_load_path = frequencies.to_a.sort_by(&:last).map(&:first)
+
+  Rails.root.join('config', 'ideal_load_path').open("w") do |f|
+    f.puts ideal_load_path
   end
 end

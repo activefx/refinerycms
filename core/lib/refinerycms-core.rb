@@ -14,6 +14,10 @@ module Refinery
   autoload :Application, File.expand_path('../refinery/application', __FILE__)
   autoload :ApplicationController, File.expand_path('../refinery/application_controller', __FILE__)
   autoload :ApplicationHelper, File.expand_path('../refinery/application_helper', __FILE__)
+  autoload :Configuration, File.expand_path('../refinery/configuration', __FILE__)
+  autoload :Engine, File.expand_path('../refinery/engine', __FILE__)
+  autoload :Menu, File.expand_path('../refinery/menu', __FILE__)
+  autoload :MenuItem, File.expand_path('../refinery/menu_item', __FILE__)
   autoload :Plugin,  File.expand_path('../refinery/plugin', __FILE__)
   autoload :Plugins, File.expand_path('../refinery/plugins', __FILE__)
 end
@@ -28,11 +32,21 @@ require 'rails/generators'
 
 module Refinery
 
+  class << self
+    def config
+      @@config ||= ::Refinery::Configuration.new
+    end
+  end
+
   module Core
     class << self
       def attach_to_application!
         ::Rails::Application.subclasses.each do |subclass|
           begin
+            # Fix Rake 0.9.0 issue
+            subclass.send :include, ::Rake::DSL if defined?(::Rake::DSL)
+
+            # Include our logic inside your logic
             subclass.send :include, ::Refinery::Application
           rescue
             $stdout.puts "Refinery CMS couldn't attach to #{subclass.name}."
@@ -46,6 +60,10 @@ module Refinery
       def root
         @root ||= Pathname.new(File.expand_path('../../', __FILE__))
       end
+    end
+
+    ::Rails::Engine.module_eval do
+      include ::Refinery::Engine
     end
 
     class Engine < ::Rails::Engine
@@ -65,17 +83,23 @@ module Refinery
         end
 
         # TODO: Is there a better way to cache assets in engines?
-        ::ActionView::Helpers::AssetTagHelper.module_eval do
+        # Also handles a change in Rails 3.1 with AssetIncludeTag being invented.
+        tag_helper_class = if defined?(::ActionView::Helpers::AssetTagHelper::AssetIncludeTag)
+          ::ActionView::Helpers::AssetTagHelper::AssetIncludeTag
+        else
+          ::ActionView::Helpers::AssetTagHelper
+        end
+        tag_helper_class.module_eval do
           def asset_file_path(path)
-            unless File.exist?(return_path = File.join(config.assets_dir, path.split('?').first))
-              ::Refinery::Plugins.registered.collect{|p| p.pathname}.compact.each do |pathname|
-                if File.exist?(plugin_asset_path = File.join(pathname.to_s, 'public', path.split('?').first))
-                  return_path = plugin_asset_path.to_s
+            unless (return_path = Pathname.new(File.join(config.assets_dir, path.split('?').first))).exist?
+              this_asset_filename = path.split('?').first.to_s.gsub(/^\//, '')
+              ::Refinery::Plugins.registered.pathnames.each do |pathname|
+                if (pathname_asset_path = pathname.join('public', this_asset_filename)).exist?
+                  return_path = pathname_asset_path
                 end
               end
             end
-
-            return_path
+            return_path.to_s
           end
         end
 
@@ -92,8 +116,9 @@ module Refinery
       # Register the plugin
       config.after_initialize do
         ::Refinery::Plugin.register do |plugin|
-          plugin.name ="refinery_core"
-          plugin.class_name ="RefineryEngine"
+          plugin.pathname = root
+          plugin.name = 'refinery_core'
+          plugin.class_name = 'RefineryEngine'
           plugin.version = ::Refinery.version
           plugin.hide_from_menu = true
           plugin.always_allow_access = true
@@ -102,7 +127,8 @@ module Refinery
 
         # Register the dialogs plugin
         ::Refinery::Plugin.register do |plugin|
-          plugin.name = "refinery_dialogs"
+          plugin.pathname = root
+          plugin.name = 'refinery_dialogs'
           plugin.version = ::Refinery.version
           plugin.hide_from_menu = true
           plugin.always_allow_access = true
@@ -112,7 +138,7 @@ module Refinery
       end
 
       # Run other initializer code that used to be in config/initializers/
-      initializer "serve static assets" do |app|
+      initializer 'serve static assets' do |app|
         app.middleware.insert_after ::ActionDispatch::Static, ::ActionDispatch::Static, "#{root}/public"
       end
 
@@ -122,9 +148,9 @@ module Refinery
 
       initializer 'add presenters' do |app|
         app.config.autoload_paths += [
-          Rails.root.join("app", "presenters"),
-          Rails.root.join("vendor", "**", "**", "app", "presenters"),
-          Refinery.roots.map{|r| r.join("**", "app", "presenters")}
+          Rails.root.join('app', 'presenters'),
+          Rails.root.join('vendor', '**', '**', 'app', 'presenters'),
+          Refinery.roots.map{|r| r.join('**', 'app', 'presenters')}
         ].flatten
       end
 
@@ -136,11 +162,11 @@ module Refinery
 #        end
 #      end
 
-      initializer "fix rack <= 1.2.1" do |app|
+      initializer 'fix rack <= 1.2.1' do |app|
         ::Rack::Utils.module_eval do
           def escape(s)
             regexp = case
-              when RUBY_VERSION >= "1.9" && s.encoding === Encoding.find('UTF-8')
+              when RUBY_VERSION >= '1.9' && s.encoding === Encoding.find('UTF-8')
                 /([^ a-zA-Z0-9_.-]+)/u
               else
                 /([^ a-zA-Z0-9_.-]+)/n
@@ -149,7 +175,7 @@ module Refinery
               '%'+$1.unpack('H2'*bytesize($1)).join('%').upcase
             }.tr(' ', '+')
           end
-        end if ::Rack.version <= "1.2.1"
+        end if ::Rack.version <= '1.2.1'
       end
 
       initializer 'set will_paginate link labels' do |app|
