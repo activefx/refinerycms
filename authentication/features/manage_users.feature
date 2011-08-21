@@ -84,6 +84,5 @@ Feature: Manage Users
     And I fill in "Username" with "marian"
     And I press "Save"
     Then I should be on the list of users
-    When I go to the Dashboard
-    Then I should see "Marian user was updated"
+    Then I should see "marian was successfully updated"
 

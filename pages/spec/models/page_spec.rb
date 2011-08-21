@@ -118,15 +118,15 @@ describe Page do
       page.url.should == '/contact'
     end
 
-    it "returns its path with marketable urls" do
-      page.url[:id].should be_nil
-      page.url[:path].should == ["rspec-is-great-for-testing-too"]
-    end
+#    it "returns its path with marketable urls" do
+#      page.url[:id].should be_nil
+#      page.url[:path].should == ["rspec-is-great-for-testing-too"]
+#    end
 
-    it "returns its path underneath its parent with marketable urls" do
-      child.url[:id].should be_nil
-      child.url[:path].should == [page.url[:path].first, 'the-child-page']
-    end
+#    it "returns its path underneath its parent with marketable urls" do
+#      child.url[:id].should be_nil
+#      child.url[:path].should == [page.url[:path].first, 'the-child-page']
+#    end
 
     it "no path parameter without marketable urls" do
       turn_off_marketable_urls

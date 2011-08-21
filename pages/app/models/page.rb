@@ -352,7 +352,8 @@ class Page
       :rgt => rgt,
       :title => (page_title if respond_to?(:page_title)) || title,
       :type => self.class.name,
-      :url => url
+      :url => url,
+      :slug => slug
     }
   end
 

@@ -105,7 +105,6 @@ describe RefinerySetting do
 
   context "find_or_set" do
     it "should create a non existant setting" do
-      debugger
       @created = RefinerySetting.find_or_set(:creating_from_scratch, 'I am a setting being created', :scoping => 'rspec_testing')
 
       @created.should == "I am a setting being created"
