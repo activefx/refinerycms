@@ -27,6 +27,7 @@ Feature: Administrator
 
   Scenario: Logout
     Given I am a logged in refinery administrator
+    Then Display the page
     And I follow "Log out"
     Then I should be on the home page
 

@@ -402,10 +402,11 @@ describe User do
       it "user himself" do
         refinery_user.can_delete?(refinery_user).should be_false
       end
+    end
 
     context "allow to delete" do
       it "if all conditions return true" do
-        super_user.can_delete?(refinery_user).should be_true
+        refinery_user.can_delete?(user).should be_true
       end
     end
 
