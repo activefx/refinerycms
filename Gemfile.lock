@@ -91,11 +91,6 @@ GIT
       warden (~> 1.0.3)
 
 PATH
-  remote: ../refinerycms-generators
-  specs:
-    refinerycms-generators (1.0.0)
-
-PATH
   remote: .
   specs:
     refinerycms (0.9.9.8)
@@ -110,6 +105,11 @@ PATH
       refinerycms-resources (~> 0.9.9.8)
       refinerycms-settings (~> 0.9.9.8)
       thor
+
+PATH
+  remote: ../refinerycms-generators
+  specs:
+    refinerycms-generators (1.0.0)
 
 PATH
   remote: authentication
