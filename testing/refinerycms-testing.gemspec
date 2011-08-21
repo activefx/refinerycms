@@ -17,15 +17,10 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'refinerycms-core', '= 1.0.4'
   # RSpec
-<<<<<<< HEAD
-  s.add_dependency 'rspec-rails',       '~> 2.5'
-  s.add_dependency 'mongoid-rspec',     '>= 1.3.2'
-=======
   s.add_dependency 'rspec-rails',       '~> 2.6'
   s.add_dependency 'mongoid-rspec',     '~> 1.4.4'
   s.add_dependency 'fuubar'
   s.add_dependency 'rspec-instafail'
->>>>>>> mongoid
 
   # Cucumber
   s.add_dependency 'capybara',          '~> 1.0.0'
