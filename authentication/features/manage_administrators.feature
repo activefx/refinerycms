@@ -45,7 +45,6 @@ Feature: Manage Administrators
     And I press "Save"
     Then I should be on the list of administrators
     And I should see "cucumber was successfully added."
-    And I should see "cucumber (green@cucumber.com)"
 
   @administrators-edit @edit
   Scenario: Edit Administrator
@@ -58,7 +57,6 @@ Feature: Manage Administrators
     And I press "Save"
     Then I should be on the list of administrators
     And I should see "cucumber was successfully updated."
-    And I should see "cucumber (green@cucumber.com)"
 
   @lockable @administrators-lockable
   Scenario: Lock Account

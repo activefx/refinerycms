@@ -27,7 +27,6 @@ Feature: Administrator
 
   Scenario: Logout
     Given I am a logged in refinery administrator
-    Then Display the page
     And I follow "Log out"
     Then I should be on the home page
 
@@ -65,7 +64,6 @@ Feature: Administrator
   @administrators-password-reset
   Scenario: Reset password page (invalid password)
     Given I am requesting administrative password reset
-    Then Display the page
     When I go to the administrative reset password page
     And I fill in "Password" with "cukes"
     And I fill in "Password confirmation" with "cukes"
