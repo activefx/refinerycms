@@ -5,7 +5,7 @@ class UserPlugin
   field :name, :type => String
   field :position, :type => Integer
 
-  referenced_in :user, :inverse_of => :plugins
+  belongs_to :user, :inverse_of => :plugins, :index => true
 
   default_scope asc(:position)
 

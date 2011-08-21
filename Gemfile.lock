@@ -1,9 +1,9 @@
 GIT
   remote: git://github.com/activefx/mongoid_nested_set.git
-  revision: f8bc134d5791e11d63e03e40cd75a0c32a32d411
+  revision: ad7174760e4e0ac9e0c76b6fc14f9bb43e475eb6
   specs:
     mongoid_nested_set (0.1.2)
-      mongoid (>= 2.0.0.beta.20)
+      mongoid (~> 2.1)
 
 GIT
   remote: git://github.com/evansagge/mongoid-rspec.git

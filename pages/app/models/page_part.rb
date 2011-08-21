@@ -22,6 +22,10 @@ class PagePart
 
   alias_attribute :content, :body
 
+  def content=(content)
+    self.body = content
+  end
+
   #translates :body if respond_to?(:translates)
 
   def to_param

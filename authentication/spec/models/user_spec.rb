@@ -310,8 +310,8 @@ describe User do
 
       # Temporary test
       it "if user count with refinery role <= 1" do
-        @user.remove_role(:refinery)
-        @super_user.can_delete?(@user).should be_false
+        user.remove_role(:refinery)
+        super_user.can_delete?(user).should be_false
       end
 
       it "if user count with refinery role <= 1" do

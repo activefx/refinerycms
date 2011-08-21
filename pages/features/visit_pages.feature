@@ -25,7 +25,6 @@ Feature: Visit Pages
   @pages-visit-show
   Scenario: Content Page
     When I go to the page titled "About"
-    Then Display the page
     Then I should see "Home"
     And I should see "About"
     And I should see "About" within ".selected > a"

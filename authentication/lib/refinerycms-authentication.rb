@@ -1,6 +1,6 @@
 require 'devise'
 require 'refinerycms-core'
-require 'friendly_id'
+#require 'friendly_id'
 
 module Refinery
   module Authentication
@@ -52,3 +52,4 @@ module Refinery
 end
 
 ::Refinery.engines << 'authentication'
+

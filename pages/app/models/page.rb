@@ -67,7 +67,7 @@ class Page
                   :skip_to_first_child, :position, :show_in_menu, :draft,
                   :parts_attributes, :browser_title, :meta_description,
                   :custom_title_type, :parent_id, :custom_title,
-                  :created_at, :updated_at, :page_id
+                  :created_at, :updated_at, :page_id, :title
 
   attr_accessor :locale # to hold temporarily
 
@@ -129,7 +129,12 @@ class Page
   end
 
   scope :live, where(:draft => false)
-  scope :by_title, proc {|t| with_globalize(:title => t)}
+
+  #scope :by_title, proc {|t| with_globalize(:title => t)}
+  def self.by_title(title)
+    where(:title => title)
+  end
+
 
   # This works using a query against the translated content first and then
   # using all of the page_ids we further filter against this model's table.
@@ -370,7 +375,8 @@ class Page
     end
 
     def use_marketable_urls?
-      RefinerySetting.find_or_set(:use_marketable_urls, true, :scoping => 'pages')
+      false
+      #RefinerySetting.find_or_set(:use_marketable_urls, true, :scoping => 'pages')
     end
 
     def expire_page_caching

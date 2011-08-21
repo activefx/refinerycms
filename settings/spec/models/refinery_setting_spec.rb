@@ -19,6 +19,7 @@ describe RefinerySetting do
     # RefinerySetting.set(:creating_from_scratch, nil)
     # RefinerySetting.set(:rspec_testing_creating_from_scratch, nil)
     RefinerySetting.where(:name => "creating_from_scratch").each{ |s| s.destroy }
+    RefinerySetting.rewrite_cache
   end
 
   # delete is not clearing the cache / triggering mongoid callbacks
@@ -104,7 +105,7 @@ describe RefinerySetting do
 
   context "find_or_set" do
     it "should create a non existant setting" do
-      #debugger
+      debugger
       @created = RefinerySetting.find_or_set(:creating_from_scratch, 'I am a setting being created', :scoping => 'rspec_testing')
 
       @created.should == "I am a setting being created"

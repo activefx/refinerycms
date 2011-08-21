@@ -62,11 +62,11 @@ module Refinery
       end
 
       def selected_page_or_descendant_page_selected?(page, collection = nil, selected_item = nil)
-        # selected = false
-        # #selected = selected_item ? selected_item === page : selected_page?(page)
-        # selected = selected_item ? selected_item == page : selected_page?(page)
-        # selected = descendant_page_selected?(page, collection, selected_item) unless selected
-        # selected
+#        selected = false
+#        #selected = selected_item ? selected_item === page : selected_page?(page)
+#        selected = selected_item ? selected_item == page : selected_page?(page)
+#        selected = descendant_page_selected?(page, collection, selected_item) unless selected
+#        selected
 
         return true if selected_page?(page) || selected_item === page
         return true if descendant_page_selected?(page, collection, selected_item)
