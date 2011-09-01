@@ -45,7 +45,7 @@ class Actor
   references_many :plugins, :class_name => "ActorPlugin", :dependent => :destroy, :inverse_of => :actor
 
   #has_friendly_id :username, :use_slug => true
-  slug :username, :index => true
+  slug :username
 
   # Setup accessible (or protected) attributes for your model
   # :login is a virtual attribute for authenticating by either username or email
