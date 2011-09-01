@@ -9,7 +9,7 @@ class Role
   before_validation :camelize_title
   validates :title, :uniqueness => true
 
-  index :title, :unique => true
+  index :title
 
   # Extractable Methods
 

@@ -16,8 +16,7 @@ class ActorPlugin
     [
       [ :actor_id, Mongo::ASCENDING ],
       [ :name, Mongo::ASCENDING ]
-    ],
-    :unique => true
+    ]
   )
 
   def self.find_by_actor_id(actor_id)

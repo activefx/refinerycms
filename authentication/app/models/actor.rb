@@ -88,59 +88,51 @@ class Actor
   end
 
   index( [ [:_id, Mongo::ASCENDING],
-           [:_type, Mongo::ASCENDING] ],
-         :unique => true )
+           [:_type, Mongo::ASCENDING] ] )
 
   # Index Email
-  index :email,                 :unique => true
+  index :email
   index( [ [:_type, Mongo::ASCENDING],
-           [:email, Mongo::ASCENDING] ],
-         :unique => true )
+           [:email, Mongo::ASCENDING] ] )
 
   # Index Username
-  index :username,              :unique => true
+  index :username
   index( [ [:_type, Mongo::ASCENDING],
-           [:username, Mongo::ASCENDING] ],
-         :unique => true )
+           [:username, Mongo::ASCENDING] ] )
 
   # Index Authentication Token
   if children_allow_token_authenticatable?
-    index :authentication_token,  :unique => true
+    index :authentication_token
     index( [ [:_type, Mongo::ASCENDING],
-             [:authentication_token, Mongo::ASCENDING] ],
-           :unique => true )
+             [:authentication_token, Mongo::ASCENDING] ] )
   end
 
   # Index Remember Token
   if children_allow_rememberable?
-    index :remember_token,        :unique => true
+    index :remember_token
     index( [ [:_type, Mongo::ASCENDING],
-             [:remember_token, Mongo::ASCENDING] ],
-           :unique => true )
+             [:remember_token, Mongo::ASCENDING] ] )
   end
 
   # Index Confirmation Token
   if children_allow_confirmable?
-    index :confirmation_token,    :unique => true
+    index :confirmation_token
     index( [ [:_type, Mongo::ASCENDING],
-             [:confirmation_token, Mongo::ASCENDING] ],
-           :unique => true )
+             [:confirmation_token, Mongo::ASCENDING] ] )
   end
 
   # Index Reset Password Token
   if children_allow_recoverable?
-    index :reset_password_token,  :unique => true
+    index :reset_password_token
     index( [ [:_type, Mongo::ASCENDING],
-             [:reset_password_token, Mongo::ASCENDING] ],
-           :unique => true )
+             [:reset_password_token, Mongo::ASCENDING] ] )
   end
 
   # Index Unlock Token
   if children_allow_lockable?
-    index :unlock_token,          :unique => true
+    index :unlock_token
     index( [ [:_type, Mongo::ASCENDING],
-             [:unlock_token, Mongo::ASCENDING] ],
-           :unique => true )
+             [:unlock_token, Mongo::ASCENDING] ] )
   end
 
 

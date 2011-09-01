@@ -11,8 +11,7 @@ class UserToken
   referenced_in :user, :inverse_of => :user_tokens
 
   index( [ [:provider, Mongo::ASCENDING],
-           [:uid, Mongo::ASCENDING] ],
-         :unique => true )
+           [:uid, Mongo::ASCENDING] ] )
 
   validates_presence_of   :uid, :provider
   validates_uniqueness_of :uid, :scope => :provider
