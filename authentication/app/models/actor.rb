@@ -87,6 +87,10 @@ class Actor
     end
   end
 
+  index( [ [:_id, Mongo::ASCENDING],
+           [:_type, Mongo::ASCENDING] ],
+         :unique => true )
+
   # Index Email
   index :email,                 :unique => true
   index( [ [:_type, Mongo::ASCENDING],

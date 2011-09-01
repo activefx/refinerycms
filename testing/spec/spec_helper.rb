@@ -43,9 +43,10 @@ def setup_environment
     # config.mock_with :rr
     # config.mock_with :rspec
     config.mock_with :mocha
-    config.include Devise::TestHelpers, :type => :controller
-    config.include Mongoid::Matchers
     config.extend VCR::RSpec::Macros
+    config.include Mongoid::Matchers
+    config.include ::Devise::TestHelpers, :type => :controller
+    config.extend ::Refinery::ControllerMacros, :type => :controller
 
     # config.fixture_path = ::Rails.root.join('spec', 'fixtures').to_s
 
@@ -74,9 +75,6 @@ def setup_environment
     config.use_transactional_fixtures = false
 
     ActiveSupport::Dependencies.clear
-    config.include Mongoid::Matchers
-    config.include ::Devise::TestHelpers, :type => :controller
-    config.extend ::Refinery::ControllerMacros, :type => :controller
 
   end
 end

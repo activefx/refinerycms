@@ -26,6 +26,15 @@ class Page
   index :parent_id
   index :rgt
 
+  index(
+    [
+      [:draft, Mongo::ASCENDING],
+      [:show_in_menu, Mongo::ASCENDING]
+    ]
+  )
+
+
+
 #  if self.respond_to?(:translates)
 #    translates :title, :custom_title, :meta_keywords, :meta_description, :browser_title, :include => :seo_meta
 
